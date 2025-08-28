@@ -71,6 +71,20 @@
   font-weight: 500;
 }
 
+.btn{
+  top: 140px;
+  right: 10px;
+  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
+  box-shadow: 0 4px 16px rgba(255,75,0,0.13);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
 .person-detail form .form-buttons .edit-btn {
   background: #007bff; /* mavi */
   color: #fff;
