@@ -3,6 +3,10 @@ export interface Personnel {
     id: number;
     firstName: string;
     lastName?: string;
+    tckimlik: string;
+    dogumtarihi: string;
+    telno?: string;
+    adres?: string;
     email?: string;
     position?: string;
     department?: string;
@@ -10,5 +14,5 @@ export interface Personnel {
     totalLeave: number;
     usedLeave: number;
     workingStatus: 'Çalışıyor' | 'İzinli' | 'Uzaktan';
-    photoUrl?: string;
+    personnelphoto: string;
 }

@@ -2,7 +2,7 @@
   <!-- Personel Kartları -->
   <div class="content-card" *ngFor="let person of personnelList">
     <div class="personnel-image">
-      <img [src]="person.photoUrl" alt="Personnel Photo" />
+      <img [src]="person.personnelphoto" alt="Personnel Photo" />
     </div>
     <div class="personnel-info">
       <h3 class="personnel-name">{{ person.firstName }} {{ person.lastName }}</h3>
@@ -23,6 +23,14 @@
     <input [(ngModel)]="newPersonnel.firstName" name="firstName" required />
     <label>Soyad:</label>
     <input [(ngModel)]="newPersonnel.lastName" name="lastName" required />
+    <label>Tc Kimlik Numarası:</label>
+    <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required />
+    <label>Doğum Tarihi:</label>
+    <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required />
+    <label>Telefon Numarası:</label>
+    <input [(ngModel)]="newPersonnel.telno" name="telno" />
+    <label>Adres:</label>
+    <input [(ngModel)]="newPersonnel.adres" name="adres" />
     <label>Email:</label>
     <input [(ngModel)]="newPersonnel.email" name="email" />
     <label>Pozisyon:</label>
@@ -31,15 +39,12 @@
     <input [(ngModel)]="newPersonnel.department" name="department" />
     <label>Başlangıç Tarihi:</label>
     <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
-    <label>Toplam İzin:</label>
-    <input [(ngModel)]="newPersonnel.totalLeave" name="totalLeave" type="number"/>
-    <label>Kullanılan İzin:</label>
-    <input [(ngModel)]="newPersonnel.usedLeave" name="usedLeave" type="number"/>
-    <label>Çalışma Durumu:</label>
-    <input [(ngModel)]="newPersonnel.workingStatus" name="workingStatus"/>
+    <label> Fotoğraf:</label>
+    <input type="file" (change)="handleFileInput($event)" required/>
+
     <div class="butons">
-    <button class="persekle" type="submit">Ekle</button>
-    <button class="kutukapat" type="button" (click)="toggleAddForm()">Kapat</button>
+      <button class="persekle" type="submit">Ekle</button>
+      <button class="kutukapat" type="button" (click)="toggleAddForm()">Kapat</button>
     </div>
   </form>
 </div>
@@ -52,6 +57,12 @@
     <p><strong>Ad Soyad:</strong> {{ selectedPersonnel?.firstName }} {{ selectedPersonnel?.lastName }}</p>
     <p><strong>Pozisyon:</strong> {{ selectedPersonnel?.position }}</p>
     <p><strong>Email:</strong> {{ selectedPersonnel?.email }}</p>
+    <p><strong>TC Kimlik:</strong> {{selectedPersonnel?.tckimlik}}</p>
+    <p><strong>Doğum Tarihi:</strong> {{selectedPersonnel?.dogumtarihi}} </p>
+    <p><strong>Telefon Numarası:</strong> {{selectedPersonnel?.telno}} </p>
+    <p><strong>Adres: </strong> {{selectedPersonnel?.adres}} </p>
+    <p><strong>Departman: </strong> {{selectedPersonnel?.department}} </p>
+    <img [src]="selectedPersonnel?.personnelphoto" alt="Personnel Photo" style="width:150px; height:auto; margin-top:10px;">
     <button class="btn" (click)="deletePersonnel(selectedPersonnel!.id)">Sil</button>
     <button class="close-btn" (click)="closeDetails()">Kapat</button>
   </div>

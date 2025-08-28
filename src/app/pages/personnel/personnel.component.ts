@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // <-- ngModel için gerekli
+import { FormsModule } from '@angular/forms';
 import { PersonnelService } from '../../services/personnel.service';
 import { Personnel } from '../../models/personnel.model';
 
 @Component({
   selector: 'app-personnel',
   standalone: true,
-  imports: [CommonModule, FormsModule], // <-- buraya ekledik
+  imports: [CommonModule, FormsModule],
   templateUrl: './personnel.html',
   styleUrls: ['./personnel.css']
 })
@@ -17,21 +17,8 @@ export class PersonnelComponent implements OnInit {
   isCardVisible = false;
   selectedPersonnel: Personnel | null = null;
 
-  // Ekleme Formu
   showAddForm = false;
-  newPersonnel: Personnel = {
-    id: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    position: '',
-    department: '',
-    startDate: '',
-    totalLeave: 0,
-    usedLeave: 0,
-    workingStatus: 'Çalışıyor', // varsayılan
-    photoUrl: 'https://cdn.pixabay.com/photo/2013/02/01/18/14/url-77169_1280.jpg'
-  };
+  newPersonnel: Personnel = this.getEmptyPersonnel();
 
   constructor(private personnelService: PersonnelService) {}
 
@@ -74,18 +61,38 @@ export class PersonnelComponent implements OnInit {
   }
 
   resetForm() {
-    this.newPersonnel = {
+    this.newPersonnel = this.getEmptyPersonnel();
+  }
+
+  // 📌 Fotoğraf seçimi
+  handleFileInput(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.newPersonnel.personnelphoto = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  private getEmptyPersonnel(): Personnel {
+    return {
       id: 0,
       firstName: '',
       lastName: '',
+      tckimlik: '',
+      dogumtarihi: '',
+      telno: '',
+      adres: '',
       email: '',
       position: '',
       department: '',
       startDate: '',
       totalLeave: 0,
       usedLeave: 0,
-      workingStatus: 'Çalışıyor', // default
-      photoUrl: 'https://cdn.pixabay.com/photo/2013/02/01/18/14/url-77169_1280.jpg'
+      workingStatus: 'Çalışıyor',
+      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg', // varsayılan
     };
   }
 }

@@ -8,8 +8,40 @@ import { Personnel } from '../models/personnel.model';
 })
 export class PersonnelService {
   private mockPersonnelData: Personnel[] = [
-    { id: 101, firstName: 'Ahmet', lastName: 'Yılmaz', email: 'ahmet.yilmaz@example.com', position: 'Yazılım Geliştirici', department: 'IT', startDate: '2023-05-15', totalLeave: 20, usedLeave: 5, workingStatus: 'Çalışıyor', photoUrl: 'https://cdn.pixabay.com/photo/2013/02/01/18/14/url-77169_1280.jpg' },
-    { id: 102, firstName: 'Ayşe', lastName: 'Kaya', email: 'ayse.kaya@example.com', position: 'Proje Yöneticisi', department: 'Yönetim', startDate: '2022-01-20', totalLeave: 25, usedLeave: 10, workingStatus: 'İzinli', photoUrl: 'https://cdn.pixabay.com/photo/2013/02/01/18/14/url-77169_1280.jpg' }
+    { 
+      id: 101, 
+      firstName: 'Ahmet', 
+      lastName: 'Yılmaz', 
+      tckimlik: '12345678901',   // ekledik
+      dogumtarihi: '1990-03-15', // ekledik
+      telno: '05551234567',       // ekledik
+      email: 'ahmet.yilmaz@example.com', 
+      position: 'Yazılım Geliştirici', 
+      department: 'IT', 
+      startDate: '2023-05-15', 
+      totalLeave: 20, 
+      usedLeave: 5, 
+      workingStatus: 'Çalışıyor', 
+      personnelphoto: '../images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+
+    },
+    { 
+      id: 102, 
+      firstName: 'Ayşe', 
+      lastName: 'Kaya', 
+      tckimlik: '10987654321', 
+      dogumtarihi: '1988-07-20', 
+      telno: '05559876543',
+      email: 'ayse.kaya@example.com', 
+      position: 'Proje Yöneticisi', 
+      department: 'Yönetim', 
+      startDate: '2022-01-20', 
+      totalLeave: 25, 
+      usedLeave: 10, 
+      workingStatus: 'İzinli', 
+      personnelphoto: '../images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+
+    }
   ];
 
   getPersonnelList(): Observable<Personnel[]> {
