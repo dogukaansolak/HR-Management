@@ -47,13 +47,17 @@ export class PersonnelComponent implements OnInit {
 
 
   // 🔹 Filtreleme Fonksiyonu
-  filterPersonnel() {
-    this.filteredPersonnel = this.personnelList.filter(person => {
-      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
-      return matchesName && matchesDept;
-    });
-  }
+filterPersonnel() {
+  this.filteredPersonnel = this.personnelList.filter(person => {
+    const fullName = (person.firstName + ' ' + person.lastName).toLowerCase();
+    const matchesName = fullName.includes(this.searchText.toLowerCase());
+    const matchesDept = this.selectedDepartment
+      ? person.department === this.selectedDepartment
+      : true;
+    return matchesName && matchesDept;
+  });
+}
+
 
   openDetails(person: Personnel) {
     this.selectedPersonnel = person;
@@ -118,4 +122,6 @@ export class PersonnelComponent implements OnInit {
       personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
     };
   }
+  
 }
+

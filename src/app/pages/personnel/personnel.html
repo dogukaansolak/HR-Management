@@ -13,8 +13,8 @@
 </div>
 
 <div class="card-container">
-  <!-- Personel Kartları -->
-  <div class="content-card" *ngFor="let person of personnelList">
+  <!-- 🔹 Artık filteredPersonnel üzerinden dönüyoruz -->
+  <div class="content-card" *ngFor="let person of filteredPersonnel">
     <div class="personnel-image">
       <img [src]="person.personnelphoto" alt="Personnel Photo" />
     </div>
@@ -27,6 +27,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
