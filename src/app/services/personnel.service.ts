@@ -22,7 +22,7 @@ export class PersonnelService {
       totalLeave: 20, 
       usedLeave: 5, 
       workingStatus: 'Çalışıyor', 
-      personnelphoto: '../images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+      personnelphoto: '../images/b5707ec1-332d-4e29-8ac0-eca895bfb3d0.jpg',
 
     },
     { 

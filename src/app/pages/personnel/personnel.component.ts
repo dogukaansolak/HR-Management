@@ -22,53 +22,74 @@ export class PersonnelComponent implements OnInit {
 
   isCardVisible = false;
   selectedPersonnel: Personnel | null = null;
+  isEditMode: boolean = false;
 
   showAddForm = false;
   newPersonnel: Personnel = this.getEmptyPersonnel();
 
-  constructor(private personnelService: PersonnelService) {}
+  constructor(private personnelService: PersonnelService) { }
 
   ngOnInit() {
     this.loadPersonnel();
   }
 
- loadPersonnel() {
-  this.personnelService.getPersonnelList().subscribe(data => {
-    this.personnelList = data;
-    this.filteredPersonnel = [...this.personnelList];
+  // 🔹 Düzenle butonuna basınca
+  editDetails(person: Personnel | null) {
+    if (!person) return;
+    this.selectedPersonnel = { ...person };
+    this.isEditMode = true;
+  }
 
-    this.departments = Array.from(new Set(
-      this.personnelList
-        .map(p => p.department)
-        .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
-    ));
-  });
-}
+  // 🔹 Kaydet butonu
+  saveDetails() {
+    if (!this.selectedPersonnel) return;
 
+    const index = this.personnelList.findIndex(p => p.id === this.selectedPersonnel!.id);
+    if (index !== -1) {
+      this.personnelList[index] = { ...this.selectedPersonnel! };
+    }
 
-  // 🔹 Filtreleme Fonksiyonu
-filterPersonnel() {
-  this.filteredPersonnel = this.personnelList.filter(person => {
-    const fullName = (person.firstName + ' ' + person.lastName).toLowerCase();
-    const matchesName = fullName.includes(this.searchText.toLowerCase());
-    const matchesDept = this.selectedDepartment
-      ? person.department === this.selectedDepartment
-      : true;
-    return matchesName && matchesDept;
-  });
-}
+    this.isEditMode = false;
+    this.isCardVisible = false;
+  }
 
+  // 🔹 Personel listesi yükleme
+  loadPersonnel() {
+    this.personnelService.getPersonnelList().subscribe(data => {
+      this.personnelList = data;
+      this.filteredPersonnel = [...this.personnelList];
 
+      this.departments = Array.from(new Set(
+        this.personnelList
+          .map(p => p.department)
+          .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
+      ));
+    });
+  }
+
+  // 🔹 Filtreleme
+  filterPersonnel() {
+    this.filteredPersonnel = this.personnelList.filter(person => {
+      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+      return matchesName && matchesDept;
+    });
+  }
+
+  // 🔹 Popup açma / kapama
   openDetails(person: Personnel) {
     this.selectedPersonnel = person;
     this.isCardVisible = true;
+    this.isEditMode = false; // başta readonly
   }
 
   closeDetails() {
     this.isCardVisible = false;
     this.selectedPersonnel = null;
+    this.isEditMode = false;
   }
 
+  // 🔹 Yeni personel formu
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
   }
@@ -91,13 +112,17 @@ filterPersonnel() {
     this.newPersonnel = this.getEmptyPersonnel();
   }
 
-  // 📌 Fotoğraf seçimi
+  // 🔹 Fotoğraf seçimi (yeni personel için)
   handleFileInput(event: any) {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.newPersonnel.personnelphoto = reader.result as string;
+        if (this.showAddForm) {
+          this.newPersonnel.personnelphoto = reader.result as string;
+        } else if (this.isEditMode && this.selectedPersonnel) {
+          this.selectedPersonnel.personnelphoto = reader.result as string;
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -122,6 +147,4 @@ filterPersonnel() {
       personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
     };
   }
-  
 }
-

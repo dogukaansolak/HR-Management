@@ -13,7 +13,6 @@
 </div>
 
 <div class="card-container">
-  <!-- 🔹 Artık filteredPersonnel üzerinden dönüyoruz -->
   <div class="content-card" *ngFor="let person of filteredPersonnel">
     <div class="personnel-image">
       <img [src]="person.personnelphoto" alt="Personnel Photo" />
@@ -27,7 +26,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
@@ -54,7 +52,7 @@
     <input [(ngModel)]="newPersonnel.department" name="department" />
     <label>Başlangıç Tarihi:</label>
     <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
-    <label> Fotoğraf:</label>
+    <label>Fotoğraf:</label>
     <input type="file" (change)="handleFileInput($event)" required/>
 
     <div class="butons">
@@ -64,21 +62,55 @@
   </form>
 </div>
 
-<!-- Arkaplan ve Detay Kutusu -->
+<!-- Personel Detay Popup -->
 <div *ngIf="isCardVisible">
   <div class="modal-backdrop" (click)="closeDetails()"></div>
   <div class="card person-detail">
     <h2>👤 Personel Bilgileri</h2>
-    <p><strong>Ad Soyad:</strong> {{ selectedPersonnel?.firstName }} {{ selectedPersonnel?.lastName }}</p>
-    <p><strong>Pozisyon:</strong> {{ selectedPersonnel?.position }}</p>
-    <p><strong>Email:</strong> {{ selectedPersonnel?.email }}</p>
-    <p><strong>TC Kimlik:</strong> {{selectedPersonnel?.tckimlik}}</p>
-    <p><strong>Doğum Tarihi:</strong> {{selectedPersonnel?.dogumtarihi}} </p>
-    <p><strong>Telefon Numarası:</strong> {{selectedPersonnel?.telno}} </p>
-    <p><strong>Adres: </strong> {{selectedPersonnel?.adres}} </p>
-    <p><strong>Departman: </strong> {{selectedPersonnel?.department}} </p>
-    <img [src]="selectedPersonnel?.personnelphoto" alt="Personnel Photo" style="width:150px; height:auto; margin-top:10px;">
-    <button class="btn" (click)="deletePersonnel(selectedPersonnel!.id)">Sil</button>
-    <button class="close-btn" (click)="closeDetails()">Kapat</button>
+
+    <!-- Fotoğraf Üste -->
+    <div style="text-align:center; margin-bottom:12px;">
+      <img 
+        [src]="selectedPersonnel?.personnelphoto" 
+        alt="Personnel Photo" 
+        style="width:120px; height:120px; border-radius:50%; object-fit:cover;"
+      >
+    </div>
+
+    <!-- Bilgiler -->
+    <label>Ad:</label>
+    <input [(ngModel)]="selectedPersonnel!.firstName" [readonly]="!isEditMode" />
+
+    <label>Soyad:</label>
+    <input [(ngModel)]="selectedPersonnel!.lastName" [readonly]="!isEditMode" />
+
+    <label>Pozisyon:</label>
+    <input [(ngModel)]="selectedPersonnel!.position" [readonly]="!isEditMode" />
+
+    <label>Email:</label>
+    <input [(ngModel)]="selectedPersonnel!.email" [readonly]="!isEditMode" />
+
+    <label>TC Kimlik:</label>
+    <input [(ngModel)]="selectedPersonnel!.tckimlik" [readonly]="!isEditMode" />
+
+    <label>Doğum Tarihi:</label>
+    <input [(ngModel)]="selectedPersonnel!.dogumtarihi" [readonly]="!isEditMode" type="date" />
+
+    <label>Telefon:</label>
+    <input [(ngModel)]="selectedPersonnel!.telno" [readonly]="!isEditMode" />
+
+    <label>Adres:</label>
+    <input [(ngModel)]="selectedPersonnel!.adres" [readonly]="!isEditMode" />
+
+    <label>Departman:</label>
+    <input [(ngModel)]="selectedPersonnel!.department" [readonly]="!isEditMode" />
+
+    <!-- Butonlar -->
+    <div class="form-buttons">
+      <button *ngIf="!isEditMode" type="button" class="edit-btn" (click)="editDetails(selectedPersonnel)">Düzenle</button>
+      <button *ngIf="isEditMode" type="button" class="save-btn" (click)="saveDetails()">Kaydet</button>
+      <button type="button" class="delete-btn" (click)="deletePersonnel(selectedPersonnel!.id)">Sil</button>
+      <button type="button" class="cancel-btn" (click)="closeDetails()">Kapat</button>
+    </div>
   </div>
 </div>
