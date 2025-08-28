@@ -302,6 +302,29 @@
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
+.filter-search {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-search input,
+.filter-search select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.filter-search input:focus,
+.filter-search select:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 5px rgba(255, 122, 0, 0.3);
+}
 
 
 

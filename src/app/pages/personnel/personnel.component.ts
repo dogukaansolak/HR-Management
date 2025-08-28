@@ -14,6 +14,12 @@ import { Personnel } from '../../models/personnel.model';
 export class PersonnelComponent implements OnInit {
 
   personnelList: Personnel[] = [];
+  filteredPersonnel: Personnel[] = [];
+
+  searchText: string = '';
+  selectedDepartment: string = '';
+  departments: string[] = [];
+
   isCardVisible = false;
   selectedPersonnel: Personnel | null = null;
 
@@ -26,9 +32,26 @@ export class PersonnelComponent implements OnInit {
     this.loadPersonnel();
   }
 
-  loadPersonnel() {
-    this.personnelService.getPersonnelList().subscribe(data => {
-      this.personnelList = data;
+ loadPersonnel() {
+  this.personnelService.getPersonnelList().subscribe(data => {
+    this.personnelList = data;
+    this.filteredPersonnel = [...this.personnelList];
+
+    this.departments = Array.from(new Set(
+      this.personnelList
+        .map(p => p.department)
+        .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
+    ));
+  });
+}
+
+
+  // 🔹 Filtreleme Fonksiyonu
+  filterPersonnel() {
+    this.filteredPersonnel = this.personnelList.filter(person => {
+      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+      return matchesName && matchesDept;
     });
   }
 
@@ -92,7 +115,7 @@ export class PersonnelComponent implements OnInit {
       totalLeave: 0,
       usedLeave: 0,
       workingStatus: 'Çalışıyor',
-      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg', // varsayılan
+      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
     };
   }
 }

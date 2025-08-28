@@ -1,3 +1,17 @@
+<div class="filter-search">
+  <input
+    type="text"
+    placeholder="Personel Ara..."
+    [(ngModel)]="searchText"
+    (input)="filterPersonnel()"
+  />
+
+  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
+    <option value="">Tüm Departmanlar</option>
+    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+  </select>
+</div>
+
 <div class="card-container">
   <!-- Personel Kartları -->
   <div class="content-card" *ngFor="let person of personnelList">
