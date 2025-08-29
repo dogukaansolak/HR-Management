@@ -99,12 +99,18 @@
 
 
 
-// Sadece ihtiyacımız olan modülleri import ediyoruz.
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginRequest } from '../../models/login-request.model';
+import { AuthService } from '../../services/auth.service';  // <-- AuthService'i import ettik
+
+export interface LoginResponse {
+  token: string;
+  fullName: string;
+  email: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -115,19 +121,12 @@ import { LoginRequest } from '../../models/login-request.model';
 })
 export class LoginComponent {
 
-  // Test için forma önceden doldurulacak bilgiler.
-  public loginData: LoginRequest = { Email: 'admin@test.com', Password: '123456-' };
-  
+  public loginData: LoginRequest = { Email: '', Password: '' };
   public errorMessage: string | null = null;
   public isLoading: boolean = false;
 
-  // AuthService'e artık ihtiyacımız olmadığı için constructor'dan siliyoruz.
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  /**
-   * Form gönderildiğinde bu metot çalışır.
-   * API çağırmak yerine, girilen bilgileri kod içinde kontrol eder.
-   */
   public onSubmit(form: NgForm): void {
     if (form.invalid) {
       this.errorMessage = 'Lütfen alanları doldurun.';
@@ -137,28 +136,19 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // --- EN ÖNEMLİ KISIM BURASI ---
-    // Gerçek bir API isteği yerine 2 saniyelik bir gecikme simüle ediyoruz.
-    setTimeout(() => {
-      // Girilen e-posta ve şifreyi, bizim belirlediğimiz doğru bilgilerle karşılaştırıyoruz.
-      if (this.loginData.Email === 'admin@test.com' && this.loginData.Password === '123456-') {
-        
-        // BİLGİLER DOĞRUYSA:
-        console.log('Giriş başarılı! (Simülasyon)');
-        // Token'ı localStorage'a kaydetme işlemini de simüle edebiliriz.
-        localStorage.setItem('accessToken', 'bu-sahte-bir-test-tokenidir');
-        // Dashboard'a yönlendir.
-        this.router.navigate(['/dashboard']);
-
-      } else {
-        
-        // BİLGİLER YANLIŞSA:
-        console.error('Giriş başarısız! (Simülasyon)');
-        this.errorMessage = 'E-posta veya şifre hatalı.';
-      }
-
-      // İşlem bitti, yükleme animasyonunu durdur.
-      this.isLoading = false;
-    }, 500); // 0,5 saniye (500 milisaniye) bekle
+    // 🔹 Backend'e istek atıyoruz
+this.authService.login(this.loginData).subscribe({
+  next: (res: LoginResponse) => {
+    console.log("Login başarılı:", res);
+    // Role yok, parametresiz çağır
+    this.authService.redirectToDashboard();
+    this.isLoading = false;
+  },
+  error: (err: any) => {
+    console.error("Login hatası:", err);
+    this.errorMessage = "E-posta veya şifre hatalı.";
+    this.isLoading = false;
+  }
+});
   }
 }
