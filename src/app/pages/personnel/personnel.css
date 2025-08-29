@@ -134,143 +134,105 @@
   transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 
-.person-detail {
+
+.card-person-detail {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 40px 50px;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-  width: 460px;
+  background: linear-gradient(180deg, #fff 0%, #f9fafb 100%);
+  padding: 36px 42px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  width: 480px;
   max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
   z-index: 1001;
   animation: fadeIn 0.3s ease-in-out;
-  text-align: center;
-  font-family: "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
 }
 
-/* === Başlık === */
-.person-detail h2 {
+.card-person-detail h2 {
   font-size: 26px;
   font-weight: 800;
-  margin-bottom: 16px;
-  color: #FF6600;
+  margin-bottom: 18px;
+  color: #ff6a00;
+  text-align: center;
+  text-shadow: 1px 1px 6px rgba(255,106,0,0.15);
+  letter-spacing: 0.5px;
 }
 
-/* === Açıklama Metni === */
-.person-detail p {
-  margin: 6px 0 18px;
-  color: #4b5563;
-  line-height: 1.6;
-}
-
-/* === Form Alanı === */
-.person-detail form {
+/* Input Grupları */
+.card-person-detail label {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.person-detail form label {
+  align-items: flex-start;
   font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 14px;
+  margin-bottom: 14px;
   color: #374151;
-  text-align: left;
 }
 
-.person-detail form input[type="text"],
-.person-detail form input[type="date"],
-.person-detail form input[type="email"],
-.person-detail form input[type="file"] {
+.card-person-detail input[type="text"],
+.card-person-detail input[type="date"],
+.card-person-detail input[type="email"] {
+  width: 100%;
   padding: 12px 14px;
+  margin-top: 6px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  width: 100%;
   font-size: 14px;
-  color: #111827;
   background: #fafafa;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
-
-.person-detail form input:focus {
-  border-color: #FF7A00;
+.card-person-detail input:focus {
+  border-color: #ff7a00;
   box-shadow: 0 0 0 4px rgba(255,122,0,0.2);
   outline: none;
   background: #fff;
 }
 
-/* === Butonlar === */
-.person-detail .form-buttons {
+/* Buton Grubu */
+.card-person-detail .form-buttons {
   display: flex;
-  justify-content: center;
-  gap: 14px;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 14px;
   margin-top: 22px;
 }
-
-.person-detail .form-buttons button {
-  flex: 1 1 45%;
+.card-person-detail .form-buttons button {
+  flex: 1;
+  min-width: 120px;
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   border: none;
-  min-width: 140px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
-/* Kaydet Butonu */
-.person-detail .save-btn {
-  background: linear-gradient(90deg, #FF6A00 0%, #FF9900 100%);
+.card-person-detail .save-btn {
+  background: linear-gradient(90deg, #ff6a00, #ff9900);
   color: #fff;
   box-shadow: 0 6px 16px rgba(255,106,0,0.28);
 }
-.person-detail .save-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(255,106,0,0.35);
-}
-
-/* Vazgeç Butonu */
-.person-detail .cancel-btn {
-  background: #e65b20;
+.card-person-detail .edit-btn {
+ background: #2563eb;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(230,91,32,0.25);
 }
-.person-detail .cancel-btn:hover {
-  background: #ff7a00;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(255,122,0,0.3);
-}
-
-/* Düzenle Butonu */
-.person-detail .edit-btn {
-  background: #007bff;
+.card-person-detail .delete-btn {
+  background: #dc2626;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(0,123,255,0.25);
 }
-.person-detail .edit-btn:hover {
-  background: #0056b3;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,86,179,0.3);
-}
-
-/* Sil Butonu */
-.person-detail .delete-btn {
-  background: #dc3545;
+.card-person-detail .cancel-btn {
+  background: #9ca3af;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(220,53,69,0.25);
 }
-.person-detail .delete-btn:hover {
-  background: #b02a37;
+.card-person-detail .form-buttons button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(220,53,69,0.3);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
 }
-
 
 /* Alt Buton Grupları */
 .butons {
