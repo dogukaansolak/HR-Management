@@ -1,364 +1,399 @@
-
 /* Ana İçerik Alanı (Tekrarlar Temizlendi) */
 .main-content {
   padding: 32px;
   flex-grow: 1;
   margin-left: 240px;
   transition: margin-left 0.3s ease-in-out;
+  background: #f5f6fa;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 /* Genel Container */
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 22px;
   justify-content: center;
-  padding: 20px;
-  background-color: #f7f7f7;
+  padding: 24px;
+  background-color: #f5f6fa;
 }
 
 /* Personel Kartları */
 .content-card {
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  width: 240px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(24,39,75,0.14);
+  width: 260px;
+  padding: 22px 18px;
   text-align: center;
-  padding: 20px 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
+.content-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120px 80px at 50% -40px, rgba(255,122,0,0.15), transparent 60%);
+  pointer-events: none;
+}
+.content-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,#FF6A00, #FF9900);
+  opacity: 0.25;
+  transition: opacity .25s ease, transform .25s ease;
+}
 .content-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.18);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 42px rgba(24,39,75,0.18);
+}
+.content-card:hover::after {
+  opacity: 0.6;
+  transform: scaleX(1.02);
 }
 
 /* Personel Fotoğrafı */
 .personnel-image img {
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
   object-fit: cover;
   border: 3px solid #ff7a00;
-  transition: transform 0.3s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-
 .content-card:hover .personnel-image img {
-  transform: scale(1.05);
+  transform: scale(1.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.16);
 }
 
+.yeni-personel-yazisi{
+  text-align: center;
+  color: #FF6600;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  font-size: 28px;
+  font-weight: 800;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+}
 /* Personel Bilgileri */
 .personnel-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  width: 100%;
 }
-
 .personnel-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #222;
+  font-size: 19px;
+  font-weight: 800;
+  color: #1f2937;
+  letter-spacing: .2px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .personnel-title {
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9a4f00;
+  background: rgba(255,122,0,0.12);
+  padding: 6px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Genel Buton */
 .btn{
-  top: 140px;
-  right: 10px;
-  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
-  box-shadow: 0 4px 16px rgba(255,75,0,0.13);
+  position: relative; /* yerleşimi bozmamak için sabit değil */
+  top: 0;
+  right: 0;
+  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
+  box-shadow: 0 6px 18px rgba(255,106,0,0.22);
   color: #fff;
   border: none;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 
-.person-detail form .form-buttons .edit-btn {
-  background: #007bff; /* mavi */
-  color: #fff;
-}
-
-.person-detail form .form-buttons .edit-btn:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
-
-.person-detail form .form-buttons .delete-btn {
-  background: #dc3545; /* kırmızı */
-  color: #fff;
-}
-
-.person-detail form .form-buttons .delete-btn:hover {
-  background: #b02a37;
-}
-
-.delete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,75,0,0.25);
-  background: linear-gradient(90deg, #FF6622 0%, #FFB733 100%);
-}
-.edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,75,0,0.25);
-  background: linear-gradient(90deg, #FF6622 0%, #FFB733 100%);
-}
-
-/* Detay Kutusu */
 .person-detail {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  width: 320px;
-  text-align: left;
+  background-color: #ffffff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  width: 460px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
   z-index: 1001;
-}
-
-.person-detail h2 {
-  margin-bottom: 15px;
-  font-size: 20px;
+  animation: fadeIn 0.3s ease-in-out;
   text-align: center;
+  font-family: "Segoe UI", Roboto, sans-serif;
 }
 
+/* === Başlık === */
+.person-detail h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #FF6600;
+}
+
+/* === Açıklama Metni === */
 .person-detail p {
-  margin: 50px 0;
-  color: #555;
+  margin: 6px 0 18px;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
-.person-detail form .form-buttons {
+/* === Form Alanı === */
+.person-detail form {
   display: flex;
-  justify-content: flex-end;
-  gap: 20px; 
-  margin-top: 15px;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.person-detail form .form-buttons button {
-  padding: 10px 18px;
-  border-radius: 12px;
+.person-detail form label {
   font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+  text-align: left;
+}
+
+.person-detail form input[type="text"],
+.person-detail form input[type="date"],
+.person-detail form input[type="email"],
+.person-detail form input[type="file"] {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  width: 100%;
   font-size: 14px;
+  color: #111827;
+  background: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.person-detail form input:focus {
+  border-color: #FF7A00;
+  box-shadow: 0 0 0 4px rgba(255,122,0,0.2);
+  outline: none;
+  background: #fff;
+}
+
+/* === Butonlar === */
+.person-detail .form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.person-detail .form-buttons button {
+  flex: 1 1 45%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  min-width: 140px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.person-detail form .form-buttons .save-btn {
-  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
+/* Kaydet Butonu */
+.person-detail .save-btn {
+  background: linear-gradient(90deg, #FF6A00 0%, #FF9900 100%);
   color: #fff;
+  box-shadow: 0 6px 16px rgba(255,106,0,0.28);
+}
+.person-detail .save-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(255,106,0,0.35);
 }
 
-.person-detail form .form-buttons .save-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,75,0,0.25);
-}
-
-.person-detail form .form-buttons .cancel-btn {
+/* Vazgeç Butonu */
+.person-detail .cancel-btn {
   background: #e65b20;
   color: #fff;
+  box-shadow: 0 6px 16px rgba(230,91,32,0.25);
 }
-
-.person-detail form .form-buttons .cancel-btn:hover {
+.person-detail .cancel-btn:hover {
   background: #ff7a00;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(255,122,0,0.3);
 }
 
+/* Düzenle Butonu */
+.person-detail .edit-btn {
+  background: #007bff;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0,123,255,0.25);
+}
+.person-detail .edit-btn:hover {
+  background: #0056b3;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,86,179,0.3);
+}
+
+/* Sil Butonu */
+.person-detail .delete-btn {
+  background: #dc3545;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(220,53,69,0.25);
+}
+.person-detail .delete-btn:hover {
+  background: #b02a37;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(220,53,69,0.3);
+}
+
+
+/* Alt Buton Grupları */
 .butons {
   display: flex;
   justify-content: space-between; 
-  gap: 10px;
+  gap: 12px;
   margin-top: 15px;
   flex-wrap: wrap; 
 }
-
 .butons button {
   flex: 1; 
-  padding: 10px 16px;
+  padding: 12px 16px;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  transition: transform .2s ease, box-shadow .2s ease;
   min-width: 100px;
 }
-
 .butons .persekle {
-  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
+  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
   color: #fff;
+  box-shadow: 0 8px 22px rgba(255,106,0,0.28);
 }
-
 .butons .persekle:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,75,0,0.25);
+  box-shadow: 0 12px 30px rgba(255,106,0,0.36);
 }
-
 .butons .kutukapat {
-  background: #e65b20;
+  background: #f44336;
   color: #fff;
 }
-
 .butons .kutukapat:hover {
-  background: #ff7a00;
+  background: #d32f2f;
 }
 
-
+/* Modal Backdrop */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(15,23,42,0.45);
+  backdrop-filter: blur(2px);
   z-index: 1000;
 }
 
+/* Ek Buton (aynı görünüm) */
 .bton{
   position: absolute;
   top: 140px;
   right: 10px;
-  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
-  box-shadow: 0 4px 16px rgba(255,75,0,0.13);
+  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
+  box-shadow: 0 6px 18px rgba(255,106,0,0.22);
   color: #fff;
   border: none;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 
-.form-buttons .edit-btn{
-  flex: 1; 
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-.form-buttons .delete-btn{
-   flex: 1; 
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-.form-buttons .cancel-btn{
-   flex: 1; 
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-.form-buttons .edit-btn{
-   flex: 1; 
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  min-width: 100px;
-}
-
-
-.person-detail {
+/* Personel Ekle Modal */
+.add-person-detail {
   position: fixed;
-  top: 50%;        
-  right: 20px;
-  width: 500px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
-  font-family: Arial, sans-serif;
+  text-transform: capitalize;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 80vh;
   overflow-y: auto;
-  overflow-x: hidden;
-  min-width: 0;
-  word-wrap: break-word;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f3f4f6;
-  max-height: calc(100vh - 180px);
+  padding: 30px;
+  border: 1px solid #e5e7eb;
+  border-radius: 30px;
+  background-color: #ffffff;
+  width: 400px;
+  box-shadow: 0 16px 44px rgba(0,0,0,0.20);
+  z-index: 1000;
 }
-
-.person-detail::-webkit-scrollbar {
-  width: 10px;
-}
-.person-detail::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 999px;
-}
-.person-detail::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 999px;
-}
-.person-detail::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-.wrapper-flex { min-height: 0; }
-
-.person-detail h2 {
-  margin-bottom: 15px;
-  font-size: 20px;
-  color: #333;
-  text-align: center;
-  position-visibility: sticky; 
-  top: 0px;
-  background: inherit;
-  padding: 0;
-  z-index: 1;
-}
-
-.person-detail form {
+.add-person-detail form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
-
-.person-detail label {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 4px;
+.add-person-detail input[type="text"],
+.add-person-detail input[type="date"],
+.add-person-detail input[type="file"],
+.add-person-detail input[type="email"] {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color .15s ease, box-shadow .2s ease;
 }
-
-.person-detail input {
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border 0.2s;
-}
-
-.person-detail input:focus {
+.add-person-detail input[type="text"]:focus,
+.add-person-detail input[type="date"]:focus,
+.add-person-detail input[type="file"]:focus,
+.add-person-detail input[type="email"]:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
+
+/* Basit butonlar */
+.persekle {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.kutukapat {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Arama & Filtreleme */
 .filter-search {
   display: flex;
   gap: 12px;
@@ -366,104 +401,82 @@
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
-
 .filter-search input,
 .filter-search select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
   font-size: 14px;
   outline: none;
-  transition: border 0.2s ease;
+  transition: border-color .15s ease, box-shadow .2s ease;
+  background: #ffffff;
 }
-
 .filter-search input:focus,
 .filter-search select:focus {
   border-color: #ff7a00;
-  box-shadow: 0 0 5px rgba(255, 122, 0, 0.3);
+  box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
 }
 
-
-
+/* Animasyon */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-
 /* === YENİLENMİŞ RESPONSIVE TASARIM === */
-
 @media (max-width: 992px) {
-  .side-nav {
-    transform: translateX(-100%);
-  }
-  
-  #menu-toggle:checked ~ .side-nav {
-      transform: translateX(0);
-  }
-
-  .main-content {
-    margin-left: 0;
-  }
-
-  .hamburger-menu {
-    display: flex;
-    align-items: center;
-  }
-  
-  .content-card {
-    width: 100%;
-  }
-
-  /* Logo, sabitlenen hamburger ikonunun arkasında kalmasın */
-  .logo-container {
-    padding-left: 60px;   
-}
+  .side-nav { transform: translateX(-100%); }
+  #menu-toggle:checked ~ .side-nav { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  .hamburger-menu { display: flex; align-items: center; }
+  .content-card { width: 100%; }
+  .logo-container { padding-left: 60px; }
 }
 
 /* Telefonlar */
 @media (max-width: 480px) {
-  .top-nav {
-    padding: 0 16px;
+  .top-nav { padding: 0 16px; }
+  .user-actions .username { display: none; }
+  .main-content { padding: 16px; }
+  .hamburger-menu { left: 16px; }
+  .hamburger-menu label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
   }
-  .user-actions .username {
-    display: none;
-  }
-  .main-content {
-    padding: 16px;
-  }
-  .hamburger-menu {
-    left: 16px;
-  }
-  .logo-container {
-    padding-left: 50px;
-  }
-
+  .logo-container { padding-left: 50px; }
 }
 @media (max-width: 640px) {
+  .person-detail { max-height: 80vh; padding: 16px; }
+}
+@media (max-width: 480px) {
+  .content-card { width: 100%; padding: 16px 12px; }
+  .personnel-name { font-size: 16px; }
+  .personnel-title { font-size: 12px; }
+  .btn { font-size: 13px; padding: 8px 14px; }
+}
+@media (max-width: 500px) {
+  .add-person-detail { width: 90%; padding: 16px; }
+  .butons { flex-direction: column; gap: 10px; }
+  .persekle, .kutukapat { width: 100%; }
+}
+@media (max-width: 500px) {
+  .person-detail .form-buttons button { width: 100%; }
+}
+
+@media (max-width: 480px) {
   .person-detail {
-    max-height: 80vh;
-    padding: 12px;
+    padding: 30px 20px;
+    width: 95%;
   }
-}
-@media (max-width: 480px) {
-  .content-card {
-    width: 100%;
-    padding: 15px 10px;
-  }
-  .personnel-name {
-    font-size: 16px;
-  }
-  .personnel-title {
-    font-size: 13px;
-  }
-  .btn {
-    font-size: 13px;
-    padding: 7px 14px;
-  }
-}
-@media (max-width: 480px) {
-  .butons {
+  .person-detail .form-buttons {
     flex-direction: column;
+    align-items: stretch;
+  }
+  .person-detail .form-buttons button {
+    flex: 1 1 100%;
+    min-width: unset;
   }
 }

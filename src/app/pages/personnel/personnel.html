@@ -15,7 +15,7 @@
 <div class="card-container">
   <div class="content-card" *ngFor="let person of filteredPersonnel">
     <div class="personnel-image">
-      <img [src]="person.personnelphoto" alt="Personnel Photo" />
+      <img [src]="person.personnelphoto" alt="personnel"/>
     </div>
     <div class="personnel-info">
       <h3 class="personnel-name">{{ person.firstName }} {{ person.lastName }}</h3>
@@ -29,31 +29,30 @@
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
-<div *ngIf="showAddForm" class="person-detail">
-  <h2>Yeni Personel</h2>
+<div *ngIf="showAddForm" class="add-person-detail">
+  <h2 class="yeni-personel-yazisi   ">Yeni Personel</h2>
   <form (ngSubmit)="addPersonnel()">
-    <label>Ad:</label>
-    <input [(ngModel)]="newPersonnel.firstName" name="firstName" required />
-    <label>Soyad:</label>
-    <input [(ngModel)]="newPersonnel.lastName" name="lastName" required />
-    <label>Tc Kimlik Numarası:</label>
-    <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required />
-    <label>Doğum Tarihi:</label>
-    <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required />
-    <label>Telefon Numarası:</label>
-    <input [(ngModel)]="newPersonnel.telno" name="telno" />
-    <label>Adres:</label>
-    <input [(ngModel)]="newPersonnel.adres" name="adres" />
-    <label>Email:</label>
-    <input [(ngModel)]="newPersonnel.email" name="email" />
-    <label>Pozisyon:</label>
-    <input [(ngModel)]="newPersonnel.position" name="position" />
-    <label>Bölüm:</label>
-    <input [(ngModel)]="newPersonnel.department" name="department" />
-    <label>Başlangıç Tarihi:</label>
-    <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
-    <label>Fotoğraf:</label>
-    <input type="file" (change)="handleFileInput($event)" required/>
+    <label> Ad: <br>
+    <input [(ngModel)]="newPersonnel.firstName" name="firstName" required /></label>
+    <label> Soyad: <br>
+    <input [(ngModel)]="newPersonnel.lastName" name="lastName" required /></label>
+    <label> Tc Kimlik Numarası: <br>
+    <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required /></label>
+    <label> Doğum Tarihi: <br>
+    <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required /></label>
+    <label> Telefon Numarası: <br>
+    <input [(ngModel)]="newPersonnel.telno" name="telno" /></label>
+    <label> Adres: <br>
+    <input [(ngModel)]="newPersonnel.adres" name="adres" /></label>
+    <label> Email: <br>
+    <input [(ngModel)]="newPersonnel.email" name="email" /></label>
+    <label> Pozisyon: <br>
+    <input [(ngModel)]="newPersonnel.position" name="position" /></label>
+    <label> Bölüm: <br>
+    <input [(ngModel)]="newPersonnel.department" name="department" /></label>
+    <label> Başlangıç Tarihi: <br>
+    <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/></label>
+    <label> Fotoğraf:<input type="file" (change)="handleFileInput($event)" required/></label>
 
     <div class="butons">
       <button class="persekle" type="submit">Ekle</button>
@@ -64,46 +63,38 @@
 
 <!-- Personel Detay Popup -->
 <div *ngIf="isCardVisible">
-  <div class="modal-backdrop" (click)="closeDetails()"></div>
+  <div class="modal-backdrop" (click)="closeDetails()" onkeydown=""></div>
   <div class="card person-detail">
     <h2>👤 Personel Bilgileri</h2>
 
     <!-- Fotoğraf Üste -->
     <div style="text-align:center; margin-bottom:12px;">
-      <img 
-        [src]="selectedPersonnel?.personnelphoto" 
-        alt="Personnel Photo" 
-        style="width:120px; height:120px; border-radius:50%; object-fit:cover;"
-      >
+      <img [src]="selectedPersonnel?.personnelphoto"  alt="Personnel"  style="width:120px; height:120px; border-radius:50%; object-fit:cover;" >
     </div>
+    <div *ngIf="showAddForm" class="modal-backdrop"></div>
+    <div *ngIf="showAddForm" class="add-person-detail">
+      </div>
+
 
     <!-- Bilgiler -->
-    <label>Ad:</label>
-    <input [(ngModel)]="selectedPersonnel!.firstName" [readonly]="!isEditMode" />
-
-    <label>Soyad:</label>
-    <input [(ngModel)]="selectedPersonnel!.lastName" [readonly]="!isEditMode" />
-
-    <label>Pozisyon:</label>
-    <input [(ngModel)]="selectedPersonnel!.position" [readonly]="!isEditMode" />
-
-    <label>Email:</label>
-    <input [(ngModel)]="selectedPersonnel!.email" [readonly]="!isEditMode" />
-
-    <label>TC Kimlik:</label>
-    <input [(ngModel)]="selectedPersonnel!.tckimlik" [readonly]="!isEditMode" />
-
-    <label>Doğum Tarihi:</label>
-    <input [(ngModel)]="selectedPersonnel!.dogumtarihi" [readonly]="!isEditMode" type="date" />
-
-    <label>Telefon:</label>
-    <input [(ngModel)]="selectedPersonnel!.telno" [readonly]="!isEditMode" />
-
-    <label>Adres:</label>
-    <input [(ngModel)]="selectedPersonnel!.adres" [readonly]="!isEditMode" />
-
-    <label>Departman:</label>
-    <input [(ngModel)]="selectedPersonnel!.department" [readonly]="!isEditMode" />
+    <label>Ad: <br>
+      <input [(ngModel)]="selectedPersonnel!.firstName" [readonly]="!isEditMode" /></label>
+    <label>Soyad: <br>
+      <input [(ngModel)]="selectedPersonnel!.lastName" [readonly]="!isEditMode" /></label>
+    <label>Pozisyon: <br>
+      <input [(ngModel)]="selectedPersonnel!.position" [readonly]="!isEditMode" /></label>
+    <label>Email: <br>
+      <input [(ngModel)]="selectedPersonnel!.email" [readonly]="!isEditMode" /></label>
+    <label>TC Kimlik: <br>
+      <input [(ngModel)]="selectedPersonnel!.tckimlik" [readonly]="!isEditMode" /></label>
+    <label>Doğum Tarihi: <br>
+      <input [(ngModel)]="selectedPersonnel!.dogumtarihi" [readonly]="!isEditMode" type="date" /></label>
+    <label>Telefon: <br>
+      <input [(ngModel)]="selectedPersonnel!.telno" [readonly]="!isEditMode"/></label>
+    <label>Adres: <br>
+      <input [(ngModel)]="selectedPersonnel!.adres" [readonly]="!isEditMode" /></label>
+    <label>Departman: <br>
+      <input [(ngModel)]="selectedPersonnel!.department" [readonly]="!isEditMode" /></label>
 
     <!-- Butonlar -->
     <div class="form-buttons">

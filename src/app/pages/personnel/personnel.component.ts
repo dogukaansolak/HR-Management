@@ -27,7 +27,7 @@ export class PersonnelComponent implements OnInit {
   showAddForm = false;
   newPersonnel: Personnel = this.getEmptyPersonnel();
 
-  constructor(private personnelService: PersonnelService) { }
+  constructor(private readonly personnelService: PersonnelService) { }
 
   ngOnInit() {
     this.loadPersonnel();
@@ -46,7 +46,7 @@ export class PersonnelComponent implements OnInit {
 
     const index = this.personnelList.findIndex(p => p.id === this.selectedPersonnel!.id);
     if (index !== -1) {
-      this.personnelList[index] = { ...this.selectedPersonnel! };
+      this.personnelList[index] = { ...this.selectedPersonnel };
     }
 
     this.isEditMode = false;
