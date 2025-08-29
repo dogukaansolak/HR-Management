@@ -1,29 +1,36 @@
-<div class="container">
-  <h2>Personel İzin ve Çalışma Durumu</h2>
-  <div class="table-wrapper">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>İsim</th>
-          <th>Toplam İzin</th>
-          <th>Kullanılan İzin</th>
-          <th>Kalan İzin</th>
-          <th>Çalışma Durumu</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of personnels">
-          <td>{{ p.firstName }} {{ p.lastName }}</td>
-          <td>{{ p.totalLeave }}</td>
-          <td>{{ p.usedLeave }}</td>
-          <td>{{ getRemainingLeave(p) }}</td>
-          <td [ngClass]="{
-                'working': p.workingStatus==='Çalışıyor',
-                'on-leave': p.workingStatus==='İzinli',
-                'remote': p.workingStatus==='Uzaktan'
-              }">{{ p.workingStatus }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- 🔍 Arama ve Filtre -->
+<div class="filter-search">
+  <input
+    type="text"
+    placeholder="Personel Ara..."
+    [(ngModel)]="searchText"
+    (input)="filterPersonnel()"
+  />
+
+  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
+    <option value="">Tüm Departmanlar</option>
+    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+  </select>
+</div>
+
+<!-- 📋 Personel Tablosu -->
+<div class="permission-table-container">
+  <table class="permission-table">
+    <thead>
+      <tr>
+        <th>Ad Soyad</th>
+        <th>Departman</th>
+        <th>Çalışma Durumu</th>
+        <th>Çalışma Süresi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of filteredPersonnel">
+        <td>{{ person.firstName }} {{ person.lastName }}</td>
+        <td>{{ person.department }}</td>
+        <td>{{ person.workingStatus }}</td>
+        <td>{{ calculateWorkDuration(person.startDate) }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

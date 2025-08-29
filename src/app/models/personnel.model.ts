@@ -13,6 +13,7 @@ export interface Personnel {
     startDate?: string; 
     totalLeave: number;
     usedLeave: number;
-    workingStatus: 'Çalışıyor' | 'İzinli' | 'Uzaktan';
+    workingStatus: string;
+    //'Çalışıyor' | 'İzinli' | 'Uzaktan';  bu satırı üst satıra alınablir
     personnelphoto: string;
 }

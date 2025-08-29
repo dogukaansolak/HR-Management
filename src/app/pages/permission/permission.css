@@ -1,42 +1,57 @@
-.container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  max-width: 100%;
+.permission-table-container {
   overflow-x: auto;
-  box-sizing: border-box;
+  margin: 20px;
 }
 
-.table-wrapper {
+.permission-table {
   width: 100%;
-  display: flex;
-  justify-content: center; 
-}
-
-.table {
-  width: 100%;
-  max-width: 1200px;      
   border-collapse: collapse;
-  table-layout: fixed;     
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-th, td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
-  word-wrap: break-word;
+.permission-table th,
+.permission-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
-thead {
-  background-color: #f2f2f2;
+.permission-table th {
+  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
+  color: #fff;
+  font-weight: 600;
 }
 
-.working {
-  color: green;
-  font-weight: b
+.permission-table tr:hover {
+  background-color: #f9f9f9;
+  transition: background 0.2s ease;
 }
 
-@media (max-width: 768px) {
-  .table {
-    font-size: 14px;
-  }
+/* 🔍 Arama ve filtre stilleri */
+.filter-search {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-search input,
+.filter-search select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.filter-search input:focus,
+.filter-search select:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 5px rgba(255, 122, 0, 0.3);
 }
