@@ -1,57 +1,130 @@
-.permission-table-container {
-  overflow-x: auto;
-  margin: 20px;
+/* izin-yonetimi.component.css */
+/* Component'e özel stiller. Responsive tasarım ve cursor kuralları burada tanımlanır. */
+
+/* Genel Konteyner */
+.container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
 }
 
-.permission-table {
+/* Filtreleme Alanı Stilleri */
+.filtre-alani {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form-input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Tablo Stilleri */
+.table-wrapper {
+  overflow-x: auto; /* Küçük ekranlarda tabloyu yatayda kaydırılabilir yapar. */
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.permission-table th,
-.permission-table td {
-  padding: 12px 16px;
+th, td {
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+  border-bottom: 1px solid #ddd;
 }
 
-.permission-table th {
-  background: linear-gradient(90deg, #FF4B00 0%, #FF9900 100%);
-  color: #fff;
-  font-weight: 600;
+thead {
+  background-color: #f8f9fa;
 }
 
-.permission-table tr:hover {
-  background-color: #f9f9f9;
-  transition: background 0.2s ease;
+/* Durum Etiketleri */
+.durum-etiketi {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
 }
 
-/* 🔍 Arama ve filtre stilleri */
-.filter-search {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+.durum-onay-bekliyor { background-color: #ffc107; color: #333; }
+.durum-onaylandi { background-color: #28a745; }
+.durum-reddedildi { background-color: #dc3545; }
+
+/* Buton Stilleri */
+.btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: white;
+  margin-right: 0.5rem;
+}
+.btn-onayla { background-color: #28a745; }
+.btn-reddet { background-color: #dc3545; }
+.islem-yapilamaz { color: #999; }
+
+/* Cursor Kuralları: İstenen cursor davranışlarını uygular. */
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-text { cursor: text; }
+.cursor-default { cursor: default; }
+.cursor-wait { cursor: wait; }
+
+/* Yükleme Animasyonu */
+.yukleniyor { text-align: center; padding: 3rem; color: #666; }
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.filter-search input,
-.filter-search select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s ease;
-}
+/* Responsive Tasarım: Mobil cihazlar için */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
 
-.filter-search input:focus,
-.filter-search select:focus {
-  border-color: #ff7a00;
-  box-shadow: 0 0 5px rgba(255, 122, 0, 0.3);
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+
+  td:before {
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    content: attr(data-label);
+  }
+
+  /* data-label'ları HTML'e eklemek gerekir, bu CSS'in çalışması için JS ile yapılabilir veya manuel eklenebilir.
+     Örnek: <td data-label="Çalışan">{{ izin.calisan.tamAd }}</td> */
 }

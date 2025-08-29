@@ -1,36 +1,63 @@
-<!-- 🔍 Arama ve Filtre -->
-<div class="filter-search">
-  <input
-    type="text"
-    placeholder="Personel Ara..."
-    [(ngModel)]="searchText"
-    (input)="filterPersonnel()"
-  />
+<div class="container">
+  <h1>İzin Yönetim Paneli</h1>
 
-  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
-    <option value="">Tüm Departmanlar</option>
-    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-  </select>
-</div>
+  <div class="filtre-alani">
+    <input type="text" placeholder="Çalışan Adına Göre Ara..." class="form-input cursor-text">
+    <select class="form-input cursor-pointer">
+      <option>Tüm Durumlar</option>
+      <option>Onay Bekliyor</option>
+      <option>Onaylandı</option>
+      <option>Reddedildi</option>
+    </select>
+  </div>
 
-<!-- 📋 Personel Tablosu -->
-<div class="permission-table-container">
-  <table class="permission-table">
-    <thead>
-      <tr>
-        <th>Ad Soyad</th>
-        <th>Departman</th>
-        <th>Çalışma Durumu</th>
-        <th>Çalışma Süresi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let person of filteredPersonnel">
-        <td>{{ person.firstName }} {{ person.lastName }}</td>
-        <td>{{ person.department }}</td>
-        <td>{{ person.workingStatus }}</td>
-        <td>{{ calculateWorkDuration(person.startDate) }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="isLoading" class="yukleniyor">
+    <div class="spinner"></div>
+    <p>Veriler Yükleniyor...</p>
+  </div>
+
+  <div *ngIf="hataMesaji" class="hata">
+    {{ hataMesaji }}
+  </div>
+
+  <div *ngIf="!isLoading && !hataMesaji" class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Çalışan</th>
+          <th>Departman</th>
+          <th>İzin Türü</th>
+          <th>Tarih Aralığı</th>
+          <th>Süre</th>
+          <th>Durum</th>
+          <th>İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let izin of izinler">
+          <td>{{ izin.calisan.firstName }}</td>
+          <td>{{ izin.calisan.department }}</td>
+          <td>{{ izin.izinTuru }}</td>
+          <td>{{ izin.baslangicTarihi | date:'dd.MM.yyyy' }} - {{ izin.bitisTarihi | date:'dd.MM.yyyy' }}</td>
+          <td>{{ izin.sureGun }} gün</td>
+          <td>
+            <span class="durum-etiketi" [class.durum-onay-bekliyor]="izin.durum === 'Onay Bekliyor'"
+              [class.durum-onaylandi]="izin.durum === 'Onaylandı'"
+              [class.durum-reddedildi]="izin.durum === 'Reddedildi'">
+              {{ izin.durum }}
+            </span>
+          </td>
+          <td class="islemler">
+            <ng-container *ngIf="izin.durum === 'Onay Bekliyor'">
+              <button class="btn btn-onayla cursor-pointer" (click)="onOnayla(izin.id)">Onayla</button>
+              <button class="btn btn-reddet cursor-pointer" (click)="onReddet(izin.id)">Reddet</button>
+            </ng-container>
+            <span *ngIf="izin.durum !== 'Onay Bekliyor'" class="islem-yapilamaz cursor-not-allowed">
+              -
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

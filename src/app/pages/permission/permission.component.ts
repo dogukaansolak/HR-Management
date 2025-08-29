@@ -1,71 +1,61 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PersonnelService } from '../../services/personnel.service';
+import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Permission, IzinTuru, Durum } from '../../models/permission.model';
 import { Personnel } from '../../models/personnel.model';
 
 @Component({
   selector: 'app-permission',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './permission.html',
-  styleUrls: ['./permission.css']
+  styleUrls: ['./permission.css'],
+  imports: [CommonModule],
+  providers: [DatePipe]
 })
-export class Permission implements OnInit {
+export class PermissionComponent {
+  izinler: Permission[] = [];
+  isLoading: boolean = true;
+  hataMesaji: string = '';
 
-  personnelList: Personnel[] = [];
-  filteredPersonnel: Personnel[] = [];
-
-  searchText: string = '';
-  selectedDepartment: string = '';
-  departments: string[] = [];
-
-  constructor(private personnelService: PersonnelService) {}
-
-  ngOnInit() {
-    this.loadPersonnel();
+  constructor(private datePipe: DatePipe) {
+    this.loadIzinler();
   }
 
-  // 🔹 Personel bilgilerini yükle
-  loadPersonnel() {
-    this.personnelService.getPersonnelList().subscribe(data => {
-      this.personnelList = data;
-      this.filteredPersonnel = [...this.personnelList];
+  loadIzinler() {
+    // // Örnek veri
+    // const calisan: Personnel = {
+    //   id: 1,
+    //   firstName: 'Ahmet',
+    //   lastName: 'Yılmaz',
+    //   tckimlik: '12345678901',
+    //   dogumtarihi: '1990-01-01',
+    //   totalLeave: 20,
+    //   usedLeave: 5,
+    //   workingStatus: 'Çalışıyor',
+    //   personnelphoto: '',
+    // };
 
-      this.departments = Array.from(new Set(
-        this.personnelList
-          .map(p => p.department)
-          .filter((dept): dept is string => !!dept)
-      ));
-    });
+    // this.izinler = [
+    //   new Permission(
+    //     1,
+    //     calisan,
+    //     IzinTuru.YILLIK_IZIN,
+    //     new Date('2025-09-01'),
+    //     new Date('2025-09-05'),
+    //     'Yıllık izin',
+    //     Durum.ONAY_BEKLIYOR,
+    //     new Date()
+    //   )
+    // ];
+
+    this.isLoading = false;
   }
 
-  // 🔹 Filtreleme
-  filterPersonnel() {
-    this.filteredPersonnel = this.personnelList.filter(person => {
-      const matchesName = (person.firstName + ' ' + person.lastName)
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
-      return matchesName && matchesDept;
-    });
+  onOnayla(id: number) {
+    const izin = this.izinler.find(i => i.id === id);
+    if (izin) izin.durum = Durum.ONAYLANDI;
   }
 
-  // 🔹 Çalışma süresi hesaplama
-  calculateWorkDuration(startDate?: string): string {
-  if (!startDate) return "—";
-  const start = new Date(startDate);
-  const today = new Date();
-  const diffTime = today.getTime() - start.getTime();
-
-  const years = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
-  const months = Math.floor((diffTime % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
-
-  if (years > 0) {
-    return `${years} yıl ${months} ay`;
-  } else {
-    return `${months} ay`;
+  onReddet(id: number) {
+    const izin = this.izinler.find(i => i.id === id);
+    if (izin) izin.durum = Durum.REDDEDILDI;
   }
-}
-
 }

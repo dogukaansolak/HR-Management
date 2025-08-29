@@ -8,7 +8,9 @@ import { Register } from './auth/register/register.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DashboardHome } from './pages/dashboard-home/dashboard-home'; // Düzeltildi
 import { PersonnelComponent } from './pages/personnel/personnel.component';
-import { Permission } from './pages/permission/permission.component';
+// Update the import to match the actual export from the file
+import { PermissionComponent } from './pages/permission/permission.component';
+
 import { Cost } from './pages/cost/cost.component';
 import { Candidate } from './pages/candidate/candidate.component';
 import { Reports } from './pages/reports/reports.component';
@@ -42,7 +44,7 @@ export const routes: Routes = [
 
       // Diğer alt rotalar
       { path: 'personnel', component: PersonnelComponent },   // Düzeltildi
-      { path: 'permission', component: Permission }, // Düzeltildi
+      { path: 'permission', component: PermissionComponent }, // Düzeltildi
       { path: 'cost', component: Cost },             // Düzeltildi
       { path: 'candidate', component: Candidate },   // Düzeltildi
       { path: 'reports', component: Reports },       // Düzeltildi
