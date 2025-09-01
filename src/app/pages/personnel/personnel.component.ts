@@ -64,13 +64,16 @@ export class PersonnelComponent implements OnInit {
     });
   }
 
-  filterPersonnel() {
-    this.filteredPersonnel = this.personnelList.filter(person => {
-      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
-      return matchesName && matchesDept;
-    });
-  }
+filterPersonnel() {
+  this.filteredPersonnel = this.personnelList.filter(person => {
+    const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+    const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+    return matchesName && matchesDept;
+  });
+
+  this.currentPage = 1; // Filtre değişince sayfayı 1 yap
+}
+
 
   openDetails(person: Personnel) {
     this.selectedPersonnel = person;
@@ -140,4 +143,25 @@ export class PersonnelComponent implements OnInit {
       personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
     };
   }
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+
+  get paginatedPersonnel(): Personnel[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredPersonnel.slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredPersonnel.length / this.itemsPerPage);
+  }
+
+  goToPreviousPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  goToNextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+  
+
 }

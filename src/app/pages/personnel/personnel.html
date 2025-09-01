@@ -13,7 +13,7 @@
 </div>
 
 <div class="card-container">
-  <div class="content-card" *ngFor="let person of filteredPersonnel">
+  <div class="content-card" *ngFor="let person of paginatedPersonnel">
     <div class="personnel-image">
       <img [src]="person.personnelphoto" alt="personnel"/>
     </div>
@@ -26,6 +26,12 @@
     </div>
   </div>
 </div>
+<div class="pagination" *ngIf="totalPages > 1" style="text-align:center; margin-top:20px;">
+  <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Önceki</button>
+  <span>Sayfa {{currentPage}} / {{totalPages}}</span>
+  <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Sonraki</button>
+</div>
+
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
