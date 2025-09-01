@@ -30,29 +30,41 @@
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
 <div *ngIf="showAddForm" class="add-person-detail">
-  <h2 class="yeni-personel-yazisi   ">Yeni Personel</h2>
+  <h2 class="yeni-personel-yazisi">Yeni Personel</h2>
   <form (ngSubmit)="addPersonnel()">
-    <label> Ad: 
-    <input [(ngModel)]="newPersonnel.firstName" name="firstName" required /></label>
+    <label> Ad:
+      <input [(ngModel)]="newPersonnel.firstName" name="firstName" required />
+    </label>
     <label> Soyad:
-    <input [(ngModel)]="newPersonnel.lastName" name="lastName" required /></label>
-    <label> Tc Kimlik Numarası: 
-    <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required /></label>
-    <label> Doğum Tarihi: 
-    <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required /></label>
-    <label> Telefon Numarası: 
-    <input [(ngModel)]="newPersonnel.telno" name="telno" /></label>
-    <label> Adres: 
-    <input [(ngModel)]="newPersonnel.adres" name="adres" /></label>
-    <label> Email: 
-    <input [(ngModel)]="newPersonnel.email" name="email" /></label>
-    <label> Pozisyon: 
-    <input [(ngModel)]="newPersonnel.position" name="position" /></label>
-    <label> Bölüm: 
-    <input [(ngModel)]="newPersonnel.department" name="department" /></label>
-    <label> Başlangıç Tarihi: 
-    <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/></label>
-    <label> Fotoğraf:<input type="file" (change)="handleFileInput($event)" required/></label>
+      <input [(ngModel)]="newPersonnel.lastName" name="lastName" required />
+    </label>
+    <label> Tc Kimlik Numarası:
+      <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required />
+    </label>
+    <label> Doğum Tarihi:
+      <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required />
+    </label>
+    <label> Telefon Numarası:
+      <input [(ngModel)]="newPersonnel.telno" name="telno" />
+    </label>
+    <label> Adres:
+      <input [(ngModel)]="newPersonnel.adres" name="adres" />
+    </label>
+    <label> Email:
+      <input [(ngModel)]="newPersonnel.email" name="email" />
+    </label>
+    <label> Pozisyon:
+      <input [(ngModel)]="newPersonnel.position" name="position" />
+    </label>
+    <label> Bölüm:
+      <input [(ngModel)]="newPersonnel.department" name="department" />
+    </label>
+    <label> Başlangıç Tarihi:
+      <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
+    </label>
+    <label> Fotoğraf:
+      <input type="file" (change)="handleFileInput($event)" required/>
+    </label>
 
     <div class="butons">
       <button class="persekle" type="submit">Ekle</button>
@@ -63,38 +75,64 @@
 
 <!-- Personel Detay Popup -->
 <div *ngIf="isCardVisible">
-  <div class="modal-backdrop" (click)="closeDetails()" onkeydown=""></div>
-  <div class="card-person-detail">
+  <div class="modal-backdrop" (click)="closeDetails()"></div>
+  <div class="card-person-detail" [ngClass]="{ 'editing': isEditMode }">
     <h2>👤 Personel Bilgileri</h2>
 
-    <!-- Fotoğraf Üste -->
+    <!-- Fotoğraf -->
     <div style="text-align:center; margin-bottom:12px;">
-      <img [src]="selectedPersonnel?.personnelphoto"  alt="Personnel"  style="width:120px; height:120px; border-radius:50%; object-fit:cover;" >
+      <img
+        [src]="selectedPersonnel?.personnelphoto"
+        alt="Personnel"
+        style="width:120px; height:120px; border-radius:50%; object-fit:cover;"
+      />
     </div>
-    <div *ngIf="showAddForm" class="modal-backdrop"></div>
-    <div *ngIf="showAddForm" class="add-person-detail">
-      </div>
-
 
     <!-- Bilgiler -->
-    <label>Ad: 
-      <input [(ngModel)]="selectedPersonnel!.firstName" [readonly]="!isEditMode" /></label>
-    <label>Soyad: 
-      <input [(ngModel)]="selectedPersonnel!.lastName" [readonly]="!isEditMode" /></label>
-    <label>Pozisyon: 
-      <input [(ngModel)]="selectedPersonnel!.position" [readonly]="!isEditMode" /></label>
-    <label>Email: 
-      <input [(ngModel)]="selectedPersonnel!.email" [readonly]="!isEditMode" /></label>
-    <label>TC Kimlik: 
-      <input [(ngModel)]="selectedPersonnel!.tckimlik" [readonly]="!isEditMode" /></label>
-    <label>Doğum Tarihi: 
-      <input [(ngModel)]="selectedPersonnel!.dogumtarihi" [readonly]="!isEditMode" type="date" /></label>
-    <label>Telefon: 
-      <input [(ngModel)]="selectedPersonnel!.telno" [readonly]="!isEditMode"/></label>
-    <label>Adres: 
-      <input [(ngModel)]="selectedPersonnel!.adres" [readonly]="!isEditMode" /></label>
-    <label>Departman: 
-      <input [(ngModel)]="selectedPersonnel!.department" [readonly]="!isEditMode" /></label>
+    <label>Ad:
+      <span class="value">{{ selectedPersonnel?.firstName }}</span>
+      <input [(ngModel)]="selectedPersonnel!.firstName" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Soyad:
+      <span class="value">{{ selectedPersonnel?.lastName }}</span>
+      <input [(ngModel)]="selectedPersonnel!.lastName" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Pozisyon:
+      <span class="value">{{ selectedPersonnel?.position }}</span>
+      <input [(ngModel)]="selectedPersonnel!.position" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Email:
+      <span class="value">{{ selectedPersonnel?.email }}</span>
+      <input [(ngModel)]="selectedPersonnel!.email" *ngIf="isEditMode"/>
+    </label>
+
+    <label>TC Kimlik:
+      <span class="value">{{ selectedPersonnel?.tckimlik }}</span>
+      <input [(ngModel)]="selectedPersonnel!.tckimlik" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Doğum Tarihi:
+      <span class="value">{{ selectedPersonnel?.dogumtarihi }}</span>
+      <input [(ngModel)]="selectedPersonnel!.dogumtarihi" type="date" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Telefon:
+      <span class="value">{{ selectedPersonnel?.telno }}</span>
+      <input [(ngModel)]="selectedPersonnel!.telno" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Adres:
+      <span class="value">{{ selectedPersonnel?.adres }}</span>
+      <input [(ngModel)]="selectedPersonnel!.adres" *ngIf="isEditMode"/>
+    </label>
+
+    <label>Departman:
+      <span class="value">{{ selectedPersonnel?.department }}</span>
+      <input [(ngModel)]="selectedPersonnel!.department" *ngIf="isEditMode"/>
+    </label>
 
     <!-- Butonlar -->
     <div class="form-buttons">
@@ -105,4 +143,3 @@
     </div>
   </div>
 </div>
-<p>bunu sil</p>

@@ -33,14 +33,12 @@ export class PersonnelComponent implements OnInit {
     this.loadPersonnel();
   }
 
-  // 🔹 Düzenle butonuna basınca
   editDetails(person: Personnel | null) {
     if (!person) return;
-    this.selectedPersonnel = { ...person };
+    this.selectedPersonnel = person;
     this.isEditMode = true;
   }
 
-  // 🔹 Kaydet butonu
   saveDetails() {
     if (!this.selectedPersonnel) return;
 
@@ -53,7 +51,6 @@ export class PersonnelComponent implements OnInit {
     this.isCardVisible = false;
   }
 
-  // 🔹 Personel listesi yükleme
   loadPersonnel() {
     this.personnelService.getPersonnelList().subscribe(data => {
       this.personnelList = data;
@@ -67,7 +64,6 @@ export class PersonnelComponent implements OnInit {
     });
   }
 
-  // 🔹 Filtreleme
   filterPersonnel() {
     this.filteredPersonnel = this.personnelList.filter(person => {
       const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
@@ -76,11 +72,10 @@ export class PersonnelComponent implements OnInit {
     });
   }
 
-  // 🔹 Popup açma / kapama
   openDetails(person: Personnel) {
     this.selectedPersonnel = person;
     this.isCardVisible = true;
-    this.isEditMode = false; // başta readonly
+    this.isEditMode = false;
   }
 
   closeDetails() {
@@ -89,7 +84,6 @@ export class PersonnelComponent implements OnInit {
     this.isEditMode = false;
   }
 
-  // 🔹 Yeni personel formu
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
   }
@@ -112,7 +106,6 @@ export class PersonnelComponent implements OnInit {
     this.newPersonnel = this.getEmptyPersonnel();
   }
 
-  // 🔹 Fotoğraf seçimi (yeni personel için)
   handleFileInput(event: any) {
     const file = event.target.files[0];
     if (file) {

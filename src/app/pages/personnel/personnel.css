@@ -1,4 +1,4 @@
-/* Ana İçerik Alanı (Tekrarlar Temizlendi) */
+/* ================= ANA İÇERİK ================= */
 .main-content {
   padding: 32px;
   flex-grow: 1;
@@ -8,7 +8,7 @@
   font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* Genel Container */
+/* ================= KART CONTAINER ================= */
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -18,7 +18,7 @@
   background-color: #f5f6fa;
 }
 
-/* Personel Kartları */
+/* ================= PERSONEL KARTLARI ================= */
 .content-card {
   background: #ffffff;
   border-radius: 18px;
@@ -62,7 +62,7 @@
   transform: scaleX(1.02);
 }
 
-/* Personel Fotoğrafı */
+/* ================= FOTOĞRAF ================= */
 .personnel-image img {
   width: 96px;
   height: 96px;
@@ -77,7 +77,8 @@
   box-shadow: 0 10px 24px rgba(0,0,0,0.16);
 }
 
-.yeni-personel-yazisi{
+/* ================= YAZI ================= */
+.yeni-personel-yazisi {
   text-align: center;
   color: #FF6600;
   margin-bottom: 12px;
@@ -86,7 +87,7 @@
   font-weight: 800;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
 }
-/* Personel Bilgileri */
+
 .personnel-info {
   display: flex;
   flex-direction: column;
@@ -118,11 +119,10 @@
   text-overflow: ellipsis;
 }
 
-/* Genel Buton */
-.btn{
-  position: relative; /* yerleşimi bozmamak için sabit değil */
-  top: 0;
-  right: 0;
+.bton{
+  position: absolute;
+  top: 140px;
+  right: 10px;
   background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
   box-shadow: 0 6px 18px rgba(255,106,0,0.22);
   color: #fff;
@@ -135,57 +135,93 @@
 }
 
 
+.persekle {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.kutukapat {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================= GENEL BUTON ================= */
+.btn {
+  position: relative;
+  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
+  box-shadow: 0 6px 18px rgba(255,106,0,0.22);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+/* ================= MODAL DETAY ================= */
 .card-person-detail {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(180deg, #fff 0%, #f9fafb 100%);
-  padding: 36px 42px;
-  border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-  width: 480px;
-  max-width: 95%;
-  max-height: 90vh;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
+  z-index: 1100;
+  width: 420px;
+  max-height: 85vh;
   overflow-y: auto;
-  z-index: 1001;
-  animation: fadeIn 0.3s ease-in-out;
-  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  animation: fadeIn 0.3s ease;
 }
 
-.card-person-detail h2 {
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 18px;
-  color: #ff6a00;
-  text-align: center;
-  text-shadow: 1px 1px 6px rgba(255,106,0,0.15);
-  letter-spacing: 0.5px;
-}
-
-/* Input Grupları */
+/* Label düzenleme */
 .card-person-detail label {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 14px;
   color: #374151;
 }
 
-.card-person-detail input[type="text"],
-.card-person-detail input[type="date"],
-.card-person-detail input[type="email"] {
-  width: 100%;
-  padding: 12px 14px;
-  margin-top: 6px;
+/* Görüntüleme modu için span */
+.card-person-detail label span.value {
+  flex: 1;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Varsayılan olarak input gizli */
+.card-person-detail label input {
+  display: none;
+  flex: 1;
+  padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   font-size: 14px;
   background: #fafafa;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
+
+/* Düzenleme modunda span gizle, input göster */
+.card-person-detail.editing label span.value {
+  display: none;
+}
+.card-person-detail.editing label input {
+  display: block;
+}
+
 .card-person-detail input:focus {
   border-color: #ff7a00;
   box-shadow: 0 0 0 4px rgba(255,122,0,0.2);
@@ -193,7 +229,7 @@
   background: #fff;
 }
 
-/* Buton Grubu */
+/* ================= FORM BUTONLARI ================= */
 .card-person-detail .form-buttons {
   display: flex;
   justify-content: space-between;
@@ -217,60 +253,15 @@
   color: #fff;
   box-shadow: 0 6px 16px rgba(255,106,0,0.28);
 }
-.card-person-detail .edit-btn {
- background: #2563eb;
-  color: #fff;
-}
-.card-person-detail .delete-btn {
-  background: #dc2626;
-  color: #fff;
-}
-.card-person-detail .cancel-btn {
-  background: #9ca3af;
-  color: #fff;
-}
+.card-person-detail .edit-btn { background: #2563eb; color: #fff; }
+.card-person-detail .delete-btn { background: #dc2626; color: #fff; }
+.card-person-detail .cancel-btn { background: #9ca3af; color: #fff; }
 .card-person-detail .form-buttons button:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(0,0,0,0.15);
 }
 
-/* Alt Buton Grupları */
-.butons {
-  display: flex;
-  justify-content: space-between; 
-  gap: 12px;
-  margin-top: 15px;
-  flex-wrap: wrap; 
-}
-.butons button {
-  flex: 1; 
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  transition: transform .2s ease, box-shadow .2s ease;
-  min-width: 100px;
-}
-.butons .persekle {
-  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
-  color: #fff;
-  box-shadow: 0 8px 22px rgba(255,106,0,0.28);
-}
-.butons .persekle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(255,106,0,0.36);
-}
-.butons .kutukapat {
-  background: #f44336;
-  color: #fff;
-}
-.butons .kutukapat:hover {
-  background: #d32f2f;
-}
-
-/* Modal Backdrop */
+/* ================= MODAL BACKDROP ================= */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -279,23 +270,7 @@
   z-index: 1000;
 }
 
-/* Ek Buton (aynı görünüm) */
-.bton{
-  position: absolute;
-  top: 140px;
-  right: 10px;
-  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
-  box-shadow: 0 6px 18px rgba(255,106,0,0.22);
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-}
-
-/* Personel Ekle Modal */
+/* ================= PERSONEL EKLE ================= */
 .add-person-detail {
   position: fixed;
   text-transform: capitalize;
@@ -310,52 +285,54 @@
   background-color: #ffffff;
   width: 400px;
   box-shadow: 0 16px 44px rgba(0,0,0,0.20);
-  z-index: 1000;
+  z-index: 1100;
 }
 .add-person-detail form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-.add-person-detail input[type="text"],
-.add-person-detail input[type="date"],
-.add-person-detail input[type="file"],
-.add-person-detail input[type="email"] {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  width: 100%;
+  gap: 18px;
+  padding: 0 4px;
+  max-width: 100%;
   box-sizing: border-box;
-  transition: border-color .15s ease, box-shadow .2s ease;
+  align-items: center;
 }
-.add-person-detail input[type="text"]:focus,
-.add-person-detail input[type="date"]:focus,
-.add-person-detail input[type="file"]:focus,
-.add-person-detail input[type="email"]:focus {
+.add-person-detail form label {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 500;
+}
+.add-person-detail form input[type="text"],
+.add-person-detail form input[type="date"],
+.add-person-detail form input[type="email"],
+.add-person-detail form input[type="file"] {
+  width: 100%;
+  max-width: 360px;
+  padding: 14px 20px;
+  border-radius: 24px;
+  border: 1.8px solid #f0a54f;
+  background: #fff;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.07);
+  font-size: 16px;
+  color: #222;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline-offset: 3px;
+  box-sizing: border-box;
+  flex: 1;
+}
+.add-person-detail form input:focus {
   border-color: #ff7a00;
-  box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
+  box-shadow: 0 0 10px 4px rgba(255, 122, 0, 0.4),
+              inset 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
   outline: none;
 }
 
-/* Basit butonlar */
-.persekle {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.kutukapat {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* Arama & Filtreleme */
+/* ================= FİLTRE - ARAMA ================= */
 .filter-search {
   display: flex;
   gap: 12px;
@@ -379,13 +356,13 @@
   box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
 }
 
-/* Animasyon */
+/* ================= ANİMASYON ================= */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* === YENİLENMİŞ RESPONSIVE TASARIM === */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
   .side-nav { transform: translateX(-100%); }
   #menu-toggle:checked ~ .side-nav { transform: translateX(0); }
@@ -394,8 +371,6 @@
   .content-card { width: 100%; }
   .logo-container { padding-left: 60px; }
 }
-
-/* Telefonlar */
 @media (max-width: 480px) {
   .top-nav { padding: 0 16px; }
   .user-actions .username { display: none; }
@@ -411,7 +386,7 @@
   .logo-container { padding-left: 50px; }
 }
 @media (max-width: 640px) {
-  .person-detail { max-height: 80vh; padding: 16px; }
+  .card-person-detail { max-height: 80vh; padding: 16px; }
 }
 @media (max-width: 480px) {
   .content-card { width: 100%; padding: 16px 12px; }
@@ -421,24 +396,6 @@
 }
 @media (max-width: 500px) {
   .add-person-detail { width: 90%; padding: 16px; }
-  .butons { flex-direction: column; gap: 10px; }
-  .persekle, .kutukapat { width: 100%; }
-}
-@media (max-width: 500px) {
-  .person-detail .form-buttons button { width: 100%; }
-}
-
-@media (max-width: 480px) {
-  .person-detail {
-    padding: 30px 20px;
-    width: 95%;
-  }
-  .person-detail .form-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .person-detail .form-buttons button {
-    flex: 1 1 100%;
-    min-width: unset;
-  }
+  .card-person-detail .form-buttons { flex-direction: column; gap: 10px; }
+  .card-person-detail .form-buttons button { width: 100%; }
 }
