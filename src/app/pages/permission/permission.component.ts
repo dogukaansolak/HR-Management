@@ -1,61 +1,45 @@
-import { Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { Permission, IzinTuru, Durum } from '../../models/permission.model';
-import { Personnel } from '../../models/personnel.model';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';        // <-- ngModel için
+import { CommonModule } from '@angular/common';      // <-- *ngFor, *ngIf için
+import { Permission } from '../../models/permission.model';
+import { PermissionService } from '../../services/permission.service';
 
 @Component({
   selector: 'app-permission',
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './permission.html',
-  styleUrls: ['./permission.css'],
-  imports: [CommonModule],
-  providers: [DatePipe]
+  styleUrls: ['./permission.css']
 })
-export class PermissionComponent {
-  izinler: Permission[] = [];
-  isLoading: boolean = true;
-  hataMesaji: string = '';
+export class PermissionComponent implements OnInit {
+  permissions: Permission[] = [];
+  filteredPermissions: Permission[] = [];
 
-  constructor(private datePipe: DatePipe) {
-    this.loadIzinler();
+  searchText: string = '';
+  selectedDepartment: string = 'Tümü';
+
+  departments: string[] = ['Tümü', 'Muhasebe', 'İK', 'IT'];
+
+  constructor(private permissionService: PermissionService) {}
+
+  ngOnInit(): void {
+    this.permissionService.getPermissions().subscribe(data => {
+      this.permissions = data;
+      this.filteredPermissions = data;
+    });
   }
 
-  loadIzinler() {
-    // // Örnek veri
-    // const calisan: Personnel = {
-    //   id: 1,
-    //   firstName: 'Ahmet',
-    //   lastName: 'Yılmaz',
-    //   tckimlik: '12345678901',
-    //   dogumtarihi: '1990-01-01',
-    //   totalLeave: 20,
-    //   usedLeave: 5,
-    //   workingStatus: 'Çalışıyor',
-    //   personnelphoto: '',
-    // };
-
-    // this.izinler = [
-    //   new Permission(
-    //     1,
-    //     calisan,
-    //     IzinTuru.YILLIK_IZIN,
-    //     new Date('2025-09-01'),
-    //     new Date('2025-09-05'),
-    //     'Yıllık izin',
-    //     Durum.ONAY_BEKLIYOR,
-    //     new Date()
-    //   )
-    // ];
-
-    this.isLoading = false;
+  filterPermissions() {
+    this.filteredPermissions = this.permissions.filter(p => {
+      const matchesSearch = p.adSoyad.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesDepartment =
+        this.selectedDepartment === 'Tümü' || p.departman === this.selectedDepartment;
+      return matchesSearch && matchesDepartment;
+    });
   }
 
-  onOnayla(id: number) {
-    const izin = this.izinler.find(i => i.id === id);
-    if (izin) izin.durum = Durum.ONAYLANDI;
-  }
-
-  onReddet(id: number) {
-    const izin = this.izinler.find(i => i.id === id);
-    if (izin) izin.durum = Durum.REDDEDILDI;
+  editPermission(permission: Permission) {
+    // Burada düzenleme ekranına yönlendirme ya da modal açma yapılabilir
+    console.log("Düzenle tıklandı:", permission);
   }
 }
