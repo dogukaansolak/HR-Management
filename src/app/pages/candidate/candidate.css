@@ -1,102 +1,247 @@
 .filter-search {
   display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  justify-content: center; 
+  max-width: 1200px;       
+  margin: 0 auto;          
 }
+
 
 .filter-search input,
 .filter-search select {
-  padding: 8px;
-  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .2s ease;
+  background: #ffffff;
 }
 
+.filter-search input:focus,
+.filter-search select:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
+}
+
+/* Kartlar */
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* yatay ortala */
   gap: 20px;
+  padding: 10px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: stretch; /* tüm kartları aynı yüksekliğe uzat */
 }
-
 .candidate-card {
   background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: 1 1 240px; /* minimum 240px, gerektiğinde büyüyebilir */
+  max-width: 300px; /* opsiyonel maksimum genişlik */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.candidate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.candidate-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  color: #111;
+}
+
+.candidate-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
 }
 
 .card-buttons {
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  justify-content: center;
+  margin-top: 16px;
 }
 
 button {
-  padding: 6px 12px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
-.delete-btn {
-  background-color: #ff4d4f;
-  color: white;
+button:hover {
+  opacity: 0.9;
 }
 
+/* Sadece Görüntüle Butonu */
+.card-buttons button {
+background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
+color: #fff;
+}
+
+/* Modal */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-color: rgba(0,0,0,0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .modal-content {
   background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  width: 80%;
-  max-width: 800px;
+  margin: auto;
+  padding: 28px 36px;
+  border-radius: 18px;
+  width: 70%;
+  max-width: 500px;
   position: relative;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  animation: modalFade 0.3s ease;
+  max-height: 80vh;      
+  overflow-y: auto;      
 }
 
 .modal-content .close {
   position: absolute;
-  top: 12px;
-  right: 20px;
+  top: 14px;    
+  right: 18px;  
   font-size: 28px;
+  font-weight: bold;
+  color: #333;
   cursor: pointer;
-}
-.top-actions {
-  margin-bottom: 16px;
+  transition: color 0.2s;
 }
 
-.pagination {
-  margin-top: 20px;
+.modal-content .close:hover {
+  color: #1890ff;
+}
+.modal-buttons {
   display: flex;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.approve-btn {
+  background-color: #28a745; /* yeşil onay */
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.approve-btn:hover {
+  opacity: 0.9;
+}
+
+.delete-btn {
+  background-color: #dc3545; /* kırmızı sil */
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 0.9;
+}
+
+
+@keyframes modalFade {
+  from { opacity: 0; transform: translateY(-20px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+
+/* Sayfalama */
+.pagination {
+  margin-top: 28px;
+  display: flex;
+  gap: 8px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .pagination button {
-  padding: 6px 12px;
+  padding: 6px 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f0f0f0;
+  border-radius: 8px;
+  background: #f8f8f8;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .pagination button.active {
   background-color: #1890ff;
   color: white;
+  border-color: #1890ff;
 }
 
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .filter-search {
+    flex-direction: column;
+    align-items: center;
+  }
+
+   .filter-search input,
+  .filter-search select {
+    width: 95%;    
+    padding: 8px 10px; 
+    font-size: 13px;   
+  }
+
+  .card-container {
+    justify-content: center;
+    gap: 16px;
+  }
+
+ .candidate-card {
+    flex: 1 1 95%;      
+    padding: 16px;     
+    font-size: 14px;    
+  }
+   .modal-content {
+    width: 90%;
+    padding: 16px 20px;
+    margin-top: 30%;   
+    max-height: 75vh;     
+  }
+
+  .modal-buttons button {
+    padding: 6px 12px; 
+    font-size: 13px;
+  }
+    .modal-content .close {
+    top: 8px;
+    right: 12px;
+    font-size: 24px; /* biraz küçült */
+  }
 }

@@ -1,100 +1,102 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Candidate } from '../../models/candidate.model';
 import { SafePipe } from '../../pipes/safe.pipe';
+
+interface Candidate {
+  id: number;
+  name: string;      // Ad Soyad
+  position: string;  // Müracaat ettiği pozisyon
+  cvUrl: string;     // PDF yolu
+}
 
 @Component({
   selector: 'app-candidate-management',
   templateUrl: './candidate.html',
   styleUrls: ['./candidate.css'],
   standalone: true,
-  imports: [FormsModule, SafePipe] // ngModel ve pipe kullanımı için
+  imports: [CommonModule, FormsModule, SafePipe]
 })
-export class CandidateManagementComponent {
+export class CandidateManagementComponent implements OnInit {
+
   candidates: Candidate[] = [
-    { id: 1, name: 'Ahmet Yılmaz', department: 'IT', cvUrl: '/assets/cvs/ahmet.pdf' },
-    { id: 2, name: 'Ayşe Demir', department: 'HR', cvUrl: '/assets/cvs/ayse.pdf' },
-    { id: 3, name: 'Mehmet Kaya', department: 'Sales', cvUrl: '/assets/cvs/mehmet.pdf' },
-    { id: 4, name: 'Elif Çelik', department: 'Marketing', cvUrl: '/assets/cvs/elif.pdf' }
+    { id: 1, name: 'Ahmet Yılmaz',  position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
+    { id: 2, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+    { id: 3, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
+    { id: 4, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 5, name: 'Selin Acar',    position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
+    { id: 6, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },   
+    { id: 7, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+    { id: 8, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
+    { id: 9, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 10, name: 'Selin Acar',    position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
+    { id: 11, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
+    { id: 12, name: 'Ahmet Yılmaz',  position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
+    { id: 13, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+    { id: 14, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
+    { id: 15, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 16, name: 'Selin Acar',    position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
+    { id: 17, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
+    { id: 18, name: 'Ahmet Yılmaz',  position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
+    { id: 19, name: 'Ahmet Yılmaz',  position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
+    { id: 20, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+
   ];
 
-  filteredCandidates: Candidate[] = [...this.candidates];
+  filteredCandidates: Candidate[] = [];
   searchText: string = '';
-  selectedDepartment: string = '';
-  departments: string[] = ['IT', 'HR', 'Sales', 'Marketing'];
+  selectedPosition: string = '';
+  positions: string[] = [];
 
   showModal: boolean = false;
   selectedCandidate?: Candidate;
 
-  filterCandidates() {
+  currentPage: number = 1;
+  pageSize: number = 12;
+  totalPages: number = 1;
+
+  ngOnInit(): void {
+    this.positions = Array.from(new Set(this.candidates.map(c => c.position)));
+    this.filteredCandidates = [...this.candidates];
+    this.updatePagination();
+  }
+
+  filterCandidates(): void {
+    const q = this.searchText.trim().toLowerCase();
     this.filteredCandidates = this.candidates.filter(c => {
-      const matchesName = c.name.toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? c.department === this.selectedDepartment : true;
-      return matchesName && matchesDept;
+      const matchesName = c.name.toLowerCase().includes(q);
+      const matchesPos  = this.selectedPosition ? c.position === this.selectedPosition : true;
+      return matchesName && matchesPos;
     });
     this.currentPage = 1;
     this.updatePagination();
   }
 
-
-  openModal(candidate: Candidate) {
+  openModal(candidate: Candidate): void {
     this.selectedCandidate = candidate;
     this.showModal = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.showModal = false;
     this.selectedCandidate = undefined;
   }
 
-  deleteCandidate(candidate: Candidate) {
-    this.candidates = this.candidates.filter(c => c.id !== candidate.id);
-    this.filterCandidates();
-  }
-
-  // TS2532 hatasını önlemek için getter kullanabiliriz
   get selectedCandidateUrl(): string {
     return this.selectedCandidate ? this.selectedCandidate.cvUrl : '';
   }
 
-  exportToCSV() {
-    const headers = ['ID', 'İsim', 'Departman', 'CV URL'];
-    const rows = this.filteredCandidates.map(c => [c.id, c.name, c.department, c.cvUrl]);
-
-    let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += headers.join(',') + '\r\n';
-    rows.forEach(row => {
-      csvContent += row.join(',') + '\r\n';
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'candidates.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-  currentPage: number = 1;
-  pageSize: number = 2; // Sayfa başına kaç aday gösterilecek
-  totalPages: number = 1;
-
-  ngOnInit() {
-    this.updatePagination();
+  updatePagination(): void {
+    this.totalPages = Math.max(1, Math.ceil(this.filteredCandidates.length / this.pageSize));
   }
 
-  updatePagination() {
-    this.totalPages = Math.ceil(this.filteredCandidates.length / this.pageSize);
-  }
-
-  get pagedCandidates() {
+  get pagedCandidates(): Candidate[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredCandidates.slice(start, start + this.pageSize);
   }
 
-  goToPage(page: number) {
+  goToPage(page: number): void {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
   }
-
 }

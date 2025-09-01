@@ -1,18 +1,23 @@
 <div class="filter-search">
-  <input type="text" placeholder="Aday Ara..." [(ngModel)]="searchText" (input)="filterCandidates()" />
-  <select [(ngModel)]="selectedDepartment" (change)="filterCandidates()">
-    <option value="">Tüm Departmanlar</option>
-    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+  <input
+    type="text"
+    placeholder="Aday Ara..."
+    [(ngModel)]="searchText"
+    (input)="filterCandidates()"
+  />
+
+  <select [(ngModel)]="selectedPosition" (change)="filterCandidates()">
+    <option value="">Tüm Pozisyonlar</option>
+    <option *ngFor="let pos of positions" [value]="pos">{{ pos }}</option>
   </select>
 </div>
 
 <div class="card-container">
-  <div class="candidate-card" *ngFor="let candidate of filteredCandidates">
+  <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
     <h3>{{ candidate.name }}</h3>
-    <p>{{ candidate.department }}</p>
+    <p>Pozisyon: {{ candidate.position }}</p>
     <div class="card-buttons">
       <button (click)="openModal(candidate)">Görüntüle</button>
-      <button (click)="deleteCandidate(candidate)" class="delete-btn">Sil</button>
     </div>
   </div>
 </div>
@@ -22,29 +27,31 @@
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <h2>{{ selectedCandidate?.name }}</h2>
-    <p>Departman: {{ selectedCandidate?.department }}</p>
-    <iframe *ngIf="selectedCandidate" [src]="selectedCandidateUrl | safeUrl" width="100%" height="500px"></iframe>
-  </div>
-</div>
-  <!-- <div class="top-actions">
-  <button (click)="exportToCSV()">CSV Export</button>
-</div> -->
-
-<div class="card-container">
-  <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
-    <h3>{{ candidate.name }}</h3>
-    <p>{{ candidate.department }}</p>
-    <div class="card-buttons">
-      <button (click)="openModal(candidate)">Görüntüle</button>
-      <button (click)="deleteCandidate(candidate)" class="delete-btn">Sil</button>
-    </div>
+    <p>Pozisyon: {{ selectedCandidate?.position }}</p>
+    <iframe
+      *ngIf="selectedCandidate"
+      [src]="selectedCandidateUrl | safeUrl"
+      width="100%"
+      height="500"
+      style="border:0"
+    ></iframe>
+    <div class="modal-buttons">
+        <button class="approve-btn">Onayla</button>
+        <button class="delete-btn">Sil</button>
+      </div>
   </div>
 </div>
 
+<!-- Sayfalama -->
 <div class="pagination" *ngIf="totalPages > 1">
   <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
-  <button *ngFor="let page of [].constructor(totalPages); let i = index"
-          (click)="goToPage(i + 1)"
-          [class.active]="currentPage === i + 1">{{ i + 1 }}</button>
+  <button
+    *ngFor="let _ of [].constructor(totalPages); let i = index"
+    (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1">
+    {{ i + 1 }}
+  </button>
   <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
 </div>
+
+

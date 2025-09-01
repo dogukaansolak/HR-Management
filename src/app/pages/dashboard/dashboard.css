@@ -155,7 +155,7 @@
 .hamburger-menu {
   position: fixed;
   top: 28px;
-  left: 32px;
+  left: 20px;
   z-index: 1002;
   display: none; /* Varsayılan olarak gizli, mobilde görünecek */
 }
