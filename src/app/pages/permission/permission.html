@@ -14,24 +14,25 @@
 <table>
   <thead>
     <tr>
-      <th>Düzenle</th>
       <th>Ad Soyad</th>
       <th>Departman</th>
       <th>Yıllık İzin</th>
       <th>Kullanılan İzin</th>
       <th>Durum</th>
+      <th>Düzenle</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let p of filteredPermissions">
-      <td>
-        <button (click)="editPermission(p)">Düzenle</button>
-      </td>
+    
       <td>{{ p.adSoyad }}</td>
       <td>{{ p.departman }}</td>
       <td>{{ p.yillikIzinHakki ? (p.yillikIzinHakki + ' gün') : 'Yok' }}</td>
       <td>{{ p.kullanilanIzin }}</td>
       <td>{{ p.durum }}</td>
+      <td>
+        <button (click)="editPermission(p)">Düzenle</button>
+      </td>
     </tr>
   </tbody>
 </table>
