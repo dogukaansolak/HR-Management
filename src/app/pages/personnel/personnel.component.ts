@@ -144,7 +144,7 @@ filterPersonnel() {
     };
   }
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 8;
 
   get paginatedPersonnel(): Personnel[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
