@@ -1,11 +1,20 @@
 .filter-bar {
-  margin-bottom: 15px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .filter-bar input,
 .filter-bar select {
-  padding: 5px;
-  margin-right: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .2s ease;
+  background: #ffffff;
 }
 
 table {
@@ -21,12 +30,14 @@ th, td {
 
 button {
   padding: 5px 10px;
-  background-color: #2196f3;
+  background-color: #ff4b00;
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
+
 }
 
 button:hover {
-  background-color: #1976d2;
+  background-color: #ff7a00;
 }
