@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';        // <-- ngModel için
-import { CommonModule } from '@angular/common';      // <-- *ngFor, *ngIf için
-import { Permission } from '../../models/permission.model';
-import { PermissionService } from '../../services/permission.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Person } from '../../models/personnel.model';
+import { PersonService } from '../../services/personnel.service';
 
 @Component({
   selector: 'app-permission',
@@ -12,34 +12,33 @@ import { PermissionService } from '../../services/permission.service';
   styleUrls: ['./permission.css']
 })
 export class PermissionComponent implements OnInit {
-  permissions: Permission[] = [];
-  filteredPermissions: Permission[] = [];
+  personnels: Person[] = [];
+  filteredPersonnels: Person[] = [];
 
   searchText: string = '';
   selectedDepartment: string = 'Tümü';
 
   departments: string[] = ['Tümü', 'Muhasebe', 'İK', 'IT'];
 
-  constructor(private permissionService: PermissionService) {}
+constructor(private personService: PersonService) {}
 
   ngOnInit(): void {
-    this.permissionService.getPermissions().subscribe(data => {
-      this.permissions = data;
-      this.filteredPermissions = data;
+    this.personService.getPersons().subscribe((data: Person[]) => {
+      this.personnels = data;
+      this.filteredPersonnels = [...data];
     });
   }
 
-  filterPermissions() {
-    this.filteredPermissions = this.permissions.filter(p => {
-      const matchesSearch = p.adSoyad.toLowerCase().includes(this.searchText.toLowerCase());
+  filterPersonnels() {
+    this.filteredPersonnels = this.personnels.filter(p => {
+      const matchesSearch = (p.firstName + ' ' + p.lastName).toLowerCase().includes(this.searchText.toLowerCase());
       const matchesDepartment =
-        this.selectedDepartment === 'Tümü' || p.departman === this.selectedDepartment;
+        this.selectedDepartment === 'Tümü' || p.department === this.selectedDepartment;
       return matchesSearch && matchesDepartment;
     });
   }
 
-  editPermission(permission: Permission) {
-    // Burada düzenleme ekranına yönlendirme ya da modal açma yapılabilir
-    console.log("Düzenle tıklandı:", permission);
+  editPersonnel(person: Person) {
+    console.log("Düzenle tıklandı:", person);
   }
 }

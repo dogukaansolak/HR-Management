@@ -3,10 +3,10 @@
     type="text"
     placeholder="Personel Ara..."
     [(ngModel)]="searchText"
-    (input)="filterPermissions()"
+    (input)="filterPersonnels()"
   />
 
-  <select [(ngModel)]="selectedDepartment" (change)="filterPermissions()">
+  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
     <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
   </select>
 </div>
@@ -23,15 +23,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of filteredPermissions">
+    <tr *ngFor="let p of filteredPersonnels">
     
-      <td>{{ p.adSoyad }}</td>
-      <td>{{ p.departman }}</td>
-      <td>{{ p.yillikIzinHakki ? (p.yillikIzinHakki + ' gün') : 'Yok' }}</td>
-      <td>{{ p.kullanilanIzin }}</td>
-      <td>{{ p.durum }}</td>
+      <td>{{ (p.firstName + ' ' + p.lastName) }}</td>
+      <td>{{ p.department }}</td>
+      <td>{{ p.totalLeave ? (p.totalLeave+ ' gün') : 'Yok' }}</td>
+      <td>{{ p.usedLeave }}</td>
+      <td>{{ p.workingStatus }}</td>
       <td>
-        <button (click)="editPermission(p)">Düzenle</button>
+        <button (click)="editPersonnel(p)">Düzenle</button>
       </td>
     </tr>
   </tbody>
