@@ -26,7 +26,7 @@
     <tr *ngFor="let p of filteredPersonnels">
     
       <td>{{ (p.firstName + ' ' + p.lastName) }}</td>
-      <td>{{ p.department }}</td>
+      <td>{{ p.departmentName }}</td>
       <td>{{ p.totalLeave ? (p.totalLeave+ ' gün') : 'Yok' }}</td>
       <td>{{ p.usedLeave }}</td>
       <td>{{ p.workingStatus }}</td>
