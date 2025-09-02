@@ -13,6 +13,15 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./personnel.css']
 })
 export class PersonnelComponent implements OnInit {
+saveDetails() {
+throw new Error('Method not implemented.');
+}
+deletePersonnel(arg0: number) {
+throw new Error('Method not implemented.');
+}
+addPersonnel() {
+throw new Error('Method not implemented.');
+}
   personnelList: Person[] = [];
   filteredPersonnel: Person[] = [];
   searchText = '';
@@ -38,59 +47,12 @@ export class PersonnelComponent implements OnInit {
     this.personService.getPersons().subscribe(data => {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
-    });
-  }
 
-addPersonnel() {
-  this.errorMessage = null;
-  this.successMessage = null;
-  // Zorunlu alan kontrolü
-  if (!this.newPersonnel.firstName || !this.newPersonnel.lastName) {
-    this.errorMessage = "Ad ve Soyad zorunlu!";
-    return;
-  }
-  // Backend DTO ile birebir property adları!
-  const body = {
-    FirstName: this.newPersonnel.firstName,
-    LastName: this.newPersonnel.lastName,
-    TCKimlik: this.newPersonnel.tckimlik,
-    DogumTarihi: this.newPersonnel.dogumTarihi ? new Date(this.newPersonnel.dogumTarihi).toISOString() : null,
-    TelNo: this.newPersonnel.telNo,
-    Email: this.newPersonnel.email,
-    Position: this.newPersonnel.position,
-    WorkingStatus: this.newPersonnel.workingStatus,
-    PersonnelPhoto: this.newPersonnel.personnelPhoto,
-    StartDate: this.newPersonnel.startDate ? new Date(this.newPersonnel.startDate).toISOString() : null,
-    TotalLeave: this.newPersonnel.totalLeave,
-    UsedLeave: this.newPersonnel.usedLeave,
-    DepartmentId: this.newPersonnel.departmentId ?? 0
-  };
-  this.personService.addPerson(body).subscribe({
-    next: () => {
-      this.successMessage = "Personel başarıyla eklendi.";
-      this.loadPersonnel();
-      this.showAddForm = false;
-      this.resetForm();
-    },
-    error: (err) => {
-      this.errorMessage = "Ekleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-    }
-  });
-}
-
-  saveDetails() {
-    if (!this.selectedPersonnel) return;
-    this.personService.updatePerson(this.selectedPersonnel).subscribe(() => {
-      this.loadPersonnel();
-      this.isEditMode = false;
-      this.isCardVisible = false;
-    });
-  }
-
-  deletePersonnel(id: number) {
-    this.personService.deletePerson(id).subscribe(() => {
-      this.loadPersonnel();
-      this.closeDetails();
+      this.departments = Array.from(new Set(
+        this.personnelList
+          .map(p => p.departmentName)
+          .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
+      ));
     });
   }
 
@@ -166,8 +128,10 @@ addPersonnel() {
       totalLeave: 0,
       usedLeave: 0,
       workingStatus: 'Çalışıyor',
-      personnelPhoto: 'assets/images/default.jpg',
-      departmentId: 0 // DTO ile uyum için eklendi!
+      personnelPhoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+
+      // EKLE
+
     };
   }
 

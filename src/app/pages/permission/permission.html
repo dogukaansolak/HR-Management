@@ -31,8 +31,40 @@
       <td>{{ p.usedLeave }}</td>
       <td>{{ p.workingStatus }}</td>
       <td>
-        <button (click)="editPersonnel(p)">Düzenle</button>
+        <button (click)="openEditModal(p)">Düzenle</button>
       </td>
     </tr>
   </tbody>
 </table>
+
+<!-- Düzenleme Modalı -->
+<div class="modal" *ngIf="selectedPerson">
+  <div class="modal-content">
+    <h3>Personel Düzenle</h3>
+
+    <label>Ad:</label>
+    <input [(ngModel)]="selectedPerson.firstName" />
+
+    <label>Soyad:</label>
+    <input [(ngModel)]="selectedPerson.lastName" />
+
+    <label>Departman:</label>
+    <select [(ngModel)]="selectedPerson.departmentName">
+      <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+    </select>
+
+    <label>Toplam İzin:</label>
+    <input type="number" [(ngModel)]="selectedPerson.totalLeave" />
+
+    <label>Kullanılan İzin:</label>
+    <input type="number" [(ngModel)]="selectedPerson.usedLeave" />
+
+    <label>Durum:</label>
+    <input [(ngModel)]="selectedPerson.workingStatus" />
+
+    <div class="modal-buttons">
+      <button (click)="saveEdit()">Kaydet</button>
+      <button (click)="closeEditModal()">İptal</button>
+    </div>
+  </div>
+</div>
