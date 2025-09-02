@@ -8,13 +8,14 @@
 
   <select [(ngModel)]="selectedPosition" (change)="filterCandidates()">
     <option value="">Tüm Pozisyonlar</option>
+    <option value="approved">Onaylandı</option>
     <option *ngFor="let pos of positions" [value]="pos">{{ pos }}</option>
   </select>
 </div>
 
 <div class="card-container">
   <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
-    <h3>{{ candidate.name }}</h3>
+  <h3>{{ candidate.name }}</h3>
     <p>Pozisyon: {{ candidate.position }}</p>
     <div class="card-buttons">
       <button (click)="openModal(candidate)">Görüntüle</button>
@@ -27,6 +28,7 @@
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <h2>{{ selectedCandidate?.name }}</h2>
+      <p *ngIf="selectedCandidate?.approved" class="modal-approved">✅ Onaylandı</p>
     <p>Pozisyon: {{ selectedCandidate?.position }}</p>
     <iframe
       *ngIf="selectedCandidate"
@@ -35,14 +37,15 @@
       height="500"
       style="border:0"
     ></iframe>
-    <div class="modal-buttons">
-        <button class="approve-btn">Onayla</button>
-        <button class="delete-btn">Sil</button>
-      </div>
+     <div class="modal-buttons">
+    <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">Onayla</button>
+    <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
+  </div>
+
+
   </div>
 </div>
 
-<!-- Sayfalama -->
 <div class="pagination" *ngIf="totalPages > 1">
   <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
   <button
@@ -53,7 +56,5 @@
   </button>
   <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
 </div>
-
-<p>Lorem ipsum dolor sit amet.</p>
 
 

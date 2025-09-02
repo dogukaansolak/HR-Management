@@ -5,9 +5,10 @@ import { SafePipe } from '../../pipes/safe.pipe';
 
 interface Candidate {
   id: number;
-  name: string;      // Ad Soyad
-  position: string;  // Müracaat ettiği pozisyon
-  cvUrl: string;     // PDF yolu
+  name: string;
+  position: string;
+  cvUrl: string;
+  approved?: boolean;
 }
 
 @Component({
@@ -60,16 +61,27 @@ export class CandidateManagementComponent implements OnInit {
     this.updatePagination();
   }
 
-  filterCandidates(): void {
-    const q = this.searchText.trim().toLowerCase();
-    this.filteredCandidates = this.candidates.filter(c => {
-      const matchesName = c.name.toLowerCase().includes(q);
-      const matchesPos  = this.selectedPosition ? c.position === this.selectedPosition : true;
-      return matchesName && matchesPos;
-    });
-    this.currentPage = 1;
-    this.updatePagination();
-  }
+  filterCandidates(resetPage: boolean = true): void {
+  const q = this.searchText.trim().toLowerCase();
+  this.filteredCandidates = this.candidates.filter(c => {
+    const matchesName = c.name.toLowerCase().includes(q);
+    const matchesPos  = this.selectedPosition ? c.position === this.selectedPosition : true;
+
+    // approved alanı undefined olabilir, buna dikkat
+    const matchesApproval =
+      this.selectedApproval === 'approved' ? c.approved === true :
+      this.selectedApproval === 'notApproved' ? c.approved !== true :
+      true;
+
+    return matchesName && matchesPos && matchesApproval;
+  });
+
+  if (resetPage) this.currentPage = 1;
+  this.updatePagination();
+}
+
+
+
 
   openModal(candidate: Candidate): void {
     this.selectedCandidate = candidate;
@@ -98,4 +110,21 @@ export class CandidateManagementComponent implements OnInit {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
   }
+
+ approveCandidate(candidate?: Candidate): void {
+  if (!candidate) return;
+  candidate.approved = true;
+
+  this.filterCandidates();
+}
+deleteCandidate(candidate?: Candidate): void {
+  if (!candidate) return;
+  this.candidates = this.candidates.filter(c => c.id !== candidate.id);
+
+  // Sayfa numarasını değiştirme
+  this.filterCandidates(false); 
+  this.closeModal();
+}
+selectedApproval: string = ''; // '', 'approved', 'notApproved'
+
 }

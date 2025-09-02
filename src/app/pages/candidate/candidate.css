@@ -244,4 +244,18 @@ color: #fff;
     right: 12px;
     font-size: 24px; /* biraz küçült */
   }
+  .modal-approved {
+  text-align: center;
+  font-weight: bold;
+  color: #28a745;
+  margin: 12px 0;
+  font-size: 16px;
+}
+  .approved-tag {
+  font-size: 12px;
+  color: #28a745;
+  margin-left: 6px;
+  font-weight: bold;
+}
+
 }

@@ -228,6 +228,14 @@
   outline: none;
   background: #fff;
 }
+/* Sayfalama */
+.pagination {
+  margin-top: 28px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 /* ================= FORM BUTONLARI ================= */
 .card-person-detail .form-buttons {
