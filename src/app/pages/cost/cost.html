@@ -1,1 +1,84 @@
-<p>cost works!</p>
+<div class="filter-bar">
+  <input
+    type="text"
+    placeholder="Personel Ara..."
+    [(ngModel)]="searchText"
+    (input)="filterPersonnels()"
+  />
+
+  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
+    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+  </select>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ad Soyad</th>
+      <th>Departman</th>
+      <th>Maaş</th>
+      <th>Yemek</th>
+      <th>Yol</th>
+      <th>Diğer</th>
+      <th>Toplam Maliyet</th>
+      <th>Düzenle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of filteredPersonnels">
+      <td>{{ p.firstName + ' ' + p.lastName }}</td>
+      <td>{{ p.departmentName }}</td>
+      <td>{{ p.salary | currency:'TRY':'symbol':'1.0-0' }}</td>
+      <td>{{ p.mealCost | currency:'TRY':'symbol':'1.0-0' }}</td>
+      <td>{{ p.transportCost | currency:'TRY':'symbol':'1.0-0' }}</td>
+      <td>{{ p.otherCost | currency:'TRY':'symbol':'1.0-0' }}</td>
+      <td><b>{{ getTotalCost(p) | currency:'TRY':'symbol':'1.0-0' }}</b></td>
+      <td>
+        <button (click)="openEditModal(p)">Düzenle</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="6" style="text-align: right;"><b>Toplam Şirket Maliyeti:</b></td>
+      <td colspan="2"><b>{{ getCompanyTotalCost() | currency:'TRY':'symbol':'1.0-0' }}</b></td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- Düzenleme Modalı -->
+<div class="modal" *ngIf="selectedPerson">
+  <div class="modal-content">
+    <h3>Personel Masraf Düzenle</h3>
+
+    <label>Ad:</label>
+    <input [(ngModel)]="selectedPerson.firstName" />
+
+    <label>Soyad:</label>
+    <input [(ngModel)]="selectedPerson.lastName" />
+
+    <label>Departman:</label>
+    <select [(ngModel)]="selectedPerson.departmentName">
+      <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+    </select>
+
+    <hr />
+
+    <label>Maaş:</label>
+    <input type="number" [(ngModel)]="selectedPerson.salary" />
+
+    <label>Yemek Gideri:</label>
+    <input type="number" [(ngModel)]="selectedPerson.mealCost" />
+
+    <label>Yol Gideri:</label>
+    <input type="number" [(ngModel)]="selectedPerson.transportCost" />
+
+    <label>Diğer Masraflar:</label>
+    <input type="number" [(ngModel)]="selectedPerson.otherCost" />
+
+    <div class="modal-buttons">
+      <button (click)="saveEdit()">Kaydet</button>
+      <button (click)="closeEditModal()">İptal</button>
+    </div>
+  </div>
+</div>

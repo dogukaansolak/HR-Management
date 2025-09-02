@@ -38,5 +38,15 @@ export interface Person {
   usedLeave?: number;
   departmentId?: number;
   departmentName?: string;
+
+  // bu alanlar veritabanına eklenecek!
+
   adres?: string;//bu veri tabanında yok
+
+  // şuanlıkn gerek yok veritabanına eklemeye
+
+  salary?: number;       // Maaş
+  mealCost?: number;     // Yemek gideri
+  transportCost?: number;// Yol gideri
+  otherCost?: number;      // Diğer giderler
 }
