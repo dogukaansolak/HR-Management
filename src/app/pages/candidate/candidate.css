@@ -70,6 +70,30 @@
   display: block;
   margin: 6px 0;
 }
+.note-input {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.note-input input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.note-input button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.note-input button:hover {
+  opacity: 0.9;
+}
 
 .card-buttons {
   display: flex;

@@ -1,3 +1,4 @@
+<!-- Filtreleme -->
 <div class="filter-search">
   <input
     type="text"
@@ -19,11 +20,17 @@
   </select>
 </div>
 
+<!-- Kartlar -->
 <div class="card-container">
   <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
     <h3>{{ candidate.name }}</h3>
     <p>Pozisyon: {{ candidate.position }}</p>
-    <span *ngIf="candidate.approved" class="approved-tag">✅ Onaylandı</span>
+
+    <span *ngIf="candidate.approved" class="approved-tag">
+      ✅ Onaylandı
+      <span *ngIf="candidate.note"> - {{ candidate.note }}</span>
+    </span>
+
     <div class="card-buttons">
       <button (click)="openModal(candidate)">Görüntüle</button>
     </div>
@@ -31,36 +38,64 @@
 </div>
 
 <!-- Modal -->
-<div class="modal" *ngIf="showModal">
+<div class="modal" *ngIf="showModal && selectedCandidate">
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
-    <h2>{{ selectedCandidate?.name }}</h2>
-    
-    <p>Pozisyon: {{ selectedCandidate?.position }}</p>
+    <h2>{{ selectedCandidate.name }}</h2>
+    <p>Pozisyon: {{ selectedCandidate.position }}</p>
 
     <iframe
-      *ngIf="selectedCandidate"
       [src]="selectedCandidateUrl | safeUrl"
       width="80%"
       height="300"
       style="border:0"
     ></iframe>
-      <p *ngIf="selectedCandidate?.approved" class="modal-approved">✅ Onaylandı</p>
+
+    <p *ngIf="selectedCandidate.approved" class="modal-approved">
+      ✅ Onaylandı
+      <span *ngIf="selectedCandidate.note"> - {{ selectedCandidate.note }}</span>
+    </p>
+
+    <div class="note-input">
+      <input
+        type="text"
+        [(ngModel)]="selectedCandidate.noteText"
+        placeholder="Notunuzu yazın..."
+      />
+      <button
+        (click)="addNoteToCandidate(selectedCandidate, selectedCandidate.noteText)"
+      >
+        Kaydet
+      </button>
+    </div>
+
     <div class="modal-buttons">
-      <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">Onayla</button>
-      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
+      <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">
+        Onayla
+      </button>
+      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">
+        Sil
+      </button>
     </div>
   </div>
 </div>
 
 <!-- Sayfalama -->
 <div class="pagination" *ngIf="totalPages > 1">
-  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+    &laquo;
+  </button>
   <button
     *ngFor="let _ of [].constructor(totalPages); let i = index"
     (click)="goToPage(i + 1)"
-    [class.active]="currentPage === i + 1">
+    [class.active]="currentPage === i + 1"
+  >
     {{ i + 1 }}
   </button>
-  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
+  <button
+    (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+  >
+    &raquo;
+  </button>
 </div>
