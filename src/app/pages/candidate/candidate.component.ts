@@ -26,26 +26,24 @@ export class CandidateManagementComponent implements OnInit {
     { id: 3, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
     { id: 4, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
     { id: 5, name: 'Selin Acar',    position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
-    { id: 6, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },   
+    { id: 6, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
     { id: 7, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
     { id: 8, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
     { id: 9, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
     { id: 10, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
-    { id: 11, name: 'Mert Koç',     position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
-    { id: 12, name: 'Ahmet Yılmaz', position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
-    { id: 13, name: 'Ayşe Demir',   position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
-    { id: 14, name: 'Mehmet Kaya',  position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
-    { id: 15, name: 'Elif Çelik',   position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 11, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
+    { id: 12, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+    { id: 13, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
+    { id: 14, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 15, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
     { id: 16, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
-    { id: 17, name: 'Mert Koç',     position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
-    { id: 18, name: 'Ahmet Yılmaz', position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
-    { id: 19, name: 'Ahmet Yılmaz', position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf' },
-    { id: 20, name: 'Ayşe Demir',   position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+
   ];
 
   filteredCandidates: Candidate[] = [];
   searchText: string = '';
   selectedPosition: string = '';
+  selectedApproval: string = ''; // '', 'approved', 'notApproved'
   positions: string[] = [];
 
   showModal: boolean = false;
@@ -62,26 +60,23 @@ export class CandidateManagementComponent implements OnInit {
   }
 
   filterCandidates(resetPage: boolean = true): void {
-  const q = this.searchText.trim().toLowerCase();
-  this.filteredCandidates = this.candidates.filter(c => {
-    const matchesName = c.name.toLowerCase().includes(q);
-    const matchesPos  = this.selectedPosition ? c.position === this.selectedPosition : true;
+    const q = this.searchText.trim().toLowerCase();
+    this.filteredCandidates = this.candidates.filter(c => {
+      const matchesName = c.name.toLowerCase().includes(q);
+      const matchesPos  = this.selectedPosition && this.selectedPosition !== 'approved'
+                        ? c.position === this.selectedPosition : true;
 
-    // approved alanı undefined olabilir, buna dikkat
-    const matchesApproval =
-      this.selectedApproval === 'approved' ? c.approved === true :
-      this.selectedApproval === 'notApproved' ? c.approved !== true :
-      true;
+      const matchesApproval =
+        this.selectedApproval === 'approved' ? c.approved === true :
+        this.selectedApproval === 'notApproved' ? c.approved !== true :
+        true;
 
-    return matchesName && matchesPos && matchesApproval;
-  });
+      return matchesName && matchesPos && matchesApproval;
+    });
 
-  if (resetPage) this.currentPage = 1;
-  this.updatePagination();
-}
-
-
-
+    if (resetPage) this.currentPage = 1;
+    this.updatePagination();
+  }
 
   openModal(candidate: Candidate): void {
     this.selectedCandidate = candidate;
@@ -111,20 +106,19 @@ export class CandidateManagementComponent implements OnInit {
     this.currentPage = page;
   }
 
- approveCandidate(candidate?: Candidate): void {
-  if (!candidate) return;
-  candidate.approved = true;
+  approveCandidate(candidate?: Candidate): void {
+    if (!candidate) return;
+    candidate.approved = true;
 
-  this.filterCandidates();
-}
-deleteCandidate(candidate?: Candidate): void {
-  if (!candidate) return;
-  this.candidates = this.candidates.filter(c => c.id !== candidate.id);
+    this.filterCandidates(false);
+  }
 
-  // Sayfa numarasını değiştirme
-  this.filterCandidates(false); 
-  this.closeModal();
-}
-selectedApproval: string = ''; // '', 'approved', 'notApproved'
+  deleteCandidate(candidate?: Candidate): void {
+    if (!candidate) return;
+    this.candidates = this.candidates.filter(c => c.id !== candidate.id);
 
+    // Sayfa numarasını değiştirme
+    this.filterCandidates(false); 
+    this.closeModal();
+  }
 }

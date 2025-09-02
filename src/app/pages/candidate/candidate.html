@@ -11,12 +11,19 @@
     <option value="approved">Onaylandı</option>
     <option *ngFor="let pos of positions" [value]="pos">{{ pos }}</option>
   </select>
+
+  <select [(ngModel)]="selectedApproval" (change)="filterCandidates()">
+    <option value="">Tüm Durumlar</option>
+    <option value="approved">Onaylandı</option>
+    <option value="notApproved">Onaylanmadı</option>
+  </select>
 </div>
 
 <div class="card-container">
   <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
-  <h3>{{ candidate.name }}</h3>
+    <h3>{{ candidate.name }}</h3>
     <p>Pozisyon: {{ candidate.position }}</p>
+    <span *ngIf="candidate.approved" class="approved-tag">✅ Onaylandı</span>
     <div class="card-buttons">
       <button (click)="openModal(candidate)">Görüntüle</button>
     </div>
@@ -28,24 +35,25 @@
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <h2>{{ selectedCandidate?.name }}</h2>
-      <p *ngIf="selectedCandidate?.approved" class="modal-approved">✅ Onaylandı</p>
+    
     <p>Pozisyon: {{ selectedCandidate?.position }}</p>
+
     <iframe
       *ngIf="selectedCandidate"
       [src]="selectedCandidateUrl | safeUrl"
-      width="100%"
-      height="500"
+      width="80%"
+      height="300"
       style="border:0"
     ></iframe>
-     <div class="modal-buttons">
-    <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">Onayla</button>
-    <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
-  </div>
-
-
+      <p *ngIf="selectedCandidate?.approved" class="modal-approved">✅ Onaylandı</p>
+    <div class="modal-buttons">
+      <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">Onayla</button>
+      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
+    </div>
   </div>
 </div>
 
+<!-- Sayfalama -->
 <div class="pagination" *ngIf="totalPages > 1">
   <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
   <button
@@ -56,5 +64,3 @@
   </button>
   <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
 </div>
-
-

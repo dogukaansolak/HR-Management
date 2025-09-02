@@ -429,20 +429,20 @@ export class PersonService {
     },
     {
       id: 1,
-      firstName: 'cem',
-      lastName: 'Yılmaz',
+      firstName: 'Yavuz',
+      lastName: 'Şentürk',
       tckimlik: '12345678901',
-      dogumtarihi: '1990-01-01',
+      dogumtarihi: '2005-07-05',
       telno: '05551234567',
       adres: 'İstanbul',
-      email: 'ali@example.com',
-      position: 'Yazılım Geliştirici',
-      department: 'IT',
+      email: 'yavuz_senturk@example.com',
+      position: 'Stajyer',
+      department: 'Karışık',
       startDate: '2020-05-10',
       totalLeave: 20,
       usedLeave: 5,
       workingStatus: 'Çalışıyor',
-      personnelphoto: 'assets/images/default.jpg'
+      personnelphoto: 'src/app/images/WIN_20250902_11_12_07_Pro.jpg'
     },
     // diğer personeller
   ];

@@ -2,13 +2,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  justify-content: center;
   margin-bottom: 24px;
-
-  justify-content: center; 
-  max-width: 1200px;       
-  margin: 0 auto;          
+  max-width: 1200px;
+  margin: 0 auto;
 }
-
 
 .filter-search input,
 .filter-search select {
@@ -31,12 +29,12 @@
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* yatay ortala */
+  justify-content: center;
   gap: 20px;
   padding: 10px 0;
   max-width: 1200px;
   margin: 0 auto;
-  align-items: stretch; /* tüm kartları aynı yüksekliğe uzat */
+  align-items: stretch;
 }
 .candidate-card {
   background: #fff;
@@ -46,26 +44,31 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 1 1 240px; /* minimum 240px, gerektiğinde büyüyebilir */
-  max-width: 300px; /* opsiyonel maksimum genişlik */
+  flex: 1 1 240px;
+  max-width: 300px;
   transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
 }
-
 .candidate-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.12);
 }
-
 .candidate-card h3 {
   margin: 0 0 8px 0;
   font-size: 17px;
   color: #111;
 }
-
 .candidate-card p {
   margin: 0;
   font-size: 14px;
   color: #555;
+}
+.approved-tag {
+  font-size: 12px;
+  color: #28a745;
+  font-weight: bold;
+  display: block;
+  margin: 6px 0;
 }
 
 .card-buttons {
@@ -87,10 +90,9 @@ button:hover {
   opacity: 0.9;
 }
 
-/* Sadece Görüntüle Butonu */
 .card-buttons button {
-background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
-color: #fff;
+  background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
+  color: #fff;
 }
 
 /* Modal */
@@ -114,24 +116,28 @@ color: #fff;
   position: relative;
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
   animation: modalFade 0.3s ease;
-  max-height: 80vh;      
-  overflow-y: auto;      
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .modal-content .close {
   position: absolute;
-  top: 14px;    
-  right: 18px;  
+  top: 14px;
+  right: 18px;
   font-size: 28px;
   font-weight: bold;
   color: #333;
   cursor: pointer;
-  transition: color 0.2s;
 }
 
-.modal-content .close:hover {
-  color: #1890ff;
+.modal-approved {
+  text-align: center;
+  font-weight: bold;
+  color: #28a745;
+  margin: 12px 0;
+  font-size: 16px;
 }
+
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
@@ -140,35 +146,14 @@ color: #fff;
 }
 
 .approve-btn {
-  background-color: #28a745; /* yeşil onay */
+  background-color: #28a745;
   color: #fff;
-  border-radius: 8px;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: opacity 0.2s;
-}
-
-.approve-btn:hover {
-  opacity: 0.9;
 }
 
 .delete-btn {
-  background-color: #dc3545; /* kırmızı sil */
+  background-color: #dc3545;
   color: #fff;
-  border-radius: 8px;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: opacity 0.2s;
 }
-
-.delete-btn:hover {
-  opacity: 0.9;
-}
-
 
 @keyframes modalFade {
   from { opacity: 0; transform: translateY(-20px);}
@@ -197,7 +182,6 @@ color: #fff;
 .pagination button.active {
   background-color: #FF6A00;
   color: white;
-  border-color: #1890ff;
 }
 
 .pagination button:disabled {
@@ -205,57 +189,38 @@ color: #fff;
   cursor: not-allowed;
 }
 
+/* Responsive */
 @media (max-width: 600px) {
   .filter-search {
     flex-direction: column;
     align-items: center;
   }
-
-   .filter-search input,
+  .filter-search input,
   .filter-search select {
-    width: 95%;    
-    padding: 8px 10px; 
-    font-size: 13px;   
+    width: 95%;
   }
-
   .card-container {
-    justify-content: center;
     gap: 16px;
   }
-
- .candidate-card {
-    flex: 1 1 95%;      
-    padding: 16px;     
-    font-size: 14px;    
+  .candidate-card {
+    flex: 1 1 95%;
   }
-   .modal-content {
+  .modal-content {
     width: 90%;
     padding: 16px 20px;
-    margin-top: 30%;   
-    max-height: 75vh;     
+    margin-top: 30%;
+    max-height: 75vh;
   }
-
   .modal-buttons button {
-    padding: 6px 12px; 
+    padding: 6px 12px;
     font-size: 13px;
   }
-    .modal-content .close {
+  .modal-content .close {
     top: 8px;
     right: 12px;
-    font-size: 24px; /* biraz küçült */
+    font-size: 24px;
   }
   .modal-approved {
-  text-align: center;
-  font-weight: bold;
-  color: #28a745;
-  margin: 12px 0;
-  font-size: 16px;
-}
-  .approved-tag {
-  font-size: 12px;
-  color: #28a745;
-  margin-left: 6px;
-  font-weight: bold;
-}
-
+    font-size: 16px;
+  }
 }
