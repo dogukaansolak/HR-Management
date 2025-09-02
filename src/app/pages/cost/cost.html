@@ -25,7 +25,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of filteredPersonnels">
+    <tr *ngFor="let p of filteredPersonnel">
       <td>{{ p.firstName + ' ' + p.lastName }}</td>
       <td>{{ p.departmentName }}</td>
       <td>{{ p.salary | currency:'TRY':'symbol':'1.0-0' }}</td>
@@ -47,34 +47,34 @@
 </table>
 
 <!-- Düzenleme Modalı -->
-<div class="modal" *ngIf="selectedPerson">
+<div class="modal" *ngIf="selectedPersonnel">
   <div class="modal-content">
     <h3>Personel Masraf Düzenle</h3>
 
     <label>Ad:</label>
-    <input [(ngModel)]="selectedPerson.firstName" />
+    <input [(ngModel)]="selectedPersonnel.firstName" />
 
     <label>Soyad:</label>
-    <input [(ngModel)]="selectedPerson.lastName" />
+    <input [(ngModel)]="selectedPersonnel.lastName" />
 
     <label>Departman:</label>
-    <select [(ngModel)]="selectedPerson.departmentName">
+    <select [(ngModel)]="selectedPersonnel.departmentName">
       <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
     </select>
 
     <hr />
 
     <label>Maaş:</label>
-    <input type="number" [(ngModel)]="selectedPerson.salary" />
+    <input type="number" [(ngModel)]="selectedPersonnel.salary" />
 
     <label>Yemek Gideri:</label>
-    <input type="number" [(ngModel)]="selectedPerson.mealCost" />
+    <input type="number" [(ngModel)]="selectedPersonnel.mealCost" />
 
     <label>Yol Gideri:</label>
-    <input type="number" [(ngModel)]="selectedPerson.transportCost" />
+    <input type="number" [(ngModel)]="selectedPersonnel.transportCost" />
 
     <label>Diğer Masraflar:</label>
-    <input type="number" [(ngModel)]="selectedPerson.otherCost" />
+    <input type="number" [(ngModel)]="selectedPersonnel.otherCost" />
 
     <div class="modal-buttons">
       <button (click)="saveEdit()">Kaydet</button>
