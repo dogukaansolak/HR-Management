@@ -240,23 +240,7 @@ import { Person } from '../models/personnel.model';
 @Injectable({ providedIn: 'root' })
 export class PersonService {
   private persons: Person[] = [
-    {
-      id: 12,
-      firstName: 'Ali',
-      lastName: 'Yılmaz',
-      tckimlik: '12345678901',
-      dogumTarihi: '1990-01-01',
-      telNo: '05551234567',
-      adres: 'İstanbul',
-      email: 'ali@example.com',
-      position: 'Yazılım Geliştirici',
-      departmentName: 'IT',
-      startDate: '2020-05-10',
-      totalLeave: 20,
-      usedLeave: 5,
-      workingStatus: 'Çalışıyor',
-      personnelPhoto: 'assets/images/default.jpg'
-    }
+   
     // diğer personeller
   ];
 

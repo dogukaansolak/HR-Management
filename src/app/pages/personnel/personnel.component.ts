@@ -58,7 +58,7 @@ export class PersonnelComponent implements OnInit {
 
       this.departments = Array.from(new Set(
         this.personnelList
-          .map(p => p.department)
+          .map(p => p.departmentName)
           .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
       ));
     });
@@ -67,7 +67,7 @@ export class PersonnelComponent implements OnInit {
   filterPersonnel() {
     this.filteredPersonnel = this.personnelList.filter(person => {
       const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+      const matchesDept = this.selectedDepartment ? person.departmentName === this.selectedDepartment : true;
       return matchesName && matchesDept;
     });
 
@@ -121,9 +121,9 @@ export class PersonnelComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         if (this.showAddForm) {
-          this.newPersonnel.personnelphoto = reader.result as string;
+          this.newPersonnel.personnelPhoto = reader.result as string;
         } else if (this.isEditMode && this.selectedPersonnel) {
-          this.selectedPersonnel.personnelphoto = reader.result as string;
+          this.selectedPersonnel.personnelPhoto = reader.result as string;
         }
       };
       reader.readAsDataURL(file);
@@ -137,17 +137,17 @@ export class PersonnelComponent implements OnInit {
       firstName: '',
       lastName: '',
       tckimlik: '',
-      dogumtarihi: '',
-      telno: '',
+      dogumTarihi: '',
+      telNo: '',
       adres: '',
       email: '',
       position: '',
-      department: '',
+      departmentName: '',
       startDate: '',
       totalLeave: 0,
       usedLeave: 0,
       workingStatus: 'Çalışıyor',
-      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+      personnelPhoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
 
       // EKLE
 

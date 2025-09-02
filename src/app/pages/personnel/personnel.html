@@ -15,7 +15,7 @@
 <div class="card-container">
   <div class="content-card" *ngFor="let person of paginatedPersonnel">
     <div class="personnel-image">
-      <img [src]="person.personnelphoto" alt="personnel"/>
+      <img [src]="person.personnelPhoto" alt="personnel"/>
     </div>
     <div class="personnel-info">
       <h3 class="personnel-name">{{ person.firstName }} {{ person.lastName }}</h3>
@@ -64,10 +64,10 @@
       <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required />
     </label>
     <label> Doğum Tarihi:
-      <input [(ngModel)]="newPersonnel.dogumtarihi" name="dogumtarihi" type="date" required />
+      <input [(ngModel)]="newPersonnel.dogumTarihi" name="dogumtarihi" type="date" required />
     </label>
     <label> Telefon Numarası:
-      <input [(ngModel)]="newPersonnel.telno" name="telno" />
+      <input [(ngModel)]="newPersonnel.telNo" name="telno" />
     </label>
     <label> Adres:
       <input [(ngModel)]="newPersonnel.adres" name="adres" />
@@ -79,7 +79,7 @@
       <input [(ngModel)]="newPersonnel.position" name="position" />
     </label>
     <label> Bölüm:
-      <input [(ngModel)]="newPersonnel.department" name="department" />
+      <input [(ngModel)]="newPersonnel.departmentName" name="department" />
     </label>
     <label> Başlangıç Tarihi:
       <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
@@ -104,7 +104,7 @@
     <!-- Fotoğraf -->
     <div style="text-align:center; margin-bottom:12px;">
       <img
-        [src]="selectedPersonnel?.personnelphoto"
+        [src]="selectedPersonnel?.personnelPhoto"
         alt="Personnel"
         style="width:120px; height:120px; border-radius:50%; object-fit:cover;"
       />
@@ -137,13 +137,13 @@
     </label>
 
     <label>Doğum Tarihi:
-      <span class="value">{{ selectedPersonnel?.dogumtarihi }}</span>
-      <input [(ngModel)]="selectedPersonnel!.dogumtarihi" type="date" *ngIf="isEditMode"/>
+      <span class="value">{{ selectedPersonnel?.dogumTarihi }}</span>
+      <input [(ngModel)]="selectedPersonnel!.dogumTarihi" type="date" *ngIf="isEditMode"/>
     </label>
 
     <label>Telefon:
-      <span class="value">{{ selectedPersonnel?.telno }}</span>
-      <input [(ngModel)]="selectedPersonnel!.telno" *ngIf="isEditMode"/>
+      <span class="value">{{ selectedPersonnel?.telNo }}</span>
+      <input [(ngModel)]="selectedPersonnel!.telNo" *ngIf="isEditMode"/>
     </label>
 
     <label>Adres:
@@ -152,15 +152,15 @@
     </label>
 
     <label>Departman:
-      <span class="value">{{ selectedPersonnel?.department }}</span>
-      <input [(ngModel)]="selectedPersonnel!.department" *ngIf="isEditMode"/>
+      <span class="value">{{ selectedPersonnel?.departmentName }}</span>
+      <input [(ngModel)]="selectedPersonnel!.departmentName" *ngIf="isEditMode"/>
     </label>
 
     <!-- Butonlar -->
     <div class="form-buttons">
       <button *ngIf="!isEditMode" type="button" class="edit-btn" (click)="editDetails(selectedPersonnel)">Düzenle</button>
       <button *ngIf="isEditMode" type="button" class="save-btn" (click)="saveDetails()">Kaydet</button>
-      <button type="button" class="delete-btn" (click)="deletePersonnel(selectedPersonnel!.id)">Sil</button>
+      <button type="button" class="delete-btn" (click)="deletePersonnel(selectedPersonnel!.id!)">Sil</button>
       <button type="button" class="cancel-btn" (click)="closeDetails()">Kapat</button>
     </div>
   </div>
