@@ -13,33 +13,38 @@ import { PersonService } from '../../services/personnel.service';
 })
 export class Cost implements OnInit {
 
-  personnels: Person[] = [];
-  filteredPersonnels: Person[] = [];
+  personnelList: Person[] = [];
+  filteredPersonnel: Person[] = [];
+  searchText = '';
+  selectedDepartment = '';
+  departments: string[] = [];
+  isCardVisible = false;
+  selectedPersonnel: Person | null = null;
+  isEditMode = false;
+  showAddForm = false;
+  currentPage = 1;
+  itemsPerPage = 8;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
-  searchText: string = '';
-  selectedDepartment: string = 'Tümü';
-  departments: string[] = ['Tümü', 'Muhasebe', 'İK', 'IT'];
-
-  // Modal için seçilen personel
-  selectedPerson: Person | null = null;
 
   constructor(private personService: PersonService) {}
 
   ngOnInit(): void {
     this.personService.getPersons().subscribe((data: Person[]) => {
-      this.personnels = data.map(p => ({
+      this.personnelList = data.map(p => ({
         ...p,
         salary: p.salary || 0,
         mealCost: p.mealCost || 0,
         transportCost: p.transportCost || 0,
         otherCost: p.otherCost || 0
       }));
-      this.filteredPersonnels = [...this.personnels];
+      this.filteredPersonnel = [...this.personnelList];
     });
   }
 
   filterPersonnels() {
-    this.filteredPersonnels = this.personnels.filter(p => {
+    this.filteredPersonnel = this.personnelList.filter(p => {
       const matchesSearch = (p.firstName + ' ' + p.lastName)
         .toLowerCase()
         .includes(this.searchText.toLowerCase());
@@ -56,27 +61,27 @@ export class Cost implements OnInit {
 
   // Tüm personellerin toplam maliyeti
   getCompanyTotalCost(): number {
-    return this.filteredPersonnels.reduce((sum, p) => sum + this.getTotalCost(p), 0);
+    return this.filteredPersonnel.reduce((sum, p) => sum + this.getTotalCost(p), 0);
   }
 
   // Modal aç
   openEditModal(person: Person) {
-    this.selectedPerson = { ...person };
+    this.selectedPersonnel = { ...person };
   }
 
   // Modal kapat
   closeEditModal() {
-    this.selectedPerson = null;
+    this.selectedPersonnel = null;
   }
 
   // Değişiklikleri kaydet
   saveEdit() {
-    if (this.selectedPerson) {
-      console.log('Kaydedilen personel masrafları:', this.selectedPerson);
+    if (this.selectedPersonnel) {
+      console.log('Kaydedilen personel masrafları:', this.selectedPersonnel);
 
-      const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
+      const index = this.personnelList.findIndex(p => p.id === this.selectedPersonnel!.id);
       if (index > -1) {
-        this.personnels[index] = { ...this.selectedPerson };
+        this.personnelList[index] = { ...this.selectedPersonnel };
         this.filterPersonnels();
       }
 
