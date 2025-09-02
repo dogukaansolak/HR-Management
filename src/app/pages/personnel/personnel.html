@@ -26,11 +26,27 @@
     </div>
   </div>
 </div>
-<div class="pagination" *ngIf="totalPages > 1" style="text-align:center; margin-top:20px;">
-  <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Önceki</button>
-  <span>Sayfa {{currentPage}} / {{totalPages}}</span>
-  <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Sonraki</button>
+<div class="pagination" *ngIf="totalPages > 1">
+  <button 
+    (click)="goToPage(currentPage - 1)" 
+    [disabled]="currentPage === 1">
+    &laquo;
+  </button>
+
+  <button 
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1">
+    {{ i + 1 }}
+  </button>
+
+  <button 
+    (click)="goToPage(currentPage + 1)" 
+    [disabled]="currentPage === totalPages">
+    &raquo;
+  </button>
 </div>
+
 
 
 <!-- Ekleme Formu -->

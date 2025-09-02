@@ -173,6 +173,11 @@ export class PersonnelComponent implements OnInit {
     if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
+  goToPage(page: number) {
+  if (page < 1 || page > this.totalPages) return;
+  this.currentPage = page;
+}
+
 
 
 }

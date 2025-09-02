@@ -228,13 +228,33 @@
   outline: none;
   background: #fff;
 }
-/* Sayfalama */
 .pagination {
-  margin-top: 28px;
+  margin-top: 24px;
   display: flex;
-  gap: 8px;
   justify-content: center;
+  gap: 8px;
   flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f8f8f8;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.pagination button.active {
+  background-color: #FF6A00;
+  color: #fff;
+  border-color: #FF6A00;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ================= FORM BUTONLARI ================= */
