@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PersonnelService } from '../../services/personnel.service';
-import { Personnel } from '../../models/personnel.model';
+import { PersonService } from '../../services/personnel.service';
+import { Person } from '../../models/personnel.model';
 
 @Component({
   selector: 'app-personnel',
@@ -13,27 +13,27 @@ import { Personnel } from '../../models/personnel.model';
 })
 export class PersonnelComponent implements OnInit {
 
-  personnelList: Personnel[] = [];
-  filteredPersonnel: Personnel[] = [];
+  personnelList: Person[] = [];
+  filteredPersonnel: Person[] = [];
 
   searchText: string = '';
   selectedDepartment: string = '';
   departments: string[] = [];
 
   isCardVisible = false;
-  selectedPersonnel: Personnel | null = null;
+  selectedPersonnel: Person | null = null;
   isEditMode: boolean = false;
 
   showAddForm = false;
-  newPersonnel: Personnel = this.getEmptyPersonnel();
+  newPersonnel: Person = this.getEmptyPersonnel();
 
-  constructor(private readonly personnelService: PersonnelService) { }
+  constructor(private readonly personService: PersonService) { }
 
   ngOnInit() {
     this.loadPersonnel();
   }
 
-  editDetails(person: Personnel | null) {
+  editDetails(person: Person | null) {
     if (!person) return;
     this.selectedPersonnel = person;
     this.isEditMode = true;
@@ -52,7 +52,7 @@ export class PersonnelComponent implements OnInit {
   }
 
   loadPersonnel() {
-    this.personnelService.getPersonnelList().subscribe(data => {
+    this.personService.getPersons().subscribe(data => {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
 
@@ -75,7 +75,7 @@ filterPersonnel() {
 }
 
 
-  openDetails(person: Personnel) {
+  openDetails(person: Person) {
     this.selectedPersonnel = person;
     this.isCardVisible = true;
     this.isEditMode = false;
@@ -93,14 +93,14 @@ filterPersonnel() {
 
   addPersonnel() {
     if (!this.newPersonnel.firstName || !this.newPersonnel.lastName) return;
-    this.personnelService.addPersonnel({ ...this.newPersonnel });
+    this.personService.addPerson({ ...this.newPersonnel });
     this.loadPersonnel();
     this.showAddForm = false;
     this.resetForm();
   }
 
   deletePersonnel(id: number) {
-    this.personnelService.deletePersonnel(id);
+    this.personService.deletePerson(id);
     this.loadPersonnel();
     this.closeDetails();
   }
@@ -124,29 +124,32 @@ filterPersonnel() {
     }
   }
 
-  private getEmptyPersonnel(): Personnel {
+  private getEmptyPersonnel(): Person {
     return {
       id: 0,
-      firstName: '',
-      lastName: '',
-      tckimlik: '',
-      dogumtarihi: '',
-      telno: '',
-      adres: '',
-      email: '',
-      position: '',
-      department: '',
-      startDate: '',
-      totalLeave: 0,
-      usedLeave: 0,
-      workingStatus: 'Çalışıyor',
-      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+    firstName: '',
+    lastName: '',
+    tckimlik: '',
+    dogumtarihi: '',
+    telno: '',
+    adres: '',
+    email: '',
+    position: '',
+    department: '',
+    startDate: '',
+    totalLeave: 0,
+    usedLeave: 0,
+    workingStatus: 'Çalışıyor',
+    personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+
+    // EKLE
+  
     };
   }
   currentPage: number = 1;
   itemsPerPage: number = 8;
 
-  get paginatedPersonnel(): Personnel[] {
+  get paginatedPersonnel(): Person[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return this.filteredPersonnel.slice(start, start + this.itemsPerPage);
   }

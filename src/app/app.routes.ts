@@ -6,27 +6,23 @@ import { Register } from './auth/register/register.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DashboardHome } from './pages/dashboard-home/dashboard-home';
 import { PersonnelComponent } from './pages/personnel/personnel.component';
-import { PermissionComponent } from './pages/permission/permission.component';
+import { PermissionComponent } from './pages/permission/permission.component'; // ✅ doğru import
 import { Cost } from './pages/cost/cost.component';
 import { CandidateManagementComponent } from './pages/candidate/candidate.component';
 import { Reports } from './pages/reports/reports.component';
 import { Settings } from './pages/settings/settings.component';
 
-// import { authGuard } from './guards/auth.guard';
-
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'personnel', component: PersonnelComponent },
   { path: 'register', component: Register },
 
   {
     path: 'dashboard',
     component: DashboardComponent,
-    // canActivate: [authGuard],
     children: [
       { path: '', component: DashboardHome },
       { path: 'personnel', component: PersonnelComponent },
-      { path: 'permission', component: PermissionComponent },
+      { path: 'permission', component: PermissionComponent }, // ✅ izin sayfası
       { path: 'cost', component: Cost },
       { path: 'candidate', component: CandidateManagementComponent },
       { path: 'reports', component: Reports },
