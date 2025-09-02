@@ -21,19 +21,20 @@
 
 
 export interface Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-  tckimlik: string;
-  dogumtarihi: string;
-  telno?: string;
-  adres?: string;
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  tckimlik?: string;
+  dogumTarihi?: string;
+  telNo?: string;
   email?: string;
   position?: string;
-  department?: string;
+  workingStatus?: string;
+  personnelPhoto?: string;
   startDate?: string;
-  totalLeave?: number;      // yıllık izin hakkı
-  usedLeave?: number;       // kullanılan izin
-  workingStatus: "Çalışıyor" | "İzinli";
-  personnelphoto: string;
+  totalLeave?: number;
+  usedLeave?: number;
+  departmentId?: number;
+  departmentName?: string;
+  adres?: string;
 }
