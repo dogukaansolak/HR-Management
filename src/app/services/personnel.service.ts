@@ -23,19 +23,19 @@ export class PersonService {
 
     // DİKKAT: Alan adları büyük harfle! Tarihler ISO string!
     const body: CreateEmployeeDto = {
-      FirstName: person.firstName,
-      LastName: person.lastName,
-      TCKimlik: person.tckimlik,
-      DogumTarihi: person.dogumTarihi ? new Date(person.dogumTarihi).toISOString() : '',
-      TelNo: person.telNo,
-      Email: person.email,
-      Position: person.position,
-      WorkingStatus: person.workingStatus,
-      PersonnelPhoto: person.personnelPhoto,
-      StartDate: person.startDate ? new Date(person.startDate).toISOString() : '',
-      TotalLeave: person.totalLeave,
-      UsedLeave: person.usedLeave,
-      DepartmentId: person.departmentId
+      firstName: person.firstName,
+      lastName: person.lastName,
+      tcKimlik: person.tcKimlik,
+      dogumTarihi: person.dogumTarihi ? new Date(person.dogumTarihi).toISOString() : '',
+      telNo: person.telNo,
+      email: person.email,
+      position: person.position,
+      workingStatus: person.workingStatus,
+      personnelPhoto: person.personnelPhoto,
+      startDate: person.startDate ? new Date(person.startDate).toISOString() : '',
+      totalLeave: person.totalLeave,
+      usedLeave: person.usedLeave,
+      departmentId: person.departmentId
     };
 
     return this.http.post(this.apiUrl, body, { headers });

@@ -24,8 +24,8 @@ import { DatePipe } from "@angular/common";
 
 export interface Person {
   id?: number;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   tckimlik?: string;
   dogumTarihi?: Date|null;
   telNo?: string;

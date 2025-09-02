@@ -1,15 +1,15 @@
 export interface CreateEmployeeDto {
-  FirstName: string;
-  LastName: string;
-  TCKimlik: string;
-  DogumTarihi: string; // ISO string!
-  TelNo: string;
-  Email: string;
-  Position: string;
-  WorkingStatus: string;
-  PersonnelPhoto: string;
-  StartDate: string; // ISO string!
-  TotalLeave: number;
-  UsedLeave: number;
-  DepartmentId: number;
+  firstName: string;
+  lastName: string;
+  tcKimlik: string;
+  dogumTarihi: string; // ISO string!
+  telNo: string;
+  email: string;
+  position: string;
+  workingStatus: string;
+  personnelPhoto: string;
+  startDate: string; // ISO string!
+  totalLeave: number;
+  usedLeave: number;
+  departmentId: number;
 }
