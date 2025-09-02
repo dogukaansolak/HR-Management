@@ -69,7 +69,7 @@
       <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
     </label>
     <label> Fotoğraf:
-      <input type="file" (change)="handleFileInput($event)" required/>
+      <input type="file" accept="image/*" (change)="handleFileInput($event)" required/>
     </label>
 
     <div class="butons">

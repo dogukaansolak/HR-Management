@@ -64,15 +64,15 @@ export class PersonnelComponent implements OnInit {
     });
   }
 
-filterPersonnel() {
-  this.filteredPersonnel = this.personnelList.filter(person => {
-    const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-    const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
-    return matchesName && matchesDept;
-  });
+  filterPersonnel() {
+    this.filteredPersonnel = this.personnelList.filter(person => {
+      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+      return matchesName && matchesDept;
+    });
 
-  this.currentPage = 1; // Filtre değişince sayfayı 1 yap
-}
+    this.currentPage = 1; // Filtre değişince sayfayı 1 yap
+  }
 
 
   openDetails(person: Person) {
@@ -112,6 +112,12 @@ filterPersonnel() {
   handleFileInput(event: any) {
     const file = event.target.files[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Sadece fotoğraf formatındaki dosyalar yüklenebilir.");
+        event.target.value = ''; // input’u sıfırla
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = () => {
         if (this.showAddForm) {
@@ -124,26 +130,27 @@ filterPersonnel() {
     }
   }
 
+
   private getEmptyPersonnel(): Person {
     return {
       id: 0,
-    firstName: '',
-    lastName: '',
-    tckimlik: '',
-    dogumtarihi: '',
-    telno: '',
-    adres: '',
-    email: '',
-    position: '',
-    department: '',
-    startDate: '',
-    totalLeave: 0,
-    usedLeave: 0,
-    workingStatus: 'Çalışıyor',
-    personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
+      firstName: '',
+      lastName: '',
+      tckimlik: '',
+      dogumtarihi: '',
+      telno: '',
+      adres: '',
+      email: '',
+      position: '',
+      department: '',
+      startDate: '',
+      totalLeave: 0,
+      usedLeave: 0,
+      workingStatus: 'Çalışıyor',
+      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
 
-    // EKLE
-  
+      // EKLE
+
     };
   }
   currentPage: number = 1;
@@ -165,6 +172,7 @@ filterPersonnel() {
   goToNextPage() {
     if (this.currentPage < this.totalPages) this.currentPage++;
   }
-  
+
+
 
 }
