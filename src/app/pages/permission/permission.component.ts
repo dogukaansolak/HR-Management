@@ -33,7 +33,7 @@ constructor(private personService: PersonService) {}
     this.filteredPersonnels = this.personnels.filter(p => {
       const matchesSearch = (p.firstName + ' ' + p.lastName).toLowerCase().includes(this.searchText.toLowerCase());
       const matchesDepartment =
-        this.selectedDepartment === 'Tümü' || p.department === this.selectedDepartment;
+        this.selectedDepartment === 'Tümü' || p.departmentName === this.selectedDepartment;
       return matchesSearch && matchesDepartment;
     });
   }

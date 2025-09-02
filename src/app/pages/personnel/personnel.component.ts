@@ -3,82 +3,116 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/personnel.service';
 import { Person } from '../../models/personnel.model';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-personnel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './personnel.html',
   styleUrls: ['./personnel.css']
 })
 export class PersonnelComponent implements OnInit {
-
   personnelList: Person[] = [];
   filteredPersonnel: Person[] = [];
-
-  searchText: string = '';
-  selectedDepartment: string = '';
+  searchText = '';
+  selectedDepartment = '';
   departments: string[] = [];
-
   isCardVisible = false;
   selectedPersonnel: Person | null = null;
-  isEditMode: boolean = false;
-
+  isEditMode = false;
   showAddForm = false;
   newPersonnel: Person = this.getEmptyPersonnel();
+  currentPage = 1;
+  itemsPerPage = 8;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
-  constructor(private readonly personService: PersonService) { }
+  constructor(private readonly personService: PersonService) {}
 
   ngOnInit() {
     this.loadPersonnel();
-  }
-
-  editDetails(person: Person | null) {
-    if (!person) return;
-    this.selectedPersonnel = person;
-    this.isEditMode = true;
-  }
-
-  saveDetails() {
-    if (!this.selectedPersonnel) return;
-
-    const index = this.personnelList.findIndex(p => p.id === this.selectedPersonnel!.id);
-    if (index !== -1) {
-      this.personnelList[index] = { ...this.selectedPersonnel };
-    }
-
-    this.isEditMode = false;
-    this.isCardVisible = false;
   }
 
   loadPersonnel() {
     this.personService.getPersons().subscribe(data => {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
+    });
+  }
 
-      this.departments = Array.from(new Set(
-        this.personnelList
-          .map(p => p.department)
-          .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
-      ));
+addPersonnel() {
+  this.errorMessage = null;
+  this.successMessage = null;
+  // Zorunlu alan kontrolü
+  if (!this.newPersonnel.firstName || !this.newPersonnel.lastName) {
+    this.errorMessage = "Ad ve Soyad zorunlu!";
+    return;
+  }
+  // Backend DTO ile birebir property adları!
+  const body = {
+    FirstName: this.newPersonnel.firstName,
+    LastName: this.newPersonnel.lastName,
+    TCKimlik: this.newPersonnel.tckimlik,
+    DogumTarihi: this.newPersonnel.dogumTarihi ? new Date(this.newPersonnel.dogumTarihi).toISOString() : null,
+    TelNo: this.newPersonnel.telNo,
+    Email: this.newPersonnel.email,
+    Position: this.newPersonnel.position,
+    WorkingStatus: this.newPersonnel.workingStatus,
+    PersonnelPhoto: this.newPersonnel.personnelPhoto,
+    StartDate: this.newPersonnel.startDate ? new Date(this.newPersonnel.startDate).toISOString() : null,
+    TotalLeave: this.newPersonnel.totalLeave,
+    UsedLeave: this.newPersonnel.usedLeave,
+    DepartmentId: this.newPersonnel.departmentId ?? 0
+  };
+  this.personService.addPerson(body).subscribe({
+    next: () => {
+      this.successMessage = "Personel başarıyla eklendi.";
+      this.loadPersonnel();
+      this.showAddForm = false;
+      this.resetForm();
+    },
+    error: (err) => {
+      this.errorMessage = "Ekleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+    }
+  });
+}
+
+  saveDetails() {
+    if (!this.selectedPersonnel) return;
+    this.personService.updatePerson(this.selectedPersonnel).subscribe(() => {
+      this.loadPersonnel();
+      this.isEditMode = false;
+      this.isCardVisible = false;
+    });
+  }
+
+  deletePersonnel(id: number) {
+    this.personService.deletePerson(id).subscribe(() => {
+      this.loadPersonnel();
+      this.closeDetails();
     });
   }
 
   filterPersonnel() {
     this.filteredPersonnel = this.personnelList.filter(person => {
       const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.department === this.selectedDepartment : true;
+      const matchesDept = this.selectedDepartment ? person.departmentName === this.selectedDepartment : true;
       return matchesName && matchesDept;
     });
-
-    this.currentPage = 1; // Filtre değişince sayfayı 1 yap
+    this.currentPage = 1;
   }
 
-
   openDetails(person: Person) {
-    this.selectedPersonnel = person;
+    this.selectedPersonnel = { ...person };
     this.isCardVisible = true;
     this.isEditMode = false;
+  }
+
+  editDetails(person: Person | null) {
+    if (!person) return;
+    this.selectedPersonnel = { ...person };
+    this.isEditMode = true;
   }
 
   closeDetails() {
@@ -89,20 +123,7 @@ export class PersonnelComponent implements OnInit {
 
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
-  }
-
-  addPersonnel() {
-    if (!this.newPersonnel.firstName || !this.newPersonnel.lastName) return;
-    this.personService.addPerson({ ...this.newPersonnel });
-    this.loadPersonnel();
-    this.showAddForm = false;
-    this.resetForm();
-  }
-
-  deletePersonnel(id: number) {
-    this.personService.deletePerson(id);
-    this.loadPersonnel();
-    this.closeDetails();
+    if (this.showAddForm) this.resetForm();
   }
 
   resetForm() {
@@ -114,22 +135,20 @@ export class PersonnelComponent implements OnInit {
     if (file) {
       if (!file.type.startsWith("image/")) {
         alert("Sadece fotoğraf formatındaki dosyalar yüklenebilir.");
-        event.target.value = ''; // input’u sıfırla
+        event.target.value = '';
         return;
       }
-
       const reader = new FileReader();
       reader.onload = () => {
         if (this.showAddForm) {
-          this.newPersonnel.personnelphoto = reader.result as string;
+          this.newPersonnel.personnelPhoto = reader.result as string;
         } else if (this.isEditMode && this.selectedPersonnel) {
-          this.selectedPersonnel.personnelphoto = reader.result as string;
+          this.selectedPersonnel.personnelPhoto = reader.result as string;
         }
       };
       reader.readAsDataURL(file);
     }
   }
-
 
   private getEmptyPersonnel(): Person {
     return {
@@ -137,24 +156,20 @@ export class PersonnelComponent implements OnInit {
       firstName: '',
       lastName: '',
       tckimlik: '',
-      dogumtarihi: '',
-      telno: '',
+      dogumTarihi: null,
+      telNo: '',
       adres: '',
       email: '',
       position: '',
-      department: '',
-      startDate: '',
+      departmentName: '',
+      startDate: null,
       totalLeave: 0,
       usedLeave: 0,
       workingStatus: 'Çalışıyor',
-      personnelphoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
-
-      // EKLE
-
+      personnelPhoto: 'assets/images/default.jpg',
+      departmentId: 0 // DTO ile uyum için eklendi!
     };
   }
-  currentPage: number = 1;
-  itemsPerPage: number = 8;
 
   get paginatedPersonnel(): Person[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -168,16 +183,7 @@ export class PersonnelComponent implements OnInit {
   goToPreviousPage() {
     if (this.currentPage > 1) this.currentPage--;
   }
-
   goToNextPage() {
     if (this.currentPage < this.totalPages) this.currentPage++;
   }
-
-  goToPage(page: number) {
-  if (page < 1 || page > this.totalPages) return;
-  this.currentPage = page;
-}
-
-
-
 }

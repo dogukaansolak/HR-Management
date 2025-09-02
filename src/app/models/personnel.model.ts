@@ -19,22 +19,24 @@
 //     yillikIzinHakki: number | null;
 // }
 
+import { DatePipe } from "@angular/common";
+
 
 export interface Person {
   id?: number;
   firstName?: string;
   lastName?: string;
   tckimlik?: string;
-  dogumTarihi?: string;
+  dogumTarihi?: Date|null;
   telNo?: string;
   email?: string;
   position?: string;
   workingStatus?: string;
   personnelPhoto?: string;
-  startDate?: string;
+  startDate?: Date|null;
   totalLeave?: number;
   usedLeave?: number;
   departmentId?: number;
   departmentName?: string;
-  adres?: string;
+  adres?: string;//bu veri tabanında yok
 }
