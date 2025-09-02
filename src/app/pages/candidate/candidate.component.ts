@@ -9,6 +9,9 @@ interface Candidate {
   position: string;
   cvUrl: string;
   approved?: boolean;
+  note?: string;
+  showNoteInput?: boolean;
+  noteText?: string;
 }
 
 @Component({
@@ -31,13 +34,12 @@ export class CandidateManagementComponent implements OnInit {
     { id: 8, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
     { id: 9, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
     { id: 10, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
-    { id: 11, name: 'Mert Koç',      position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
-    { id: 12, name: 'Ayşe Demir',    position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
-    { id: 13, name: 'Mehmet Kaya',   position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
-    { id: 14, name: 'Elif Çelik',    position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
+    { id: 11, name: 'Mert Koç',     position: 'İK Uzmanı',           cvUrl: '/assets/cvs/mert.pdf' },
+    { id: 12, name: 'Ayşe Demir',   position: 'İK Uzmanı',           cvUrl: '/assets/cvs/ayse.pdf' },
+    { id: 13, name: 'Mehmet Kaya',  position: 'Satış Temsilcisi',    cvUrl: '/assets/cvs/mehmet.pdf' },
+    { id: 14, name: 'Elif Çelik',   position: 'Pazarlama Uzmanı',    cvUrl: '/assets/cvs/elif.pdf' },
     { id: 15, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
     { id: 16, name: 'Selin Acar',   position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/selin.pdf' },
-
   ];
 
   filteredCandidates: Candidate[] = [];
@@ -89,7 +91,7 @@ export class CandidateManagementComponent implements OnInit {
   }
 
   get selectedCandidateUrl(): string {
-    return this.selectedCandidate ? this.selectedCandidate.cvUrl : '';
+    return this.selectedCandidate?.cvUrl ?? '';
   }
 
   updatePagination(): void {
@@ -109,16 +111,21 @@ export class CandidateManagementComponent implements OnInit {
   approveCandidate(candidate?: Candidate): void {
     if (!candidate) return;
     candidate.approved = true;
-
     this.filterCandidates(false);
   }
 
   deleteCandidate(candidate?: Candidate): void {
     if (!candidate) return;
     this.candidates = this.candidates.filter(c => c.id !== candidate.id);
-
-    // Sayfa numarasını değiştirme
     this.filterCandidates(false); 
     this.closeModal();
   }
+
+  addNoteToCandidate(candidate?: Candidate, noteText?: string) {
+    if (!candidate) return;
+    candidate.note = noteText || '';
+    candidate.showNoteInput = false;
+    this.filterCandidates(false);
+  }
+
 }
