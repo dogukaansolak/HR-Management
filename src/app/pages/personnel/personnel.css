@@ -281,9 +281,9 @@
   color: #fff;
   box-shadow: 0 6px 16px rgba(255,106,0,0.28);
 }
-.card-person-detail .edit-btn { background: #2563eb; color: #fff; }
+.card-person-detail .edit-btn { background: #ff9900; color: #fff; }
 .card-person-detail .delete-btn { background: #dc2626; color: #fff; }
-.card-person-detail .cancel-btn { background: #9ca3af; color: #fff; }
+.card-person-detail .cancel-btn { background: #bd0000; color: #fff; }
 .card-person-detail .form-buttons button:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(0,0,0,0.15);
