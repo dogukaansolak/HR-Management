@@ -41,23 +41,10 @@
 <!-- Personel Düzenleme Modalı -->
 <div class="modal" *ngIf="selectedPerson">
   <div class="modal-content">
-    <h3>Personel Düzenle</h3>
-
-    <label>Ad:</label>
-
-    <label>Soyad:</label>
-
-    <label>Departman:</label>
     
 
-    <label>Toplam İzin:</label>
-    <input type="number" [(ngModel)]="selectedPerson.totalLeave" />
-
-    <label>Kullanılan İzin:</label>
-    <input type="number" [(ngModel)]="selectedPerson.usedLeave" />
-
-    <label>İzin Tipi:</label>
-    <input [(ngModel)]="selectedPerson.workingStatus" />
+    <app-leave-form *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-form>
+    <app-leave-list *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-list>
 
     <div class="modal-buttons">
       <button (click)="saveEdit()">Kaydet</button>
@@ -67,5 +54,4 @@
 </div>
 
 <!-- Yeni İzin Ekleme Formu -->
-<app-leave-form *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-form>
-<app-leave-list *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-list>
+
