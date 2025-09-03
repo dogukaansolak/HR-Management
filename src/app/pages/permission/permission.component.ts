@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+// src/app/pages/permission/permission.component.ts
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
+import { LeaveListComponent } from './leaves/leave-list.component';
+import { LeaveFormComponent } from './leaves/leave-form.component';
+import { DepartmentService } from '../../services/department.service';  
 
 @Component({
   selector: 'app-permission',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, LeaveFormComponent, LeaveListComponent],
   templateUrl: './permission.html',
   styleUrls: ['./permission.css']
 })
@@ -15,12 +19,13 @@ export class PermissionComponent implements OnInit {
   personnels: Person[] = [];
   filteredPersonnels: Person[] = [];
 
-  searchText: string = '';
-  selectedDepartment: string = 'Tümü';
-  departments: string[] = ['Tümü', 'Muhasebe', 'İK', 'IT'];
+  searchText = '';
+  selectedDepartment = 'Tüm Departmanlar';
+  departments = ['Tüm Departmanlar'];
 
-  // Modal için seçilen personel
   selectedPerson: Person | null = null;
+
+  @ViewChild('leaveList') leaveList?: LeaveListComponent;
 
   constructor(private personService: PersonService) {}
 
@@ -32,39 +37,52 @@ export class PermissionComponent implements OnInit {
   }
 
   filterPersonnels() {
+    const q = this.searchText?.trim().toLowerCase() ?? '';
     this.filteredPersonnels = this.personnels.filter(p => {
-      const matchesSearch = (p.firstName + ' ' + p.lastName)
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase());
-      const matchesDepartment =
-        this.selectedDepartment === 'Tümü' || p.departmentName === this.selectedDepartment;
-      return matchesSearch && matchesDepartment;
+      const full = (p.firstName + ' ' + p.lastName).toLowerCase();
+      const matchesSearch = !q || full.includes(q);
+      const matchesDept = this.selectedDepartment === 'Tümü' || p.departmentName === this.selectedDepartment;
+      return matchesSearch && matchesDept;
     });
   }
 
-  // Modal aç
-  openEditModal(person: Person) {
-    this.selectedPerson = { ...person };
+  openPersonPermissions(person: Person) {
+    this.selectedPerson = person;
   }
 
-  // Modal kapat
-  closeEditModal() {
+  backToList() {
     this.selectedPerson = null;
   }
 
-  // Değişiklikleri kaydet
-  saveEdit() {
-    if (this.selectedPerson) {
-      // Backend'e kaydetme işlemi yapılabilir
-      console.log('Kaydedilen personel:', this.selectedPerson);
-
-      const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
-      if (index > -1) {
-        this.personnels[index] = { ...this.selectedPerson };
-        this.filterPersonnels();
-      }
-
-      this.closeEditModal();
-    }
+  // leave-form component'tan gelen event ile list yenilensin
+  onLeaveCreated() {
+    this.leaveList?.load();
   }
+
+  // Modal aç
+openEditModal(person: Person) {
+  this.selectedPerson = { ...person };
+}
+
+// Modal kapat
+closeEditModal() {
+  this.selectedPerson = null;
+}
+
+// Değişiklikleri kaydet
+saveEdit() {
+  if (!this.selectedPerson) return;
+
+  // Backend kaydı yapılacak
+  console.log('Kaydedilen personel:', this.selectedPerson);
+
+  const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
+  if (index > -1) {
+    this.personnels[index] = { ...this.selectedPerson };
+    this.filterPersonnels();
+  }
+
+  this.closeEditModal();
+}
+
 }

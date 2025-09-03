@@ -1,3 +1,4 @@
+<!-- Filtreleme Çubuğu -->
 <div class="filter-bar">
   <input
     type="text"
@@ -11,6 +12,7 @@
   </select>
 </div>
 
+<!-- Personel Tablosu -->
 <table>
   <thead>
     <tr>
@@ -19,15 +21,14 @@
       <th>Yıllık İzin</th>
       <th>Kullanılan İzin</th>
       <th>Durum</th>
-      <th>Düzenle</th>
+      <th>İşlem</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let p of filteredPersonnels">
-    
-      <td>{{ (p.firstName + ' ' + p.lastName) }}</td>
+      <td>{{ p.firstName }} {{ p.lastName }}</td>
       <td>{{ p.departmentName }}</td>
-      <td>{{ p.totalLeave ? (p.totalLeave+ ' gün') : 'Yok' }}</td>
+      <td>{{ p.totalLeave ? p.totalLeave + ' gün' : 'Yok' }}</td>
       <td>{{ p.usedLeave }}</td>
       <td>{{ p.workingStatus }}</td>
       <td>
@@ -37,7 +38,7 @@
   </tbody>
 </table>
 
-<!-- Düzenleme Modalı -->
+<!-- Personel Düzenleme Modalı -->
 <div class="modal" *ngIf="selectedPerson">
   <div class="modal-content">
     <h3>Personel Düzenle</h3>
@@ -68,3 +69,7 @@
     </div>
   </div>
 </div>
+
+<!-- Yeni İzin Ekleme Formu -->
+<app-leave-form *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-form>
+<app-leave-list *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-list>

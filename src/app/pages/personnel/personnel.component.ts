@@ -123,14 +123,21 @@ deletePersonnel(id: number) {
 
 filterPersonnel() {
   this.filteredPersonnel = this.personnelList.filter(person => {
-    const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-    const matchesDept = this.selectedDepartment
-      ? person.departmentId === Number(this.selectedDepartment)
-      : true;
+    const matchesName = (person.firstName + ' ' + person.lastName)
+      .toLowerCase()
+      .includes(this.searchText.toLowerCase());
+
+    const matchesDept =
+      !this.selectedDepartment || this.selectedDepartment.toLowerCase() === 'tümü'
+        ? true
+        : person.departmentName!.toLowerCase() === this.selectedDepartment.toLowerCase();
+
     return matchesName && matchesDept;
   });
-  this.currentPage = 1;
+
+  this.currentPage = 1; // Pagination kullanıyorsan bırak
 }
+
 
   openDetails(person: Person) {
     this.selectedPersonnel = { ...person };
