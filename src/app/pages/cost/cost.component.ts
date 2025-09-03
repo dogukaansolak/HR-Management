@@ -45,13 +45,11 @@ export class Cost implements OnInit {
 
   filterPersonnels() {
     this.filteredPersonnel = this.personnelList.filter(p => {
-      const matchesSearch = (p.firstName + ' ' + p.lastName)
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase());
-      const matchesDepartment =
-        this.selectedDepartment === 'Tümü' || p.departmentName === this.selectedDepartment;
+      const matchesSearch = (p.firstName + ' ' + p.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesDepartment = this.selectedDepartment ? p.departmentName === this.selectedDepartment : true;
       return matchesSearch && matchesDepartment;
     });
+    this.currentPage = 1;
   }
 
   // Personelin toplam maliyeti
