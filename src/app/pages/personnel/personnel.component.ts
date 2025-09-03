@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/personnel.service';
 import { Person } from '../../models/personnel.model';
 import { HttpClientModule } from '@angular/common/http';
+import { Department, DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-personnel',
@@ -17,7 +18,7 @@ export class PersonnelComponent implements OnInit {
   filteredPersonnel: Person[] = [];
   searchText = '';
   selectedDepartment = '';
-  departments: string[] = [];
+  departments: Department[] = [];
   isCardVisible = false;
   selectedPersonnel: Person | null = null;
   isEditMode = false;
@@ -28,10 +29,11 @@ export class PersonnelComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
-  constructor(private readonly personService: PersonService) {}
+  constructor(private readonly personService: PersonService, private readonly departmentService: DepartmentService) {}
 
   ngOnInit() {
     this.loadPersonnel();
+    this.loadDepartments();
   }
 
   loadPersonnel() {
@@ -39,11 +41,12 @@ export class PersonnelComponent implements OnInit {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
 
-      this.departments = Array.from(new Set(
-        this.personnelList
-          .map(p => p.departmentName)
-          .filter((dept): dept is string => dept !== undefined && dept !== null && dept !== '')
-      ));
+
+    });
+  }
+  loadDepartments() {
+    this.departmentService.getDepartments().subscribe(depts => {
+      this.departments = depts;
     });
   }
 

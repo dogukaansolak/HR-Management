@@ -8,7 +8,7 @@
 
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
     <option value="">Tüm Departmanlar</option>
-    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+  <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
   </select>
 </div>
 
@@ -57,16 +57,18 @@
     <label> Email:
       <input [(ngModel)]="newPersonnel.email" name="email" />
     </label>
+    <label> Bölüm:   
+ <select [(ngModel)]="newPersonnel.departmentId" name="departmentId" required>
+  <option value="">Seçiniz</option>
+  <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
+</select>
+    </label>
     <label> Pozisyon:
       <input [(ngModel)]="newPersonnel.position" name="position" />
-    </label>
-    <label> Bölüm:   
-      <input [(ngModel)]="newPersonnel.departmentName" name="departmentName" />
     </label>
     <label> Başlangıç Tarihi:
       <input [(ngModel)]="newPersonnel.startDate" name="startDate" type="date"/>
     </label>
-    <input type="number" [(ngModel)]="newPersonnel.departmentId" name="departmentId" placeholder="Departman ID" required>
     <label> Fotoğraf:
       <input type="file" accept="image/*" (change)="handleFileInput($event)" required/>
     </label>
@@ -133,8 +135,12 @@
     </label>
 
     <label>Departman:
-      <span class="value">{{ selectedPersonnel?.departmentName }}</span>
-      <input [(ngModel)]="selectedPersonnel!.departmentName" *ngIf="isEditMode"/>
+      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.departmentName }}</span>
+      <!-- Güncelleme modunda departman selectbox! -->
+      <select *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.departmentId">
+        <option value="">Seçiniz</option>
+        <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
+      </select>
     </label>
 
     <div class="form-buttons">
