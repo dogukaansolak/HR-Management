@@ -44,15 +44,11 @@
     <h3>Personel Düzenle</h3>
 
     <label>Ad:</label>
-    <input [(ngModel)]="selectedPerson.firstName" />
 
     <label>Soyad:</label>
-    <input [(ngModel)]="selectedPerson.lastName" />
 
     <label>Departman:</label>
-    <select [(ngModel)]="selectedPerson.departmentName">
-      <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-    </select>
+    
 
     <label>Toplam İzin:</label>
     <input type="number" [(ngModel)]="selectedPerson.totalLeave" />
