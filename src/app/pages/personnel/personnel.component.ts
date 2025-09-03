@@ -87,33 +87,36 @@ export class PersonnelComponent implements OnInit {
   });
 }
 
-  saveDetails() {
-    if (!this.selectedPersonnel) return;
-    this.personService.updatePerson(this.selectedPersonnel).subscribe({
-      next: () => {
-        this.successMessage = "Personel güncellendi.";
-        this.loadPersonnel();
-        this.isEditMode = false;
-        this.isCardVisible = false;
-      },
-      error: (err) => {
-        this.errorMessage = "Güncelleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-      }
-    });
-  }
+saveDetails() {
+  if (!this.selectedPersonnel) return;
+  this.personService.updatePerson(this.selectedPersonnel).subscribe({
+    next: () => {
+      this.successMessage = "Personel güncellendi.";
+      this.loadPersonnel();
+      this.isEditMode = false;
+      this.isCardVisible = false;
+    },
+    error: (err) => {
+      this.errorMessage = "Güncelleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+    }
+  });
+}
 
-  deletePersonnel(id: number) {
-    this.personService.deletePerson(id).subscribe({
-      next: () => {
-        this.successMessage = "Personel silindi.";
-        this.loadPersonnel();
-        this.closeDetails();
-      },
-      error: (err) => {
-        this.errorMessage = "Silme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-      }
-    });
+deletePersonnel(id: number) {
+  if (!confirm("Bu personeli silmek istediğinize emin misiniz?")) {
+    return;
   }
+  this.personService.deletePerson(id).subscribe({
+    next: () => {
+      this.successMessage = "Personel silindi.";
+      this.loadPersonnel();
+      this.closeDetails();
+    },
+    error: (err) => {
+      this.errorMessage = "Silme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+    }
+  });
+}
 
   filterPersonnel() {
     this.filteredPersonnel = this.personnelList.filter(person => {

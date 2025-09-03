@@ -41,11 +41,16 @@ export class PersonService {
     return this.http.post(this.apiUrl, body, { headers });
   }
 
-  updatePerson(person: Person): Observable<Person> {
-    return this.http.put<Person>(`${this.apiUrl}/${person.id}`, person);
-  }
+updatePerson(person: Person): Observable<Person> {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.put<Person>(`${this.apiUrl}/${person.id}`, person, { headers });
+}
 
   deletePerson(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
   }
+
 }
