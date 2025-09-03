@@ -121,14 +121,16 @@ deletePersonnel(id: number) {
   });
 }
 
-  filterPersonnel() {
-    this.filteredPersonnel = this.personnelList.filter(person => {
-      const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesDept = this.selectedDepartment ? person.departmentName === this.selectedDepartment : true;
-      return matchesName && matchesDept;
-    });
-    this.currentPage = 1;
-  }
+filterPersonnel() {
+  this.filteredPersonnel = this.personnelList.filter(person => {
+    const matchesName = (person.firstName + ' ' + person.lastName).toLowerCase().includes(this.searchText.toLowerCase());
+    const matchesDept = this.selectedDepartment
+      ? person.departmentId === Number(this.selectedDepartment)
+      : true;
+    return matchesName && matchesDept;
+  });
+  this.currentPage = 1;
+}
 
   openDetails(person: Person) {
     this.selectedPersonnel = { ...person };
