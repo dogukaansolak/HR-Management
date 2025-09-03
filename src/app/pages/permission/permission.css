@@ -1,3 +1,4 @@
+/* Filtre Çubuğu */
 .filter-bar {
   display: flex;
   gap: 12px;
@@ -13,61 +14,125 @@
   border: 1px solid #e5e7eb;
   font-size: 14px;
   outline: none;
-  transition: border-color .15s ease, box-shadow .2s ease;
+  transition: all .2s ease;
   background: #ffffff;
 }
 
+.filter-bar input:focus,
+.filter-bar select:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+}
+
+/* Tablo */
 table {
   width: 100%;
   border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,.08);
 }
 
-th, td {
-  padding: 8px;
-  border: 1px solid #ddd;
+th {
+  background: #ff6600;
+  color: #fff;
+  padding: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
   text-align: center;
-}
-
-button {
-  padding: 5px 10px;
-  background-color: #ff4b00;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #ff7a00;
-}
-
-/* Modal Arka Plan */
-
-
-/* Modal İçerik */
-.modal-content {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 15px;
-  width: 400px;
-  max-width: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.modal-content label {
-  font-weight: bold;
   font-size: 14px;
 }
 
-.modal-content input,
-.modal-content select {
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+tr:hover td {
+  background: #fff5f0;
 }
 
+/* Genel Buton */
+button {
+  padding: 6px 14px;
+  background: #ff4b00;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background .2s ease, transform .1s ease;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #ff7a00;
+  transform: scale(1.03);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Modal Arka Plan */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Modal İçerik */
+.modal-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 15px;
+  width: 420px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+  animation: fadeIn .3s ease;
+}
+
+.modal-content label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+  outline: none;
+}
+
+.modal-content textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Modal Butonları */
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
@@ -75,10 +140,11 @@ button:hover {
 }
 
 .modal-buttons button {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .modal-buttons button:first-child {
@@ -91,14 +157,114 @@ button:hover {
   color: white;
 }
 
+/* İzin Bölümü Kutusu */
+.permission-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  margin-top: 15px;
+}
+
+/* Genel container */
+.leave-list, .leave-form {
+  background: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 800px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Başlık */
+.leave-list h3, .leave-form h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-left: 5px solid #3498db;
+  padding-left: 10px;
+}
+
+/* Tablo */
+.leave-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leave-list th, .leave-list td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.leave-list th {
+  background: #3498db;
+  color: white;
+  font-weight: 500;
+}
+
+.leave-list tr:hover {
+  background: #f5faff;
+}
+
+/* Butonlar */
+button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #2980b9;
+}
+
+/* Form */
+.leave-form label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.leave-form input,
+.leave-form select,
+.leave-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+.leave-form input:focus,
+.leave-form select:focus,
+.leave-form textarea:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.leave-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.leave-form button {
+  margin-top: 15px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+}
 
 
-/* (kısa sürüm, önceki önerilen stil ile aynı) */
-.filter-bar{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
-.filter-bar input,.filter-bar select{padding:10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:14px}
-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.08)}
-th{background:#ff6600;color:#fff;padding:12px}
-td{padding:10px;border-bottom:1px solid #eee;text-align:center}
-button{padding:6px 14px;background:#ff4b00;color:#fff;border-radius:8px;border:0;cursor:pointer}
-.permission-section{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-top:15px}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:999}
+/* Animasyon */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
