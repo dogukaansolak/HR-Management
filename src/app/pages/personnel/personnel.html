@@ -6,10 +6,10 @@
     (input)="filterPersonnel()"
   />
 
-  <select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
-    <option value="">Tüm Departmanlar</option>
+<select [(ngModel)]="selectedDepartment" (change)="filterPersonnel()">
+  <option value="">Tüm Departmanlar</option>
   <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
-  </select>
+</select>
 </div>
 
 <div class="card-container">

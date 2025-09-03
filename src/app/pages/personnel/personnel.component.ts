@@ -17,7 +17,7 @@ export class PersonnelComponent implements OnInit {
   personnelList: Person[] = [];
   filteredPersonnel: Person[] = [];
   searchText = '';
-  selectedDepartment = '';
+  selectedDepartment: number | '' = '';
   departments: Department[] = [];
   isCardVisible = false;
   selectedPersonnel: Person | null = null;
@@ -122,20 +122,21 @@ deletePersonnel(id: number) {
 }
 
 filterPersonnel() {
+  const searchTextLower = this.searchText.trim().toLowerCase();
   this.filteredPersonnel = this.personnelList.filter(person => {
-    const matchesName = (person.firstName + ' ' + person.lastName)
-      .toLowerCase()
-      .includes(this.searchText.toLowerCase());
+    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+    const matchesName = fullName.includes(searchTextLower);
 
+    // Departman Id ile filtrele
     const matchesDept =
-      !this.selectedDepartment || this.selectedDepartment.toLowerCase() === 'tümü'
+      this.selectedDepartment === '' || this.selectedDepartment == null
         ? true
-        : person.departmentName!.toLowerCase() === this.selectedDepartment.toLowerCase();
+        : person.departmentId === this.selectedDepartment;
 
     return matchesName && matchesDept;
   });
 
-  this.currentPage = 1; // Pagination kullanıyorsan bırak
+  this.currentPage = 1;
 }
 
 
