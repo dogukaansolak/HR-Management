@@ -1,52 +1,37 @@
-
-// export interface Personnel {
-//     id: number;
-//     firstName: string;
-//     lastName?: string;
-//     tckimlik: string;
-//     dogumtarihi: string;
-//     telno?: string;
-//     adres?: string;
-//     email?: string;
-//     position?: string;
-//     department?: string;
-//     startDate?: string; 
-//     totalLeave: number;
-//     usedLeave: number;
-//     workingStatus: 'Çalışıyor' | 'İzinli' | 'Uzaktan';  //bu satırı üst satıra alınablir
-//     personnelphoto: string;
-//     kullanilanIzin: number;
-//     yillikIzinHakki: number | null;
-// }
-
 import { DatePipe } from "@angular/common";
 
+// Tek bir gider hareketi (ör: maaş, yemek vs.)
+export interface ExpenseHistory {
+  amount: number;     // tutar
+  date: Date;         // kaydedilen tarih
+  fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
+}
 
 export interface Person {
   id?: number;
   firstName: string;
   lastName: string;
   tckimlik?: string;
-  dogumTarihi?: Date|null;
+  dogumTarihi?: Date | null;
   telNo?: string;
   email?: string;
   position?: string;
   workingStatus?: string;
   personnelPhoto?: string;
-  startDate?: Date|null;
+  startDate?: Date | null;
   totalLeave?: number;
   usedLeave?: number;
   departmentId?: number;
   departmentName?: string;
 
-  // bu alanlar veritabanına eklenecek!
+  // Bu alanlar veritabanına eklenecek!
+  adres?: string; // şu an DB’de yok ama modelde tutuluyor
 
-  adres?: string;//bu veri tabanında yok
+  // Masraf alanları
+  salary?: number;
+  mealCost?: number;
+  transportCost?: number;
+  otherCost?: number;
 
-  // şuanlıkn gerek yok veritabanına eklemeye
-
-  salary?: number;       // Maaş
-  mealCost?: number;     // Yemek gideri
-  transportCost?: number;// Yol gideri
-  otherCost?: number;      // Diğer giderler
+  expenseHistory?: ExpenseHistory[];
 }

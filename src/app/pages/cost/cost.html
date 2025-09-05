@@ -1,11 +1,5 @@
 <div class="filter-bar">
-  <input
-    type="text"
-    placeholder="Personel Ara..."
-    [(ngModel)]="searchText"
-    (input)="filterPersonnels()"
-  />
-
+  <input type="text" placeholder="Personel Ara..." [(ngModel)]="searchText" (input)="filterPersonnels()" />
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
     <option value="">Tüm Departmanlar</option>
     <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
@@ -26,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of filteredPersonnel">
+    <tr *ngFor="let p of filteredPersonnel; trackBy: trackById">
       <td>{{ p.firstName + ' ' + p.lastName }}</td>
       <td>{{ p.departmentName }}</td>
       <td>{{ p.salary | currency:'TRY':'symbol':'1.0-0' }}</td>
@@ -34,45 +28,65 @@
       <td>{{ p.transportCost | currency:'TRY':'symbol':'1.0-0' }}</td>
       <td>{{ p.otherCost | currency:'TRY':'symbol':'1.0-0' }}</td>
       <td><b>{{ getTotalCost(p) | currency:'TRY':'symbol':'1.0-0' }}</b></td>
-      <td>
-        <button (click)="openEditModal(p)">Düzenle</button>
-      </td>
+      <td><button (click)="openEditModal(p)">Düzenle</button></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="6" style="text-align: right;"><b>Toplam Şirket Maliyeti:</b></td>
+      <td colspan="6" style="text-align:right;"><b>Toplam Şirket Maliyeti:</b></td>
       <td colspan="2"><b>{{ getCompanyTotalCost() | currency:'TRY':'symbol':'1.0-0' }}</b></td>
     </tr>
   </tfoot>
 </table>
 
-<!-- Düzenleme Modalı -->
 <div class="modal" *ngIf="selectedPersonnel">
   <div class="modal-content">
-    <h3>Personel Masraf Düzenle</h3>
-    <label>Departman:</label>
-    <select [(ngModel)]="selectedPersonnel.departmentName">
-      <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-    </select>
+    <h3>{{ selectedPersonnel.firstName }} {{ selectedPersonnel.lastName }} - Yeni Gider Ekle</h3>
+    <p><b>Departman:</b> {{ selectedPersonnel.departmentName }}</p>
 
-    <hr />
-
-    <label>Maaş:</label>
-    <input type="number" [(ngModel)]="selectedPersonnel.salary" />
-
-    <label>Yemek Gideri:</label>
-    <input type="number" [(ngModel)]="selectedPersonnel.mealCost" />
-
-    <label>Yol Gideri:</label>
-    <input type="number" [(ngModel)]="selectedPersonnel.transportCost" />
-
-    <label>Diğer Masraflar:</label>
-    <input type="number" [(ngModel)]="selectedPersonnel.otherCost" />
+    <label>Maaş:</label><input type="number" [(ngModel)]="selectedPersonnel.salary" />
+    <label>Yemek:</label><input type="number" [(ngModel)]="selectedPersonnel.mealCost" />
+    <label>Yol:</label><input type="number" [(ngModel)]="selectedPersonnel.transportCost" />
+    <label>Diğer:</label><input type="number" [(ngModel)]="selectedPersonnel.otherCost" />
+    <label>Gider Fişi:</label><input type="file" accept="image/*,application/pdf" multiple />
 
     <div class="modal-buttons">
       <button (click)="saveEdit()">Kaydet</button>
       <button (click)="closeEditModal()">İptal</button>
+      <button (click)="openSelectedHistory()" [disabled]="!selectedPersonnel?.id">Geçmiş Hareketleri Göster</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="isHistoryModalOpen && selectedHistoryPerson">
+  <div class="modal-content">
+    <h3>{{ selectedHistoryPerson.firstName }} {{ selectedHistoryPerson.lastName }} - Geçmiş Hareketler</h3>
+
+    <table *ngIf="selectedHistoryPerson.expenseHistory.length > 0; else noHistory">
+      <thead>
+        <tr>
+          <th>Tarih</th>
+          <th>Tutar</th>
+          <th>İşlem</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of selectedHistoryPerson.expenseHistory; let i = index">
+          <td>{{ h.date | date:'short' }}</td>
+          <td>
+            <input type="number" [ngModel]="h.amount" (ngModelChange)="updateHistoryAmount(i, $event)" />
+          </td>
+          <td><button (click)="deleteHistory(i)">Sil</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noHistory>
+      <p>Henüz kayıtlı bir geçmiş bulunmuyor.</p>
+    </ng-template>
+
+    <div class="modal-buttons">
+      <button (click)="closeHistoryModal()">Kapat</button>
     </div>
   </div>
 </div>

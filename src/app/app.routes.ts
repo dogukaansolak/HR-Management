@@ -7,7 +7,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DashboardHome } from './pages/dashboard-home/dashboard-home';
 import { PersonnelComponent } from './pages/personnel/personnel.component';
 import { PermissionComponent } from './pages/permission/permission.component'; // ✅ doğru import
-import { Cost } from './pages/cost/cost.component';
+import { CostComponent } from './pages/cost/cost.component';
 import { CandidateManagementComponent } from './pages/candidate/candidate.component';
 import { Reports } from './pages/reports/reports.component';
 import { Settings } from './pages/settings/settings.component';
@@ -23,7 +23,7 @@ export const routes: Routes = [
       { path: '', component: DashboardHome },
       { path: 'personnel', component: PersonnelComponent },
       { path: 'permission', component: PermissionComponent }, // ✅ izin sayfası
-      { path: 'cost', component: Cost },
+      { path: 'cost', component: CostComponent },
       { path: 'candidate', component: CandidateManagementComponent },
       { path: 'reports', component: Reports },
       { path: 'settings', component: Settings }
