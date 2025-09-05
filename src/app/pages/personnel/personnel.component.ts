@@ -92,18 +92,26 @@ export class PersonnelComponent implements OnInit {
 
 saveDetails() {
   if (!this.selectedPersonnel) return;
+
+  if (!this.selectedPersonnel.firstName || !this.selectedPersonnel.lastName) {
+    this.errorMessage = "Ad ve Soyad boş olamaz!";
+    return;
+  }
+
   this.personService.updatePerson(this.selectedPersonnel).subscribe({
     next: () => {
       this.successMessage = "Personel güncellendi.";
-      this.loadPersonnel();
-      this.isEditMode = false;
-      this.isCardVisible = false;
+      this.loadPersonnel();         
+      this.isEditMode = false;      
+      this.isCardVisible = false;   
     },
     error: (err) => {
       this.errorMessage = "Güncelleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+      console.error(err);
     }
   });
 }
+
 
 deletePersonnel(id: number) {
   if (!confirm("Bu personeli silmek istediğinize emin misiniz?")) {
@@ -147,10 +155,9 @@ filterPersonnel() {
   }
 
   editDetails(person: Person | null) {
-    if (!person) return;
-    this.selectedPersonnel = { ...person };
-    this.isEditMode = true;
-  }
+  if (!person) return;
+  this.isEditMode = true;
+}
 
   closeDetails() {
     this.isCardVisible = false;
