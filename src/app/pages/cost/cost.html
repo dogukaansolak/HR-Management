@@ -51,13 +51,6 @@
 <div class="modal" *ngIf="selectedPersonnel">
   <div class="modal-content">
     <h3>Personel Masraf Düzenle</h3>
-
-    <label>Ad:</label>
-    <input [(ngModel)]="selectedPersonnel.firstName" />
-
-    <label>Soyad:</label>
-    <input [(ngModel)]="selectedPersonnel.lastName" />
-
     <label>Departman:</label>
     <select [(ngModel)]="selectedPersonnel.departmentName">
       <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
