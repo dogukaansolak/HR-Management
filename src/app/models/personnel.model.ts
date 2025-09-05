@@ -26,7 +26,7 @@ export interface Person {
   id?: number;
   firstName: string;
   lastName: string;
-  tckimlik?: string;
+  tcKimlik?: string;
   dogumTarihi?: Date|null;
   telNo?: string;
   email?: string;

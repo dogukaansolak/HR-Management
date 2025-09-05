@@ -62,7 +62,7 @@ export class PersonnelComponent implements OnInit {
   const body = {
     firstName: this.newPersonnel.firstName,
     lastName: this.newPersonnel.lastName,
-    tcKimlik: this.newPersonnel.tckimlik,
+    tcKimlik: this.newPersonnel.tcKimlik,
     dogumTarihi: this.newPersonnel.dogumTarihi ? new Date(this.newPersonnel.dogumTarihi).toISOString() : null,
     telNo: this.newPersonnel.telNo,
     email: this.newPersonnel.email,
@@ -199,7 +199,7 @@ filterPersonnel() {
       id: 0,
       firstName: '',
       lastName: '',
-      tckimlik: '',
+      tcKimlik: '',
       dogumTarihi: null,
       telNo: '',
       adres: '',
