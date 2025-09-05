@@ -126,7 +126,7 @@
     </label>
 
     <label>Doğum Tarihi:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.dogumTarihi }}</span>
+      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.dogumTarihi | date:'dd.MM.yyyy'}}</span>
       <input [(ngModel)]="selectedPersonnel!.dogumTarihi" type="date" *ngIf="isEditMode" name="dogumTarihi"/>
     </label>
 
