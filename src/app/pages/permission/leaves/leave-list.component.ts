@@ -19,12 +19,14 @@ export class LeaveListComponent implements OnInit {
     this.load();
   }
 
+
   load() {
-    if (!this.personId) return;
-    this.leaveService.getLeavesByEmployee(this.personId).subscribe(data => {
-      this.leaves = data;
-    });
-  }
+  this.leaveService.getLeaves().subscribe((data: Leave[]) => {
+    this.leaves = this.personId
+      ? data.filter(l => l.employeeId === this.personId)
+      : data;
+  });
+}
 
   deleteLeave(id: number) {
     if (confirm('Bu izni silmek istediğinize emin misiniz?')) {

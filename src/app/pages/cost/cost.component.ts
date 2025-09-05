@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-cost',

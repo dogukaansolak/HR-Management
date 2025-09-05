@@ -7,6 +7,7 @@ import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
 import { DepartmentService } from '../../services/department.service';  
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-permission',
