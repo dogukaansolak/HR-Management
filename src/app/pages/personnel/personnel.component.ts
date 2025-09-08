@@ -72,7 +72,8 @@ export class PersonnelComponent implements OnInit {
     startDate: this.newPersonnel.startDate ? new Date(this.newPersonnel.startDate).toISOString() : null,
     totalLeave: this.newPersonnel.totalLeave,
     usedLeave: this.newPersonnel.usedLeave,
-    departmentId: this.newPersonnel.departmentId
+    departmentId: this.newPersonnel.departmentId,
+    adres: this.newPersonnel.adres
   };
 
   this.personService.addPerson(body).subscribe({

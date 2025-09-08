@@ -35,6 +35,7 @@ export class PersonService {
       startDate: person.startDate ? new Date(person.startDate).toISOString() : '',
       totalLeave: person.totalLeave,
       usedLeave: person.usedLeave,
+      adres: person.adres,
       departmentId: person.departmentId
     };
 
