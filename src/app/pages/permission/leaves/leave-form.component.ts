@@ -24,17 +24,30 @@ export class LeaveFormComponent {
 
   constructor(private leaveService: LeaveService) {}
 
+  private toIsoDate(dateStr?: string): string | undefined {
+    if (!dateStr) return undefined;
+    try {
+      const iso = new Date(dateStr).toISOString();
+      return iso;
+    } catch {
+      return undefined;
+    }
+  }
+
   saveLeave() {
     if (!this.personId) return;
 
-    const leave: Partial<Leave> = {
-      ...this.newLeave,
+    // .NET backend often expects PascalCase keys
+    const payload = {
       employeeId: this.personId,
-      startDate: this.newLeave.startDate, // string olarak gönderiyoruz
-      endDate: this.newLeave.endDate      // string olarak gönderiyoruz
+      leaveType: this.newLeave.leaveType || '',
+      startDate: this.toIsoDate(this.newLeave.startDate) || this.newLeave.startDate || '',
+      endDate: this.toIsoDate(this.newLeave.endDate) || this.newLeave.endDate || '',
+      reason: this.newLeave.reason || '',
+      status: this.newLeave.status || 'Pending'
     };
 
-    this.leaveService.createLeave(leave as Leave).subscribe({
+    this.leaveService.createLeave(payload as unknown as Leave).subscribe({
       next: () => {
         alert('İzin başarıyla eklendi!');
         this.resetForm();
