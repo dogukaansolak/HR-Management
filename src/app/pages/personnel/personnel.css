@@ -365,8 +365,8 @@
 }
 
 .person-photo-wrapper img {
-  width: 120px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ff7a00;
