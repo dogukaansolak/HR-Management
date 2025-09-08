@@ -8,7 +8,8 @@
   />
 
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
-    <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+    <option value="">Tüm Departmanlar</option>
+    <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
   </select>
 </div>
 

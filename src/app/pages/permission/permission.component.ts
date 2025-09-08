@@ -6,7 +6,7 @@ import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
-import { DepartmentService } from '../../services/department.service';  
+import { Department, DepartmentService } from '../../services/department.service';  
 import { NgModule } from '@angular/core';
 
 @Component({
@@ -20,11 +20,20 @@ export class PermissionComponent implements OnInit {
   personnels: Person[] = [];
   filteredPersonnels: Person[] = [];
 
-  searchText = '';
-  selectedDepartment = 'Tüm Departmanlar';
-  departments = ['Tüm Departmanlar'];
 
   selectedPerson: Person | null = null;
+    personnelList: Person[] = [];
+    filteredPersonnel: Person[] = [];
+    searchText = '';
+    selectedDepartment: number | '' = '';
+    departments: Department[] = [];
+    isCardVisible = false;
+    selectedPersonnel: Person | null = null;
+    isEditMode = false;
+    showAddForm = false;
+    currentPage = 1;
+    errorMessage: string | null = null;
+    successMessage: string | null = null;
 
   @ViewChild('leaveList') leaveList?: LeaveListComponent;
 
@@ -38,12 +47,17 @@ export class PermissionComponent implements OnInit {
   }
 
   filterPersonnels() {
-    const q = this.searchText?.trim().toLowerCase() ?? '';
-    this.filteredPersonnels = this.personnels.filter(p => {
-      const full = (p.firstName + ' ' + p.lastName).toLowerCase();
-      const matchesSearch = !q || full.includes(q);
-      const matchesDept = this.selectedDepartment === 'Tümü' || p.departmentName === this.selectedDepartment;
-      return matchesSearch && matchesDept;
+  const searchTextLower = this.searchText.trim().toLowerCase();
+  this.filteredPersonnels = this.personnels.filter(person => {
+    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+    const matchesName = fullName.includes(searchTextLower);
+  
+    const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
+            ? true
+            : person.departmentId === this.selectedDepartment;
+
+
+    return matchesName && matchesDept;
     });
   }
 
