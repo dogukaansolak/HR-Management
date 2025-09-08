@@ -1,19 +1,17 @@
-// src/app/models/leave.model.ts
-
 import { Person } from './personnel.model';
 
 export interface Leave {
   id: number;
   employeeId: number;
-  employee?: Person; // Opsiyonel çünkü backend her zaman dönmeyebilir
+  employee?: Person;
 
   leaveType: string; // "Yıllık", "Hastalık", "Mazeret"
-  startDate: Date;
-  endDate: Date;
+  startDate: string; // string olarak değiştirildi
+  endDate: string;   // string olarak değiştirildi
 
   reason: string; // Açıklama
   status: string; // "Pending", "Approved", "Rejected"
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }

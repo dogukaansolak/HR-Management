@@ -8,15 +8,16 @@ import { Leave } from '../../../models/leave.model';
   selector: 'app-leave-form',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './leave-form.component.html'
+  templateUrl: './leave-form.component.html',
+  styleUrls: ['./leave-form.component.css']
 })
 export class LeaveFormComponent {
   @Input() personId!: number;
 
   newLeave: Partial<Leave> = {
     leaveType: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: '',
+    endDate: '',
     reason: '',
     status: 'Pending'
   };
@@ -26,23 +27,32 @@ export class LeaveFormComponent {
   saveLeave() {
     if (!this.personId) return;
 
-    const leave: Leave = {
+    const leave: Partial<Leave> = {
       ...this.newLeave,
-      id: 0, // backend generate edecek
       employeeId: this.personId,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    } as Leave;
+      startDate: this.newLeave.startDate, // string olarak gönderiyoruz
+      endDate: this.newLeave.endDate      // string olarak gönderiyoruz
+    };
 
-    this.leaveService.createLeave(leave).subscribe(() => {
-      alert('İzin eklendi!');
-      this.newLeave = {
-        leaveType: '',
-        startDate: new Date(),
-        endDate: new Date(),
-        reason: '',
-        status: 'Pending'
-      };
+    this.leaveService.createLeave(leave as Leave).subscribe({
+      next: () => {
+        alert('İzin başarıyla eklendi!');
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('İzin eklenemedi!');
+      }
     });
+  }
+
+  private resetForm() {
+    this.newLeave = {
+      leaveType: '',
+      startDate: '',
+      endDate: '',
+      reason: '',
+      status: 'Pending'
+    };
   }
 }
