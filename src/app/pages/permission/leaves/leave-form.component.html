@@ -1,21 +1,14 @@
 <div class="leave-form">
   <h3>Yeni İzin Ekle</h3>
 
-  <label>İzin Tipi</label>
-  <select [(ngModel)]="newLeave.leaveType">
-    <option value="Yıllık">Yıllık</option>
-    <option value="Hastalık">Hastalık</option>
-    <option value="Mazeret">Mazeret</option>
-  </select>
+  <label for="start">Başlangıç Tarihi</label>
+  <input type="date" [(ngModel)]="leave.startDate" />
 
-  <label>Başlangıç Tarihi</label>
-  <input type="date" [(ngModel)]="newLeave.startDate" />
+  <label for="end">Bitiş Tarihi</label>
+  <input type="date" [(ngModel)]="leave.endDate" />
 
-  <label>Bitiş Tarihi</label>
-  <input type="date" [(ngModel)]="newLeave.endDate" />
+  <label for="reason">Açıklama</label>
+  <textarea [(ngModel)]="leave.reason"></textarea>
 
-  <label>Açıklama</label>
-  <textarea [(ngModel)]="newLeave.reason"></textarea>
-
-  <button (click)="saveLeave()">Kaydet</button>
+  <button (click)="submitLeave()">Kaydet</button>
 </div>

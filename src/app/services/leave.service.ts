@@ -20,27 +20,32 @@ export class LeaveService {
     return headers.set('Content-Type', 'application/json');
   }
 
-  // Tüm izinleri getir
+  // ✅ Tüm izinleri getir
   getLeaves(): Observable<Leave[]> {
     return this.http.get<Leave[]>(this.apiUrl, { headers: this.getAuthHeaders() });
   }
 
-  // Id'ye göre izin getir
+  // ✅ Id'ye göre izin getir
   getLeaveById(id: number): Observable<Leave> {
     return this.http.get<Leave>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  // Yeni izin oluştur
-  createLeave(leavePayload: unknown): Observable<Leave> {
-    return this.http.post<Leave>(this.apiUrl, leavePayload, { headers: this.getAuthHeaders() });
+  // ✅ Belirli personele ait izinleri getir
+  getLeavesByPerson(personId: number): Observable<Leave[]> {
+    return this.http.get<Leave[]>(`${this.apiUrl}/person/${personId}`, { headers: this.getAuthHeaders() });
   }
 
-  // İzin güncelle
+  // ✅ Yeni izin oluştur (personId ile birlikte)
+  createLeave(personId: number, leave: Partial<Leave>): Observable<Leave> {
+    return this.http.post<Leave>(`${this.apiUrl}/person/${personId}`, leave, { headers: this.getAuthHeaders() });
+  }
+
+  // ✅ İzin güncelle
   updateLeave(id: number, leave: Partial<Leave>): Observable<Leave> {
     return this.http.put<Leave>(`${this.apiUrl}/${id}`, leave, { headers: this.getAuthHeaders() });
   }
 
-  // İzin sil
+  // ✅ İzin sil
   deleteLeave(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }

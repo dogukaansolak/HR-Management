@@ -24,11 +24,12 @@ export interface Person {
   usedLeave?: number;
   departmentId?: number;
   departmentName?: string;
+  hireDate?: string;   
+  leaves?: { startDate: string, endDate: string }[];
 
   // Bu alanlar veritabanına eklenecek!
   adres?: string; // şu an DB’de yok ama modelde tutuluyor
 
-  // Masraf alanları
   salary?: number;
   mealCost?: number;
   transportCost?: number;
