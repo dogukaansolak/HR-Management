@@ -1,4 +1,3 @@
-// src/app/pages/permission/permission.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +6,6 @@ import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
 import { Department, DepartmentService } from '../../services/department.service';  
-import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-permission',
@@ -20,20 +18,10 @@ export class PermissionComponent implements OnInit {
   personnels: Person[] = [];
   filteredPersonnels: Person[] = [];
 
-
   selectedPerson: Person | null = null;
-    personnelList: Person[] = [];
-    filteredPersonnel: Person[] = [];
-    searchText = '';
-    selectedDepartment: number | '' = '';
-    departments: Department[] = [];
-    isCardVisible = false;
-    selectedPersonnel: Person | null = null;
-    isEditMode = false;
-    showAddForm = false;
-    currentPage = 1;
-    errorMessage: string | null = null;
-    successMessage: string | null = null;
+  searchText = '';
+  selectedDepartment: number | '' = '';
+  departments: Department[] = [];
 
   @ViewChild('leaveList') leaveList?: LeaveListComponent;
 
@@ -43,21 +31,24 @@ export class PermissionComponent implements OnInit {
     this.personService.getPersons().subscribe((data: Person[]) => {
       this.personnels = data;
       this.filteredPersonnels = [...data];
+
+      // Backend'den gelen izin bilgilerine göre güncelle
+      this.personnels.forEach(p => {
+        this.updateWorkingStatus(p);
+      });
     });
   }
 
   filterPersonnels() {
-  const searchTextLower = this.searchText.trim().toLowerCase();
-  this.filteredPersonnels = this.personnels.filter(person => {
-    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
-    const matchesName = fullName.includes(searchTextLower);
-  
-    const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
-            ? true
-            : person.departmentId === this.selectedDepartment;
+    const searchTextLower = this.searchText.trim().toLowerCase();
+    this.filteredPersonnels = this.personnels.filter(person => {
+      const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+      const matchesName = fullName.includes(searchTextLower);
+      const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
+        ? true
+        : person.departmentId === this.selectedDepartment;
 
-
-    return matchesName && matchesDept;
+      return matchesName && matchesDept;
     });
   }
 
@@ -69,35 +60,40 @@ export class PermissionComponent implements OnInit {
     this.selectedPerson = null;
   }
 
-  // leave-form component'tan gelen event ile list yenilensin
   onLeaveCreated() {
     this.leaveList?.load();
+    if (this.selectedPerson) this.updateWorkingStatus(this.selectedPerson);
   }
 
-  // Modal aç
-openEditModal(person: Person) {
-  this.selectedPerson = { ...person };
-}
-
-// Modal kapat
-closeEditModal() {
-  this.selectedPerson = null;
-}
-
-// Değişiklikleri kaydet
-saveEdit() {
-  if (!this.selectedPerson) return;
-
-  // Backend kaydı yapılacak
-  console.log('Kaydedilen personel:', this.selectedPerson);
-
-  const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
-  if (index > -1) {
-    this.personnels[index] = { ...this.selectedPerson };
-    this.filterPersonnels();
+  openEditModal(person: Person) {
+    this.selectedPerson = { ...person };
   }
 
-  this.closeEditModal();
-}
+  closeEditModal() {
+    this.selectedPerson = null;
+  }
 
+  saveEdit() {
+    if (!this.selectedPerson) return;
+
+    // Backend kaydı yapılacak
+    console.log('Kaydedilen personel:', this.selectedPerson);
+
+    const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
+    if (index > -1) {
+      this.personnels[index] = { ...this.selectedPerson };
+      this.filterPersonnels();
+    }
+
+    this.closeEditModal();
+  }
+
+  // Backend'den gelen izinlere göre çalışıyor mu kontrol et
+  updateWorkingStatus(person: Person) {
+    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+    const isOnLeave = person.leaves?.some(leave =>
+      leave.startDate <= today && leave.endDate >= today
+    );
+    person.workingStatus = isOnLeave ? 'İzinde' : 'Çalışıyor';
+  }
 }
