@@ -29,7 +29,18 @@
   </div>
 </div>
 
-<div class="pagination" *ngIf="totalPages > 1"></div>
+<!-- PAGINATION ŞIK TASARIM -->
+<div class="pagination-bar" *ngIf="totalPages > 1">
+  <button class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
+    &#8592; Önceki
+  </button>
+  <span class="pagination-info">
+    Sayfa <b>{{ currentPage }}</b> / {{ totalPages }}
+  </span>
+  <button class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
+    Sonraki &#8594;
+  </button>
+</div>
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
@@ -57,7 +68,7 @@
     <label>Email:
       <input [(ngModel)]="newPersonnel.email" name="email" />
     </label>
-    <label>Bölüm:
+    <label>Depatman:
       <select [(ngModel)]="newPersonnel.departmentId" name="departmentId" required>
         <option value="">Seçiniz</option>
         <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
@@ -110,16 +121,6 @@
       <input [(ngModel)]="selectedPersonnel!.lastName" *ngIf="isEditMode" name="lastName"/>
     </label>
 
-    <label>Pozisyon:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.position }}</span>
-      <input [(ngModel)]="selectedPersonnel!.position" *ngIf="isEditMode" name="position"/>
-    </label>
-
-    <label>Email:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.email }}</span>
-      <input [(ngModel)]="selectedPersonnel!.email" *ngIf="isEditMode" type="email" name="email"/>
-    </label>
-
     <label>TC Kimlik:
       <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.tckimlik }}</span>
       <input [(ngModel)]="selectedPersonnel!.tckimlik" *ngIf="isEditMode" name="tckimlik"/>
@@ -140,12 +141,27 @@
       <input [(ngModel)]="selectedPersonnel!.adres" *ngIf="isEditMode" name="adres"/>
     </label>
 
+    <label>Email:
+      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.email }}</span>
+      <input [(ngModel)]="selectedPersonnel!.email" *ngIf="isEditMode" type="email" name="email"/>
+    </label>
+
     <label>Departman:
       <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.departmentName }}</span>
       <select *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.departmentId" name="departmentId">
         <option value="">Seçiniz</option>
         <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
       </select>
+    </label>
+
+    <label>Pozisyon:
+      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.position }}</span>
+      <input [(ngModel)]="selectedPersonnel!.position" *ngIf="isEditMode" name="position"/>
+    </label>
+
+    <label>Başlangıç Tarihi:
+      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.startDate }}</span>
+      <input [(ngModel)]="selectedPersonnel!.startDate" type="date" *ngIf="isEditMode" name="startDate"/>
     </label>
 
     <!-- Form Butonları -->
