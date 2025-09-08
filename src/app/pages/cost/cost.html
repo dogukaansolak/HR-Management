@@ -44,16 +44,22 @@
     <h3>{{ selectedPersonnel.firstName }} {{ selectedPersonnel.lastName }} - Yeni Gider Ekle</h3>
     <p><b>Departman:</b> {{ selectedPersonnel.departmentName }}</p>
 
-    <label>Maaş:</label><input type="number" [(ngModel)]="selectedPersonnel.salary" />
+    <label>Gider Tarihi:</label>
+    <input type="date" [(ngModel)]="selectedPersonnel.expenseDate" />
     <label>Yemek:</label><input type="number" [(ngModel)]="selectedPersonnel.mealCost" />
     <label>Yol:</label><input type="number" [(ngModel)]="selectedPersonnel.transportCost" />
     <label>Diğer:</label><input type="number" [(ngModel)]="selectedPersonnel.otherCost" />
-    <label>Gider Fişi:</label><input type="file" accept="image/*,application/pdf" multiple />
+    <label>Gider Fişi:</label>
+<input 
+  type="file" 
+  accept="image/*,application/pdf" 
+  multiple 
+  (change)="onFileSelected($event)"  />
 
     <div class="modal-buttons">
       <button (click)="saveEdit()">Kaydet</button>
       <button (click)="closeEditModal()">İptal</button>
-      <button (click)="openSelectedHistory()" [disabled]="!selectedPersonnel?.id">Geçmiş Hareketleri Göster</button>
+      <button (click)="openSelectedHistory()" [disabled]="!selectedPersonnel.id">Geçmiş Hareketleri Göster</button>
     </div>
   </div>
 </div>
@@ -62,27 +68,48 @@
   <div class="modal-content">
     <h3>{{ selectedHistoryPerson.firstName }} {{ selectedHistoryPerson.lastName }} - Geçmiş Hareketler</h3>
 
-    <table *ngIf="selectedHistoryPerson.expenseHistory.length > 0; else noHistory">
-      <thead>
-        <tr>
-          <th>Tarih</th>
-          <th>Tutar</th>
-          <th>İşlem</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let h of selectedHistoryPerson.expenseHistory; let i = index">
-          <td>{{ h.date | date:'short' }}</td>
-          <td>
-            <input type="number" [ngModel]="h.amount" (ngModelChange)="updateHistoryAmount(i, $event)" />
-          </td>
-          <td><button (click)="deleteHistory(i)">Sil</button></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="filter-bar" style="justify-content: flex-start; margin-bottom: 15px;">
+      <input 
+        type="date" 
+        [(ngModel)]="historySearchDate" 
+        (ngModelChange)="filterHistory()" 
+        placeholder="Tarihe Göre Filtrele"
+      />
+    </div>
+    <table *ngIf="filteredExpenseHistory.length > 0; else noHistory">
+  <thead>
+    <tr>
+      <th>Tarih</th>
+      <th>Tutar</th>
+      <th>Fişler</th> <th>İşlem</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let h of filteredExpenseHistory; let i = index">
+      <td>{{ h.date | date:'dd.MM.yyyy' }}</td>
+      <td>
+        {{ h.amount | currency:'TRY':'symbol':'1.0-0' }}
+      </td>
+
+      <td>
+        <div *ngIf="h.receiptUrls && h.receiptUrls.length > 0">
+          <a *ngFor="let url of h.receiptUrls; let fileIndex = index" 
+             [href]="url" 
+             target="_blank" 
+             style="margin-right: 5px; text-decoration: underline; cursor: pointer;">
+            Fiş {{ fileIndex + 1 }}
+          </a>
+        </div>
+        <span *ngIf="!h.receiptUrls || h.receiptUrls.length === 0">-</span>
+      </td>
+
+      <td><button (click)="deleteHistory(i)">Sil</button></td>
+    </tr>
+  </tbody>
+</table>
 
     <ng-template #noHistory>
-      <p>Henüz kayıtlı bir geçmiş bulunmuyor.</p>
+      <p>Bu filtreye uygun kayıtlı bir geçmiş bulunmuyor.</p>
     </ng-template>
 
     <div class="modal-buttons">

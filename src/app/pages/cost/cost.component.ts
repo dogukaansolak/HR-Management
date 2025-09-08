@@ -18,9 +18,21 @@ export class CostComponent implements OnInit {
   selectedDepartment = '';
   departments: string[] = [];
 
-  selectedPersonnel: Partial<Person & { expenseHistory: ExpenseHistory[] }> | null = null;
+  selectedPersonnel: Partial<Person & { expenseHistory: ExpenseHistory[], expenseDate: string }> | null = null;
   isHistoryModalOpen = false;
   selectedHistoryPerson: Person & { expenseHistory: ExpenseHistory[] } | null = null;
+
+   historySearchDate: string = ''; // Tarih input'u için
+  filteredExpenseHistory: ExpenseHistory[] = []; // Filtrelenmiş listeyi tutmak için
+
+  selectedFiles: File[] = [];
+
+   onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.selectedFiles = Array.from(input.files);
+    }
+  }
 
   constructor(private personService: PersonService) {}
 
@@ -54,6 +66,30 @@ export class CostComponent implements OnInit {
     });
   }
 
+  filterHistory() {
+    if (!this.selectedHistoryPerson) {
+      this.filteredExpenseHistory = [];
+      return;
+    }
+
+    let history = [...this.selectedHistoryPerson.expenseHistory];
+
+    if (this.historySearchDate) {
+      // Input'tan gelen 'YYYY-MM-DD' formatındaki tarih
+      const searchDate = new Date(this.historySearchDate);
+      
+      history = history.filter(h => {
+        const itemDate = new Date(h.date);
+        // İki tarihin de yıl, ay ve gün değerlerini karşılaştır
+        return itemDate.getFullYear() === searchDate.getFullYear() &&
+               itemDate.getMonth() === searchDate.getMonth() &&
+               itemDate.getDate() === searchDate.getDate();
+      });
+    }
+
+    this.filteredExpenseHistory = history;
+  }
+
   getTotalCost(person: Person): number {
     return (person.salary || 0) + (person.mealCost || 0) + (person.transportCost || 0) + (person.otherCost || 0);
   }
@@ -63,6 +99,11 @@ export class CostComponent implements OnInit {
   }
 
   openEditModal(person: Person) {
+
+    this.selectedFiles = [];
+
+    const today = new Date().toISOString().split('T')[0];
+
     this.selectedPersonnel = {
       id: person.id,
       firstName: person.firstName,
@@ -71,7 +112,8 @@ export class CostComponent implements OnInit {
       salary: 0,
       mealCost: 0,
       transportCost: 0,
-      otherCost: 0
+      otherCost: 0,
+      expenseDate: today
     };
   }
 
@@ -79,7 +121,7 @@ export class CostComponent implements OnInit {
     this.selectedPersonnel = null;
   }
 
-   saveEdit() {
+  saveEdit() {
   if (!this.selectedPersonnel) return;
 
   const person = this.personnelList.find(p => p.id === this.selectedPersonnel!.id);
@@ -90,14 +132,34 @@ export class CostComponent implements OnInit {
     person.transportCost = (person.transportCost || 0) + (this.selectedPersonnel.transportCost || 0);
     person.otherCost = (person.otherCost || 0) + (this.selectedPersonnel.otherCost || 0);
 
-    // expenseHistory ekle
-    if (!person.expenseHistory) person.expenseHistory = [];
     const totalNewExpense = (this.selectedPersonnel.salary || 0) +
                             (this.selectedPersonnel.mealCost || 0) +
                             (this.selectedPersonnel.transportCost || 0) +
                             (this.selectedPersonnel.otherCost || 0);
-    if (totalNewExpense > 0) {
-      person.expenseHistory.push({ amount: totalNewExpense, date: new Date() });
+
+    // Sadece masraf girildiyse veya sadece fiş eklendiyse bile kaydet
+    if (totalNewExpense > 0 || this.selectedFiles.length > 0) {
+      if (!person.expenseHistory) person.expenseHistory = [];
+
+      const expenseDate = new Date(this.selectedPersonnel.expenseDate + 'T00:00:00');
+
+      // FİŞ İŞLEME MANTIĞI EKLENDİ 
+      const receiptUrls: string[] = [];
+      if (this.selectedFiles.length > 0) {
+        this.selectedFiles.forEach(file => {
+          // NOT: Bu, dosyayı sunucuya yüklemez, sadece tarayıcıda geçici bir adres oluşturur.
+          const temporaryUrl = URL.createObjectURL(file);
+          receiptUrls.push(temporaryUrl);
+        });
+      }
+      // FİŞ İŞLEME MANTIĞI SONU 
+
+      // expenseHistory'ye fiş URL'lerini de ekleyerek kaydı gönder
+      person.expenseHistory.push({
+        amount: totalNewExpense,
+        date: expenseDate,
+        receiptUrls: receiptUrls // Fiş URL'leri eklendi
+      });
     }
 
     // filteredPersonnel içinde değişikliği bildir
@@ -109,7 +171,6 @@ export class CostComponent implements OnInit {
 
   this.closeEditModal();
 }
-
 
   openHistoryModal(person: Person) {
     this.selectedHistoryPerson = { ...person, expenseHistory: [...(person.expenseHistory || [])] };
@@ -127,38 +188,63 @@ export class CostComponent implements OnInit {
     if (person) this.openHistoryModal(person);
   }
 
-  updateHistoryAmount(index: number, amount: number) {
+  updateHistoryAmount(index: number, newAmount: number) {
     if (!this.selectedHistoryPerson?.expenseHistory) return;
 
-    this.selectedHistoryPerson.expenseHistory[index].amount = amount;
+  // 2. Değiştirilecek olan asıl geçmiş kaydını filtrelenmiş listeden bul
+  const historyItemToUpdate = this.filteredExpenseHistory[index];
+  if (!historyItemToUpdate) return;
+  
+  const oldAmount = historyItemToUpdate.amount; // Eski tutarı sakla
 
-    const originalPerson = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
-    if (originalPerson?.expenseHistory) {
-      originalPerson.expenseHistory[index].amount = amount;
+  // 3. Ana personel listesindeki ilgili kişiyi bul
+  const originalPerson = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
+  if (!originalPerson?.expenseHistory) return;
 
-      const idx = this.filteredPersonnel.findIndex(p => p.id === originalPerson.id);
-      if (idx !== -1) {
-        this.filteredPersonnel[idx] = { ...originalPerson };
-        this.filteredPersonnel = [...this.filteredPersonnel];
-      }
-    }
+  // 4. Ana listedeki geçmiş kaydının index'ini bul ve tutarı güncelle
+  const originalIndex = originalPerson.expenseHistory.findIndex(h => h === historyItemToUpdate);
+  if (originalIndex === -1) return;
+  
+  originalPerson.expenseHistory[originalIndex].amount = newAmount;
+
+  // 5. [MANTIK DÜZELTMESİ] Ana tablodaki toplam maliyeti güncelle
+  // Tutar farkını personelin toplam maliyetlerinden birine yansıtıyoruz.
+  // Bu örnekte, bu tür çeşitli giderlerin `otherCost` içinde toplandığını varsayıyoruz.
+  const difference = newAmount - oldAmount;
+  originalPerson.otherCost = (originalPerson.otherCost || 0) + difference;
+
+  // 6. Değişikliğin ekrana yansıması için filtrelenmiş personel listesini güncelle
+  this.filterPersonnels();
+
+  // 7. Modal içindeki listenin görünümünü yenile
+  this.filterHistory();
   }
 
   deleteHistory(index: number) {
   if (!this.selectedHistoryPerson) return;
+  
+  // 2. Silinecek olan asıl geçmiş kaydını filtrelenmiş listeden bul
+  const historyItemToDelete = this.filteredExpenseHistory[index];
+  if (!historyItemToDelete) return;
 
+  const amountToDelete = historyItemToDelete.amount; // Silinecek tutarı sakla
+
+  // 3. Ana personel listesindeki ilgili kişiyi bul
   const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
   if (!person || !person.expenseHistory) return;
 
-  // Geçmiş ve ana listeyi sil
-  person.expenseHistory.splice(index, 1);
-  this.selectedHistoryPerson.expenseHistory.splice(index, 1);
+  // 4. Ana listedeki geçmiş kaydını sil
+  person.expenseHistory = person.expenseHistory.filter(h => h !== historyItemToDelete);
+  
+  // 5. [MANTIK DÜZELTMESİ] Silinen tutarı personelin toplam maliyetinden düş
+  person.otherCost = (person.otherCost || 0) - amountToDelete;
 
-  // filteredPersonnel’deki ilgili kişiyi güncelle
-  const idx = this.filteredPersonnel.findIndex(p => p.id === person.id);
-  if (idx !== -1) {
-    this.filteredPersonnel[idx] = { ...person };
-  }
+  // 6. Değişikliğin ekrana yansıması için filtrelenmiş personel listesini güncelle
+  this.filterPersonnels();
+
+  // 7. Modal içindeki "selectedHistoryPerson" verisini ve görünümü yenile
+  this.selectedHistoryPerson.expenseHistory = this.selectedHistoryPerson.expenseHistory.filter(h => h !== historyItemToDelete);
+  this.filterHistory();
 }
 
 

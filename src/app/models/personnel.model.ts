@@ -4,7 +4,8 @@ import { DatePipe } from "@angular/common";
 export interface ExpenseHistory {
   amount: number;     // tutar
   date: Date;         // kaydedilen tarih
-  fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
+  //fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
+  receiptUrls?: string[];  // Çoklu fiş URL'lerini tutmak için bu ideal.
 }
 
 export interface Person {
