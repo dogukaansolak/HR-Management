@@ -12,4 +12,5 @@ export interface CreateEmployeeDto {
   totalLeave: number;
   usedLeave: number;
   departmentId: number;
+  adres: string;
 }
