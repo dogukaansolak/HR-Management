@@ -1,17 +1,29 @@
-import { Person } from './personnel.model';
+export interface LeaveDto {
+  Id: number;
+  EmployeeId: number;
+  EmployeeName: string;
+  LeaveType: string;
+  StartDate: Date;
+  EndDate: Date;
+  Reason: string;
+  Status: string;
+  CreatedAt: Date;
+  UpdatedAt: Date;
+}
 
-export interface Leave {
-  id: number;
-  employeeId: number;
-  employee?: Person;
+export interface CreateLeaveDto {
+  EmployeeId: number;
+  LeaveType: string;
+  StartDate: Date;
+  EndDate: Date;
+  Reason: string;
+  Status: string;
+}
 
-  leaveType: string; // "Yıllık", "Hastalık", "Mazeret"
-  startDate: string; // string olarak değiştirildi
-  endDate: string;   // string olarak değiştirildi
-
-  reason: string; // Açıklama
-  status: string; // "Pending", "Approved", "Rejected"
-
-  createdAt?: string;
-  updatedAt?: string;
+export interface UpdateLeaveDto {
+  LeaveType: string;
+  StartDate: Date;
+  EndDate: Date;
+  Reason: string;
+  Status: string;
 }

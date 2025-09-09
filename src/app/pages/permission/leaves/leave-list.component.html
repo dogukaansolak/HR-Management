@@ -1,27 +1,72 @@
-<div class="leave-list">
-  <h3>İzin Listesi</h3>
-  <table>
+<div class="leave-container">
+  <div class="header">
+    <h2>İzinler</h2>
+    <button class="btn btn-primary" (click)="openNewLeaveForm()">Yeni İzin Ekle</button>
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="Personel Ara..." [(ngModel)]="searchText" (input)="filterLeaves()" />
+    <select [(ngModel)]="selectedStatus" (change)="filterLeaves()">
+      <option value="">Tüm Durumlar</option>
+      <option value="Pending">Beklemede</option>
+      <option value="Approved">Onaylandı</option>
+      <option value="Rejected">Reddedildi</option>
+    </select>
+  </div>
+
+  <table class="leave-table">
     <thead>
       <tr>
-        <th>Tip</th>
-        <th>Başlangıç</th>
-        <th>Bitiş</th>
-        <th>Açıklama</th>
+        <th>Çalışan</th>
+        <th>İzin Türü</th>
+        <th>Başlangıç Tarihi</th>
+        <th>Bitiş Tarihi</th>
+        <th>Gün Sayısı</th>
         <th>Durum</th>
-        <th>İşlem</th>
+        <th>Aksiyon</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let leave of leaves">
-        <td>{{ leave.leaveType }}</td>
-        <td>{{ leave.startDate | date }}</td>
-        <td>{{ leave.endDate | date }}</td>
-        <td>{{ leave.reason }}</td>
-        <td>{{ leave.status }}</td>
+      <tr *ngFor="let leave of filteredLeaves">
+        <td>{{ leave.EmployeeName }}</td>
+        <td>{{ leave.LeaveType }}</td>
+        <td>{{ leave.StartDate | date:'yyyy-MM-dd' }}</td>
+        <td>{{ leave.EndDate | date:'yyyy-MM-dd' }}</td>
+        <td>{{ leave.EndDate | dateDiff:leave.StartDate }}</td>
+        <td>{{ leave.Status }}</td>
         <td>
-          <button (click)="deleteLeave(leave.id)" class="butonizinsil">Sil</button>
+          <button class="btn btn-sm btn-warning" (click)="openEditLeaveForm(leave)">Düzenle</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteLeave(leave.Id)">Sil</button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <h3>{{ editingLeaveId ? 'İzni Güncelle' : 'Yeni İzin Ekle' }}</h3>
+    <form [formGroup]="leaveForm" (ngSubmit)="saveLeave()">
+      <label>Çalışan Id:</label>
+      <input type="number" formControlName="EmployeeId" />
+      <label>İzin Türü:</label>
+      <select formControlName="LeaveType">
+        <option value="Yıllık">Yıllık</option>
+        <option value="Hastalık">Hastalık</option>
+        <option value="Mazeret">Mazeret</option>
+      </select>
+      <label>Başlangıç Tarihi:</label>
+      <input type="date" formControlName="StartDate" />
+      <label>Bitiş Tarihi:</label>
+      <input type="date" formControlName="EndDate" />
+      <label>Açıklama:</label>
+      <textarea formControlName="Reason"></textarea>
+      <label>Durum:</label>
+      <select formControlName="Status">
+        <option value="Pending">Beklemede</option>
+        <option value="Approved">Onaylandı</option>
+        <option value="Rejected">Reddedildi</option>
+      </select>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-success">{{ editingLeaveId ? 'Güncelle' : 'Kaydet' }}</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">İptal</button>

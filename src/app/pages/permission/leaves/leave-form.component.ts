@@ -1,67 +1,57 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeaveService } from '../../../services/leave.service';
+import { LeaveDto } from '../../../models/leave.model';
 
 @Component({
   selector: 'app-leave-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './leave-form.component.html',
   styleUrls: ['./leave-form.component.css']
 })
 export class LeaveFormComponent implements OnInit {
   @Input() personId!: number;
-  @Output() leaveCreated = new EventEmitter<void>();
+  leaveForm!: FormGroup;
+  leave: LeaveDto = {} as LeaveDto;
 
-  leave = {
-    startDate: '',
-    endDate: '',
-    reason: ''
-  };
-
-  personLeaves: any[] = []; // mevcut izinler
-
-  constructor(private leaveService: LeaveService) {}
+  constructor(private fb: FormBuilder, private leaveService: LeaveService) {}
 
   ngOnInit(): void {
-    if (this.personId) {
-      this.loadPersonLeaves();
-    }
+    this.leaveForm = this.fb.group({
+      LeaveType: ['', Validators.required],
+      StartDate: ['', Validators.required],
+      EndDate: ['', Validators.required],
+      Reason: ['', Validators.required],
+      Status: ['Pending', Validators.required]
+    });
+
+    // Leave bilgilerini yükle
+    this.loadLeaves();
   }
 
-  loadPersonLeaves() {
-    this.leaveService.getLeavesByPerson(this.personId).subscribe((res: any[]) => {
-      this.personLeaves = res;
+  loadLeaves() {
+    this.leaveService.getAllLeaves().subscribe((leaves: LeaveDto[]) => {
+      // Örnek: sadece bu personId'nin izinlerini filtrele
+      const filtered = leaves.filter((l: LeaveDto) => l.EmployeeId === this.personId);
+      // Burada ihtiyacın olan işleme göre kullanabilirsin
+      console.log(filtered);
     });
   }
 
-  submitLeave() {
-    if (!this.leave.startDate || !this.leave.endDate) {
-      alert('Lütfen başlangıç ve bitiş tarihini seçiniz.');
-      return;
-    }
+  saveLeave() {
+    if (this.leaveForm.invalid) return;
 
-    // Tarih çakışmasını kontrol et
-    const overlap = this.personLeaves.some(l =>
-      (this.leave.startDate <= l.endDate && this.leave.endDate >= l.startDate)
-    );
+    // DTO'ya personId ekle
+    const dto: LeaveDto = {
+      ...this.leaveForm.value,
+      EmployeeId: this.personId
+    };
 
-    if (overlap) {
-      alert('Bu tarihler arasında zaten izin bulunuyor.');
-      return;
-    }
-
-    // Kaydet
-    this.leaveService.createLeave(this.personId, this.leave).subscribe({
-      next: () => {
-        this.leaveCreated.emit(); // ✅ parent component (PermissionComponent) bilgilendirilir
-        this.leave = { startDate: '', endDate: '', reason: '' }; // form sıfırlanır
-        this.loadPersonLeaves(); // yeni izinleri getir
+    this.leaveService.createLeave(dto).subscribe({
+      next: (res) => {
+        console.log('İzin kaydedildi', res);
+        this.leaveForm.reset({ Status: 'Pending' });
       },
-      error: err => {
-        console.error('İzin kaydedilemedi', err);
-      }
+      error: (err) => console.error(err)
     });
   }
 }

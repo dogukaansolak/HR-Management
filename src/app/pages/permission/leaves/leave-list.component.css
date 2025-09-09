@@ -1,53 +1,86 @@
-.leave-list {
-  background: #fff;
+.leave-container {
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 700px;
-  margin: 0 auto;
+  background: #f9f9f9;
+  border-radius: 10px;
 }
 
-.leave-list table {
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.filters {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.leave-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.leave-list th,
-.leave-list td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
+.leave-table th, .leave-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
 }
 
-.leave-list th {
-  background-color: #3498db;
-  color: white;
+.leave-table tr:hover {
+  background-color: #f1f1f1;
 }
 
-.leave-list tr:hover {
-  background-color: #f5faff;
+.leave-table td.pending {
+  color: orange;
+  font-weight: bold;
 }
 
-.leave-list button {
-  padding: 6px 12px;
+.leave-table td.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.leave-table td.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+}
+
+.modal-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 5px 10px;
   border: none;
-  border-radius: 6px;
-  background-color: #e74c3c;
-  color: white;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.leave-list button:hover {
-  background-color: #c0392b;
-}
-
-.butonizinsilme{
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: #ff4b00;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s ease;
-}
+.btn-primary { background-color: #007bff; color: #fff; }
+.btn-success { background-color: #28a745; color: #fff; }
+.btn-warning { background-color: #ffc107; color: #000; }
+.btn-danger { background-color: #dc3545; color: #fff; }
+.btn-secondary { background-color: #6c757d; color: #fff; }
