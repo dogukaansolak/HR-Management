@@ -6,6 +6,7 @@
     [(ngModel)]="searchText"
     (input)="filterPersonnels()"
   />
+
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
     <option value="">Tüm Departmanlar</option>
     <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
@@ -41,17 +42,10 @@
 <!-- Personel Düzenleme Modalı -->
 <div class="modal" *ngIf="selectedPerson">
   <div class="modal-content">
-    <app-leave-form
-      *ngIf="selectedPerson"
-      [personId]="selectedPerson.id!"
-      (leaveCreated)="onLeaveCreated()"
-    ></app-leave-form>
+    
 
-    <app-leave-list
-      *ngIf="selectedPerson"
-      [personId]="selectedPerson.id!"
-      #leaveList
-    ></app-leave-list>
+    <app-leave-form *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-form>
+    <app-leave-list *ngIf="selectedPerson" [personId]="selectedPerson.id!"></app-leave-list>
 
     <div class="modal-buttons">
       <button (click)="saveEdit()">Kaydet</button>
