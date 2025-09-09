@@ -1,4 +1,3 @@
-// src/app/pages/permission/permission.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -6,8 +5,7 @@ import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
-import { Department, DepartmentService } from '../../services/department.service';  
-import { NgModule } from '@angular/core';
+import { Department, DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-permission',
@@ -20,24 +18,16 @@ export class PermissionComponent implements OnInit {
   personnels: Person[] = [];
   filteredPersonnels: Person[] = [];
 
-
   selectedPerson: Person | null = null;
-    personnelList: Person[] = [];
-    filteredPersonnel: Person[] = [];
-    searchText = '';
-    selectedDepartment: number | '' = '';
-    departments: Department[] = [];
-    isCardVisible = false;
-    selectedPersonnel: Person | null = null;
-    isEditMode = false;
-    showAddForm = false;
-    currentPage = 1;
-    errorMessage: string | null = null;
-    successMessage: string | null = null;
+  searchText = '';
+  selectedDepartment: number | '' = '';
+  departments: Department[] = [];
+  isModalOpen: boolean = false;
+  oldLeavePerson: Person | null = null;
 
   @ViewChild('leaveList') leaveList?: LeaveListComponent;
 
-  constructor(private personService: PersonService) {}
+  constructor(private personService: PersonService) { }
 
   ngOnInit(): void {
     this.personService.getPersons().subscribe((data: Person[]) => {
@@ -47,57 +37,49 @@ export class PermissionComponent implements OnInit {
   }
 
   filterPersonnels() {
-  const searchTextLower = this.searchText.trim().toLowerCase();
-  this.filteredPersonnels = this.personnels.filter(person => {
-    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
-    const matchesName = fullName.includes(searchTextLower);
-  
-    const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
-            ? true
-            : person.departmentId === this.selectedDepartment;
+    const searchTextLower = this.searchText.trim().toLowerCase();
+    this.filteredPersonnels = this.personnels.filter(person => {
+      const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+      const matchesName = fullName.includes(searchTextLower);
 
+      const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
+        ? true
+        : person.departmentId === this.selectedDepartment;
 
-    return matchesName && matchesDept;
+      return matchesName && matchesDept;
     });
   }
 
-  openPersonPermissions(person: Person) {
+  openEditModal(person: Person) {
     this.selectedPerson = person;
+    this.isModalOpen = true;
+    this.oldLeavePerson = null; // popup varsa kapat
   }
 
-  backToList() {
+  openOldLeavePopup(person: Person) {
+    this.oldLeavePerson = person;
+    this.isModalOpen = false; // modal varsa kapat
+  }
+
+  closeEditModal() {
     this.selectedPerson = null;
+    this.isModalOpen = false;
   }
 
-  // leave-form component'tan gelen event ile list yenilensin
   onLeaveCreated() {
     this.leaveList?.load();
   }
-
-  // Modal aç
-openEditModal(person: Person) {
-  this.selectedPerson = { ...person };
-}
-
-// Modal kapat
-closeEditModal() {
+  
+  handleLeaveCreated() {
+  // Leave eklenince modalı kapat
+  this.isModalOpen = false;
   this.selectedPerson = null;
-}
 
-// Değişiklikleri kaydet
-saveEdit() {
-  if (!this.selectedPerson) return;
-
-  // Backend kaydı yapılacak
-  console.log('Kaydedilen personel:', this.selectedPerson);
-
-  const index = this.personnels.findIndex(p => p.id === this.selectedPerson!.id);
-  if (index > -1) {
-    this.personnels[index] = { ...this.selectedPerson };
-    this.filterPersonnels();
-  }
-
-  this.closeEditModal();
+  // Tablodaki veriyi yenile
+  this.personService.getPersons().subscribe((data: Person[]) => {
+    this.personnels = data;
+    this.filteredPersonnels = [...data];
+  });
 }
 
 }

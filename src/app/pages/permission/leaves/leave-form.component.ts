@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LeaveService } from '../../../services/leave.service';
@@ -13,6 +13,7 @@ import { Leave } from '../../../models/leave.model';
 })
 export class LeaveFormComponent {
   @Input() personId!: number;
+  @Output() leaveCreated = new EventEmitter<void>(); // <- burada event
 
   newLeave: Partial<Leave> = {
     leaveType: '',
@@ -37,19 +38,19 @@ export class LeaveFormComponent {
   saveLeave() {
     if (!this.personId) return;
 
-    // .NET backend often expects PascalCase keys
     const payload = {
-      employeeId: this.personId,
-      leaveType: this.newLeave.leaveType || '',
-      startDate: this.toIsoDate(this.newLeave.startDate) || this.newLeave.startDate || '',
-      endDate: this.toIsoDate(this.newLeave.endDate) || this.newLeave.endDate || '',
-      reason: this.newLeave.reason || '',
-      status: this.newLeave.status || 'Pending'
+      EmployeeId: this.personId, // PascalCase
+      LeaveType: this.newLeave.leaveType || '',
+      StartDate: this.newLeave.startDate || '',
+      EndDate: this.newLeave.endDate || '',
+      Reason: this.newLeave.reason || '',
+      Status: this.newLeave.status || 'Pending'
     };
 
     this.leaveService.createLeave(payload as unknown as Leave).subscribe({
       next: () => {
         alert('İzin başarıyla eklendi!');
+        this.leaveCreated.emit();  // <- parent component'e bildir
         this.resetForm();
       },
       error: (err) => {
