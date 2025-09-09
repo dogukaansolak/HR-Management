@@ -4,24 +4,22 @@ import { Observable } from 'rxjs';
 import { Person } from '../models/personnel.model';
 import { CreateEmployeeDto } from '../pages/personnel/createPersonnelDto';
 
-
 @Injectable({ providedIn: 'root' })
 export class PersonService {
   private apiUrl = 'https://localhost:7168/api/Employee'; // BACKEND API URL'ini buraya yaz
 
   constructor(private http: HttpClient) {}
 
-  getPersons(): Observable<Person[]> {
+  private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Person[]>(this.apiUrl, { headers });
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  getPersons(): Observable<Person[]> {
+    return this.http.get<Person[]>(this.apiUrl, { headers: this.getAuthHeaders() });
+  }
+  
   addPerson(person: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    // DİKKAT: Alan adları büyük harfle! Tarihler ISO string!
     const body: CreateEmployeeDto = {
       firstName: person.firstName,
       lastName: person.lastName,
@@ -38,25 +36,28 @@ export class PersonService {
       adres: person.adres,
       departmentId: person.departmentId
     };
-
-    return this.http.post(this.apiUrl, body, { headers });
+    return this.http.post(this.apiUrl, body, { headers: this.getAuthHeaders() });
   }
 
   updatePerson(person: Person): Observable<Person> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    // departmentId kesinlikle sayı olmalı!
-    const body = {
-      ...person,
-      departmentId: Number(person.departmentId)
-    };
-    return this.http.put<Person>(`${this.apiUrl}/${person.id}`, body, { headers });
+    const body = { ...person, departmentId: Number(person.departmentId) };
+    return this.http.put<Person>(`${this.apiUrl}/${person.id}`, body, { headers: this.getAuthHeaders() });
   }
 
   deletePerson(id: number): Observable<void> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
+  // ------------------- Expense Fonksiyonları -------------------
+  addExpense(personId: number, formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${personId}/expenses`, formData, { headers: this.getAuthHeaders() });
+  }
+
+  updateExpense(expenseId: number, dto: { Amount: number }): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/expenses/${expenseId}`, dto, { headers: this.getAuthHeaders() });
+  }
+
+  deleteExpense(expenseId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/expenses/${expenseId}`, { headers: this.getAuthHeaders() });
+  }
 }

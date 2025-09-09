@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Person, ExpenseHistory } from '../../models/personnel.model';
+import { Person, ExpenseHistoryWithId } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
 
 @Component({
@@ -18,43 +18,32 @@ export class CostComponent implements OnInit {
   selectedDepartment = '';
   departments: string[] = [];
 
-  selectedPersonnel: Partial<Person & { expenseHistory: ExpenseHistory[], expenseDate: string }> | null = null;
+  selectedPersonnel: Partial<Person & { expenseHistory: ExpenseHistoryWithId[], expenseDate: string }> | null = null;
   isHistoryModalOpen = false;
-  selectedHistoryPerson: Person & { expenseHistory: ExpenseHistory[] } | null = null;
+  selectedHistoryPerson: Person & { expenseHistory: ExpenseHistoryWithId[] } | null = null;
 
-   historySearchDate: string = ''; // Tarih input'u için
-  filteredExpenseHistory: ExpenseHistory[] = []; // Filtrelenmiş listeyi tutmak için
-
+  historySearchDate: string = '';
+  filteredExpenseHistory: ExpenseHistoryWithId[] = [];
   selectedFiles: File[] = [];
 
-   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
-      this.selectedFiles = Array.from(input.files);
-    }
-  }
-
-  constructor(private personService: PersonService) {}
+  constructor(private personService: PersonService) { }
 
   ngOnInit(): void {
-    this.personService.getPersons().subscribe((data: Person[]) => {
+    this.loadPersonnel();
+  }
+
+  loadPersonnel() {
+    this.personService.getPersons().subscribe(data => {
       this.personnelList = data.map(p => ({
         ...p,
         salary: p.salary || 0,
         mealCost: p.mealCost || 0,
         transportCost: p.transportCost || 0,
         otherCost: p.otherCost || 0,
-        expenseHistory: p.expenseHistory || []
+        expenseHistory: (p.expenseHistory ?? []).map(h => ({ ...h, id: h.id! })) as ExpenseHistoryWithId[]
       }));
       this.filteredPersonnel = [...this.personnelList];
-
-      this.departments = Array.from(
-        new Set(
-          this.personnelList
-            .map(p => p.departmentName)
-            .filter((d): d is string => !!d)
-        )
-      );
+      this.departments = Array.from(new Set(this.personnelList.map(p => p.departmentName).filter((d): d is string => !!d)));
     });
   }
 
@@ -71,24 +60,129 @@ export class CostComponent implements OnInit {
       this.filteredExpenseHistory = [];
       return;
     }
-
     let history = [...this.selectedHistoryPerson.expenseHistory];
-
     if (this.historySearchDate) {
-      // Input'tan gelen 'YYYY-MM-DD' formatındaki tarih
       const searchDate = new Date(this.historySearchDate);
-      
       history = history.filter(h => {
         const itemDate = new Date(h.date);
-        // İki tarihin de yıl, ay ve gün değerlerini karşılaştır
         return itemDate.getFullYear() === searchDate.getFullYear() &&
                itemDate.getMonth() === searchDate.getMonth() &&
                itemDate.getDate() === searchDate.getDate();
       });
     }
-
     this.filteredExpenseHistory = history;
   }
+
+  openEditModal(person: Person) {
+    this.selectedFiles = [];
+    const today = new Date().toISOString().split('T')[0];
+    this.selectedPersonnel = {
+      id: person.id,
+      firstName: person.firstName,
+      lastName: person.lastName,
+      departmentName: person.departmentName,
+      salary: person.salary || 0,
+      mealCost: person.mealCost || 0,
+      transportCost: person.transportCost || 0,
+      otherCost: person.otherCost || 0,
+      expenseDate: today,
+      expenseHistory: person.expenseHistory ? [...person.expenseHistory] : []
+    };
+  }
+
+  closeEditModal() { this.selectedPersonnel = null; }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) this.selectedFiles = Array.from(input.files);
+  }
+
+  saveEdit() {
+    if (!this.selectedPersonnel || !this.selectedPersonnel.id) return;
+
+    console.log('Kaydet tıklandı:', this.selectedPersonnel);
+
+    const personId = this.selectedPersonnel.id;
+    const dto = new FormData();
+    dto.append('Salary', (this.selectedPersonnel.salary || 0).toString());
+    dto.append('MealCost', (this.selectedPersonnel.mealCost || 0).toString());
+    dto.append('TransportCost', (this.selectedPersonnel.transportCost || 0).toString());
+    dto.append('OtherCost', (this.selectedPersonnel.otherCost || 0).toString());
+    dto.append('ExpenseDate', this.selectedPersonnel.expenseDate!);
+    this.selectedFiles.forEach(file => dto.append('Receipts', file));
+
+    this.personService.addExpense(personId, dto).subscribe({
+      next: res => {
+        console.log('Backend response:', res);
+
+        const person = this.personnelList.find(p => p.id === personId);
+        if (person) {
+          person.salary = (person.salary || 0) + (this.selectedPersonnel!.salary || 0);
+          person.mealCost = (person.mealCost || 0) + (this.selectedPersonnel!.mealCost || 0);
+          person.transportCost = (person.transportCost || 0) + (this.selectedPersonnel!.transportCost || 0);
+          person.otherCost = (person.otherCost || 0) + (this.selectedPersonnel!.otherCost || 0);
+
+          const total = (this.selectedPersonnel!.salary || 0) +
+                        (this.selectedPersonnel!.mealCost || 0) +
+                        (this.selectedPersonnel!.transportCost || 0) +
+                        (this.selectedPersonnel!.otherCost || 0);
+
+          const receiptUrls: string[] = (this.selectedFiles || [])
+            .map(file => URL.createObjectURL(file))
+            .filter((url): url is string => !!url);
+
+          const newExpense: ExpenseHistoryWithId = {
+            id: res.id!,
+            amount: total,
+            date: new Date(this.selectedPersonnel!.expenseDate!),
+            receiptUrls
+          };
+
+          person.expenseHistory = [...(person.expenseHistory ?? []), newExpense];
+        }
+
+        this.filterPersonnels();
+        this.closeEditModal();
+      },
+      error: err => console.error('Gider kaydedilemedi:', err)
+    });
+  }
+
+  deleteHistory(index: number) {
+  if (!this.selectedHistoryPerson) return;
+  const historyItem = this.filteredExpenseHistory[index];
+  if (!historyItem || historyItem.id === undefined) return;
+
+  this.personService.deleteExpense(historyItem.id).subscribe({
+    next: () => {
+      const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
+      if (!person || !person.expenseHistory) return;
+
+      // Kayıtları güncelle
+      person.expenseHistory = person.expenseHistory.filter(h => h.id !== historyItem.id);
+      person.otherCost = (person.otherCost || 0) - historyItem.amount;
+
+      this.selectedHistoryPerson!.expenseHistory =
+        this.selectedHistoryPerson!.expenseHistory.filter(h => h.id !== historyItem.id);
+
+      this.filterPersonnels();
+      this.filterHistory();
+    },
+    error: err => console.error('Gider silme hatası:', err)
+  });
+}
+
+  openHistoryModal(person: Person) {
+    this.selectedHistoryPerson = { ...person, expenseHistory: [...(person.expenseHistory ?? [])] };
+    this.isHistoryModalOpen = true;
+  }
+
+  closeHistoryModal() {
+    this.selectedHistoryPerson = null;
+    this.isHistoryModalOpen = false;
+  }
+
+  trackById(index: number, item: Person) { return item.id; }
 
   getTotalCost(person: Person): number {
     return (person.salary || 0) + (person.mealCost || 0) + (person.transportCost || 0) + (person.otherCost || 0);
@@ -98,157 +192,9 @@ export class CostComponent implements OnInit {
     return this.filteredPersonnel.reduce((sum, p) => sum + this.getTotalCost(p), 0);
   }
 
-  openEditModal(person: Person) {
-
-    this.selectedFiles = [];
-
-    const today = new Date().toISOString().split('T')[0];
-
-    this.selectedPersonnel = {
-      id: person.id,
-      firstName: person.firstName,
-      lastName: person.lastName,
-      departmentName: person.departmentName,
-      salary: 0,
-      mealCost: 0,
-      transportCost: 0,
-      otherCost: 0,
-      expenseDate: today
-    };
-  }
-
-  closeEditModal() {
-    this.selectedPersonnel = null;
-  }
-
-  saveEdit() {
-  if (!this.selectedPersonnel) return;
-
-  const person = this.personnelList.find(p => p.id === this.selectedPersonnel!.id);
-  if (person) {
-    // Masrafları güncelle
-    person.salary = (person.salary || 0) + (this.selectedPersonnel.salary || 0);
-    person.mealCost = (person.mealCost || 0) + (this.selectedPersonnel.mealCost || 0);
-    person.transportCost = (person.transportCost || 0) + (this.selectedPersonnel.transportCost || 0);
-    person.otherCost = (person.otherCost || 0) + (this.selectedPersonnel.otherCost || 0);
-
-    const totalNewExpense = (this.selectedPersonnel.salary || 0) +
-                            (this.selectedPersonnel.mealCost || 0) +
-                            (this.selectedPersonnel.transportCost || 0) +
-                            (this.selectedPersonnel.otherCost || 0);
-
-    // Sadece masraf girildiyse veya sadece fiş eklendiyse bile kaydet
-    if (totalNewExpense > 0 || this.selectedFiles.length > 0) {
-      if (!person.expenseHistory) person.expenseHistory = [];
-
-      const expenseDate = new Date(this.selectedPersonnel.expenseDate + 'T00:00:00');
-
-      // FİŞ İŞLEME MANTIĞI EKLENDİ 
-      const receiptUrls: string[] = [];
-      if (this.selectedFiles.length > 0) {
-        this.selectedFiles.forEach(file => {
-          // NOT: Bu, dosyayı sunucuya yüklemez, sadece tarayıcıda geçici bir adres oluşturur.
-          const temporaryUrl = URL.createObjectURL(file);
-          receiptUrls.push(temporaryUrl);
-        });
-      }
-      // FİŞ İŞLEME MANTIĞI SONU 
-
-      // expenseHistory'ye fiş URL'lerini de ekleyerek kaydı gönder
-      person.expenseHistory.push({
-        amount: totalNewExpense,
-        date: expenseDate,
-        receiptUrls: receiptUrls // Fiş URL'leri eklendi
-      });
-    }
-
-    // filteredPersonnel içinde değişikliği bildir
-    const idx = this.filteredPersonnel.findIndex(p => p.id === person.id);
-    if (idx !== -1) {
-      this.filteredPersonnel[idx] = { ...person };
-    }
-  }
-
-  this.closeEditModal();
-}
-
-  openHistoryModal(person: Person) {
-    this.selectedHistoryPerson = { ...person, expenseHistory: [...(person.expenseHistory || [])] };
-    this.isHistoryModalOpen = true;
-  }
-
-  closeHistoryModal() {
-    this.selectedHistoryPerson = null;
-    this.isHistoryModalOpen = false;
-  }
-
   openSelectedHistory() {
     if (!this.selectedPersonnel?.id) return;
     const person = this.personnelList.find(p => p.id === this.selectedPersonnel!.id);
     if (person) this.openHistoryModal(person);
-  }
-
-  updateHistoryAmount(index: number, newAmount: number) {
-    if (!this.selectedHistoryPerson?.expenseHistory) return;
-
-  // 2. Değiştirilecek olan asıl geçmiş kaydını filtrelenmiş listeden bul
-  const historyItemToUpdate = this.filteredExpenseHistory[index];
-  if (!historyItemToUpdate) return;
-  
-  const oldAmount = historyItemToUpdate.amount; // Eski tutarı sakla
-
-  // 3. Ana personel listesindeki ilgili kişiyi bul
-  const originalPerson = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
-  if (!originalPerson?.expenseHistory) return;
-
-  // 4. Ana listedeki geçmiş kaydının index'ini bul ve tutarı güncelle
-  const originalIndex = originalPerson.expenseHistory.findIndex(h => h === historyItemToUpdate);
-  if (originalIndex === -1) return;
-  
-  originalPerson.expenseHistory[originalIndex].amount = newAmount;
-
-  // 5. [MANTIK DÜZELTMESİ] Ana tablodaki toplam maliyeti güncelle
-  // Tutar farkını personelin toplam maliyetlerinden birine yansıtıyoruz.
-  // Bu örnekte, bu tür çeşitli giderlerin `otherCost` içinde toplandığını varsayıyoruz.
-  const difference = newAmount - oldAmount;
-  originalPerson.otherCost = (originalPerson.otherCost || 0) + difference;
-
-  // 6. Değişikliğin ekrana yansıması için filtrelenmiş personel listesini güncelle
-  this.filterPersonnels();
-
-  // 7. Modal içindeki listenin görünümünü yenile
-  this.filterHistory();
-  }
-
-  deleteHistory(index: number) {
-  if (!this.selectedHistoryPerson) return;
-  
-  // 2. Silinecek olan asıl geçmiş kaydını filtrelenmiş listeden bul
-  const historyItemToDelete = this.filteredExpenseHistory[index];
-  if (!historyItemToDelete) return;
-
-  const amountToDelete = historyItemToDelete.amount; // Silinecek tutarı sakla
-
-  // 3. Ana personel listesindeki ilgili kişiyi bul
-  const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
-  if (!person || !person.expenseHistory) return;
-
-  // 4. Ana listedeki geçmiş kaydını sil
-  person.expenseHistory = person.expenseHistory.filter(h => h !== historyItemToDelete);
-  
-  // 5. [MANTIK DÜZELTMESİ] Silinen tutarı personelin toplam maliyetinden düş
-  person.otherCost = (person.otherCost || 0) - amountToDelete;
-
-  // 6. Değişikliğin ekrana yansıması için filtrelenmiş personel listesini güncelle
-  this.filterPersonnels();
-
-  // 7. Modal içindeki "selectedHistoryPerson" verisini ve görünümü yenile
-  this.selectedHistoryPerson.expenseHistory = this.selectedHistoryPerson.expenseHistory.filter(h => h !== historyItemToDelete);
-  this.filterHistory();
-}
-
-
-  trackById(index: number, item: Person) {
-    return item.id;
   }
 }

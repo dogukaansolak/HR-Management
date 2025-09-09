@@ -1,13 +1,19 @@
 import { DatePipe } from "@angular/common";
 
-// Tek bir gider hareketi (ör: maaş, yemek vs.)
+// ExpenseHistory temel hali
 export interface ExpenseHistory {
   amount: number;     // tutar
   date: Date;         // kaydedilen tarih
-  //fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
+  fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
   receiptUrls?: string[];  // Çoklu fiş URL'lerini tutmak için bu ideal.
 }
 
+// Backend’den dönen id’yi garanti etmek için ayrı interface
+export interface ExpenseHistoryWithId extends ExpenseHistory {
+  id: number;
+}
+
+// Person modeli
 export interface Person {
   id?: number;
   firstName: string;
@@ -28,12 +34,13 @@ export interface Person {
   leaves?: { startDate: string, endDate: string }[];
 
   // Bu alanlar veritabanına eklenecek!
-  adres?: string; // şu an DB’de yok ama modelde tutuluyor
+  adres?: string;
 
   salary?: number;
   mealCost?: number;
   transportCost?: number;
   otherCost?: number;
 
-  expenseHistory?: ExpenseHistory[];
+  // ExpenseHistory artık id zorunlu
+  expenseHistory?: ExpenseHistoryWithId[]; 
 }
