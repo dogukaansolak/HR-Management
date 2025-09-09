@@ -1,38 +1,47 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LeaveDto, CreateLeaveDto, UpdateLeaveDto } from '../models/leave.model';
+import { Leave } from '../models/leave.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeaveService {
-  private apiUrl = 'https://localhost:7168/api/Leave'; // Backend API URL
+  private apiUrl = 'https://localhost:7168/api/Leave';
 
   constructor(private http: HttpClient) {}
 
-  getAllLeaves(): Observable<LeaveDto[]> {
-    return this.http.get<LeaveDto[]>(this.apiUrl);
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers.set('Content-Type', 'application/json');
   }
 
-  getLeaveById(id: number): Observable<LeaveDto> {
-    return this.http.get<LeaveDto>(`${this.apiUrl}/${id}`);
+  // Tüm izinleri getir
+  getLeaves(): Observable<Leave[]> {
+    return this.http.get<Leave[]>(this.apiUrl, { headers: this.getAuthHeaders() });
   }
 
-  createLeave(dto: CreateLeaveDto): Observable<LeaveDto> {
-    return this.http.post<LeaveDto>(this.apiUrl, dto);
+  // Id'ye göre izin getir
+  getLeaveById(id: number): Observable<Leave> {
+    return this.http.get<Leave>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  updateLeave(id: number, dto: UpdateLeaveDto): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, dto);
+  // Yeni izin oluştur
+  createLeave(leavePayload: unknown): Observable<Leave> {
+    return this.http.post<Leave>(this.apiUrl, leavePayload, { headers: this.getAuthHeaders() });
   }
 
+  // İzin güncelle
+  updateLeave(id: number, leave: Partial<Leave>): Observable<Leave> {
+    return this.http.put<Leave>(`${this.apiUrl}/${id}`, leave, { headers: this.getAuthHeaders() });
+  }
+
+  // İzin sil
   deleteLeave(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  // ✅ personId’ye göre izinleri getir
-  getLeavesByPerson(personId: number): Observable<LeaveDto[]> {
-    return this.http.get<LeaveDto[]>(`${this.apiUrl}/person/${personId}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 }

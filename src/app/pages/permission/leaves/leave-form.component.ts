@@ -1,52 +1,71 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LeaveService } from '../../../services/leave.service';
-import { CreateLeaveDto, LeaveDto } from '../../../models/leave.model';
+import { Leave } from '../../../models/leave.model';
 
 @Component({
   selector: 'app-leave-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './leave-form.component.html',
   styleUrls: ['./leave-form.component.css']
 })
-export class LeaveFormComponent implements OnInit {
-  @Input() personId!: number;               // dışarıdan gelecek
-  @Output() saved = new EventEmitter<void>(); // başarıdan sonra parent’a haber ver
+export class LeaveFormComponent {
+  @Input() personId!: number;
 
-  leaveForm!: FormGroup;
+  newLeave: Partial<Leave> = {
+    leaveType: '',
+    startDate: '',
+    endDate: '',
+    reason: '',
+    status: 'Pending'
+  };
 
-  constructor(private fb: FormBuilder, private leaveService: LeaveService) {}
+  constructor(private leaveService: LeaveService) {}
 
-  ngOnInit(): void {
-    this.leaveForm = this.fb.group({
-      LeaveType: ['', Validators.required],
-      StartDate: ['', Validators.required],
-      EndDate:   ['', Validators.required],
-      Reason:    ['', Validators.required],
-      Status:    ['Pending', Validators.required]
+  private toIsoDate(dateStr?: string): string | undefined {
+    if (!dateStr) return undefined;
+    try {
+      const iso = new Date(dateStr).toISOString();
+      return iso;
+    } catch {
+      return undefined;
+    }
+  }
+
+  saveLeave() {
+    if (!this.personId) return;
+
+    // .NET backend often expects PascalCase keys
+    const payload = {
+      employeeId: this.personId,
+      leaveType: this.newLeave.leaveType || '',
+      startDate: this.toIsoDate(this.newLeave.startDate) || this.newLeave.startDate || '',
+      endDate: this.toIsoDate(this.newLeave.endDate) || this.newLeave.endDate || '',
+      reason: this.newLeave.reason || '',
+      status: this.newLeave.status || 'Pending'
+    };
+
+    this.leaveService.createLeave(payload as unknown as Leave).subscribe({
+      next: () => {
+        alert('İzin başarıyla eklendi!');
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('İzin eklenemedi!');
+      }
     });
   }
 
-  saveLeave(): void {
-    if (this.leaveForm.invalid || !this.personId) return;
-
-    const dto: CreateLeaveDto = {
-      EmployeeId: this.personId,
-      LeaveType:  this.leaveForm.value.LeaveType,
-      StartDate:  this.leaveForm.value.StartDate,
-      EndDate:    this.leaveForm.value.EndDate,
-      Reason:     this.leaveForm.value.Reason,
-      Status:     this.leaveForm.value.Status
+  private resetForm() {
+    this.newLeave = {
+      leaveType: '',
+      startDate: '',
+      endDate: '',
+      reason: '',
+      status: 'Pending'
     };
-
-    this.leaveService.createLeave(dto).subscribe({
-      next: () => {
-        this.leaveForm.reset({ Status: 'Pending' });
-        this.saved.emit(); // listeyi yeniletmek için
-      },
-      error: (err) => console.error('İzin kaydı hatası:', err)
-    });
   }
 }
