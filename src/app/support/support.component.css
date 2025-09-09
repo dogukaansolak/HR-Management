@@ -1,0 +1,35 @@
+.support-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.support-container h2, .support-container h3 {
+  margin-top: 1.5em;
+}
+.support-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.support-container input, .support-container textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.support-container button {
+  width: 120px;
+  padding: 10px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.support-container button:hover {
+  background: #125ea7;
+}

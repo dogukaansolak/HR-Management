@@ -11,6 +11,7 @@ import { CostComponent } from './pages/cost/cost.component';
 import { CandidateManagementComponent } from './pages/candidate/candidate.component';
 import { Reports } from './pages/reports/reports.component';
 import { Settings } from './pages/settings/settings.component';
+import { SupportComponent } from './support/support.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -26,7 +27,9 @@ export const routes: Routes = [
       { path: 'cost', component: CostComponent },
       { path: 'candidate', component: CandidateManagementComponent },
       { path: 'reports', component: Reports },
-      { path: 'settings', component: Settings }
+      { path: 'settings', component: Settings },
+      { path: 'support', component: SupportComponent },
+
     ]
   },
 
