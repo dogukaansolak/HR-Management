@@ -1,14 +1,39 @@
-<div class="leave-form">
-  <h3>Yeni İzin Ekle</h3>
+<form [formGroup]="leaveForm" (ngSubmit)="saveLeave()" class="leave-form">
+  <div class="row">
+    <label>İzin Türü</label>
+    <select formControlName="LeaveType">
+      <option value="" disabled>Seçiniz</option>
+      <option value="Yıllık">Yıllık</option>
+      <option value="Hastalık">Hastalık</option>
+      <option value="Mazeret">Mazeret</option>
+    </select>
+  </div>
 
-  <label for="start">Başlangıç Tarihi</label>
-  <input type="date" [(ngModel)]="leave.startDate" />
+  <div class="row">
+    <label>Başlangıç Tarihi</label>
+    <input type="date" formControlName="StartDate" />
+  </div>
 
-  <label for="end">Bitiş Tarihi</label>
-  <input type="date" [(ngModel)]="leave.endDate" />
+  <div class="row">
+    <label>Bitiş Tarihi</label>
+    <input type="date" formControlName="EndDate" />
+  </div>
 
-  <label for="reason">Açıklama</label>
-  <textarea [(ngModel)]="leave.reason"></textarea>
+  <div class="row">
+    <label>Açıklama</label>
+    <textarea formControlName="Reason" rows="3"></textarea>
+  </div>
 
-  <button (click)="submitLeave()">Kaydet</button>
-</div>
+  <div class="row">
+    <label>Durum</label>
+    <select formControlName="Status">
+      <option value="Pending">Beklemede</option>
+      <option value="Approved">Onaylandı</option>
+      <option value="Rejected">Reddedildi</option>
+    </select>
+  </div>
+
+  <div class="actions">
+    <button type="submit" [disabled]="leaveForm.invalid">Kaydet</button>
+  </div>
+</form>

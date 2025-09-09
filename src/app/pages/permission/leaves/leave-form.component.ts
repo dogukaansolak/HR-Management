@@ -1,17 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LeaveService } from '../../../services/leave.service';
-import { LeaveDto } from '../../../models/leave.model';
+import { CreateLeaveDto, LeaveDto } from '../../../models/leave.model';
 
 @Component({
   selector: 'app-leave-form',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './leave-form.component.html',
   styleUrls: ['./leave-form.component.css']
 })
 export class LeaveFormComponent implements OnInit {
-  @Input() personId!: number;
+  @Input() personId!: number;               // dışarıdan gelecek
+  @Output() saved = new EventEmitter<void>(); // başarıdan sonra parent’a haber ver
+
   leaveForm!: FormGroup;
-  leave: LeaveDto = {} as LeaveDto;
 
   constructor(private fb: FormBuilder, private leaveService: LeaveService) {}
 
@@ -19,39 +23,30 @@ export class LeaveFormComponent implements OnInit {
     this.leaveForm = this.fb.group({
       LeaveType: ['', Validators.required],
       StartDate: ['', Validators.required],
-      EndDate: ['', Validators.required],
-      Reason: ['', Validators.required],
-      Status: ['Pending', Validators.required]
-    });
-
-    // Leave bilgilerini yükle
-    this.loadLeaves();
-  }
-
-  loadLeaves() {
-    this.leaveService.getAllLeaves().subscribe((leaves: LeaveDto[]) => {
-      // Örnek: sadece bu personId'nin izinlerini filtrele
-      const filtered = leaves.filter((l: LeaveDto) => l.EmployeeId === this.personId);
-      // Burada ihtiyacın olan işleme göre kullanabilirsin
-      console.log(filtered);
+      EndDate:   ['', Validators.required],
+      Reason:    ['', Validators.required],
+      Status:    ['Pending', Validators.required]
     });
   }
 
-  saveLeave() {
-    if (this.leaveForm.invalid) return;
+  saveLeave(): void {
+    if (this.leaveForm.invalid || !this.personId) return;
 
-    // DTO'ya personId ekle
-    const dto: LeaveDto = {
-      ...this.leaveForm.value,
-      EmployeeId: this.personId
+    const dto: CreateLeaveDto = {
+      EmployeeId: this.personId,
+      LeaveType:  this.leaveForm.value.LeaveType,
+      StartDate:  this.leaveForm.value.StartDate,
+      EndDate:    this.leaveForm.value.EndDate,
+      Reason:     this.leaveForm.value.Reason,
+      Status:     this.leaveForm.value.Status
     };
 
     this.leaveService.createLeave(dto).subscribe({
-      next: (res) => {
-        console.log('İzin kaydedildi', res);
+      next: () => {
         this.leaveForm.reset({ Status: 'Pending' });
+        this.saved.emit(); // listeyi yeniletmek için
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error('İzin kaydı hatası:', err)
     });
   }
 }
