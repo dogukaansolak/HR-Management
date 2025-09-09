@@ -1,38 +1,61 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LeaveDto, CreateLeaveDto, UpdateLeaveDto } from '../models/leave.model';
+
+export interface LeaveDto {
+  id: number;
+  employeeId: number;
+  employeeName: string;
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateLeaveDto {
+  employeeId: number;
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+}
+
+export interface UpdateLeaveDto {
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeaveService {
-  private apiUrl = 'https://localhost:7168/api/Leave'; // Backend API URL
+  private apiUrl = 'https://localhost:5001/api/Leave'; // backend adresin
 
   constructor(private http: HttpClient) {}
 
-  getAllLeaves(): Observable<LeaveDto[]> {
+  getAll(): Observable<LeaveDto[]> {
     return this.http.get<LeaveDto[]>(this.apiUrl);
   }
 
-  getLeaveById(id: number): Observable<LeaveDto> {
+  getById(id: number): Observable<LeaveDto> {
     return this.http.get<LeaveDto>(`${this.apiUrl}/${id}`);
   }
 
-  createLeave(dto: CreateLeaveDto): Observable<LeaveDto> {
+  create(dto: CreateLeaveDto): Observable<LeaveDto> {
     return this.http.post<LeaveDto>(this.apiUrl, dto);
   }
 
-  updateLeave(id: number, dto: UpdateLeaveDto): Observable<void> {
+  update(id: number, dto: UpdateLeaveDto): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, dto);
   }
 
-  deleteLeave(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  // ✅ personId’ye göre izinleri getir
-  getLeavesByPerson(personId: number): Observable<LeaveDto[]> {
-    return this.http.get<LeaveDto[]>(`${this.apiUrl}/person/${personId}`);
   }
 }
