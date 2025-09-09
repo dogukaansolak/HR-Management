@@ -1,27 +1,30 @@
-<div class="leave-list">
-  <h3>İzin Listesi</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Tip</th>
-        <th>Başlangıç</th>
-        <th>Bitiş</th>
-        <th>Açıklama</th>
-        <th>Durum</th>
-        <th>İşlem</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let leave of leaves">
-        <td>{{ leave.leaveType }}</td>
-        <td>{{ leave.startDate | date }}</td>
-        <td>{{ leave.endDate | date }}</td>
-        <td>{{ leave.reason }}</td>
-        <td>{{ leave.status }}</td>
-        <td>
-          <button (click)="deleteLeave(leave.id)">Sil</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="overlay">
+  <div class="popup">
+    <span class="close-popup" (click)="onClose()">&times;</span>
+    <h3>İzin Listesi</h3>
+    <div class="popup-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tip</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Açıklama</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of leaves">
+            <td>{{ leave.leaveType }}</td>
+            <td>{{ leave.startDate | date }}</td>
+            <td>{{ leave.endDate | date }}</td>
+            <td>{{ leave.reason }}</td>
+            <td>{{ leave.status }}</td>
+            <td><button (click)="deleteLeave(leave.id)">Sil</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

@@ -6,7 +6,6 @@
     [(ngModel)]="searchText"
     (input)="filterPersonnels()"
   />
-
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
     <option value="">Tüm Departmanlar</option>
     <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
@@ -46,24 +45,22 @@
     <span class="close-popup" (click)="oldLeavePerson = null">&times;</span>
     <h3>{{ oldLeavePerson.firstName }} {{ oldLeavePerson.lastName }} - Eski İzinler</h3>
     <div class="popup-scroll">
-      <app-leave-list [personId]="oldLeavePerson.id!"></app-leave-list>
+      <app-leave-list 
+  *ngIf="oldLeavePerson"
+  [personId]="oldLeavePerson.id!"
+  (close)="oldLeavePerson = null">
+</app-leave-list>
     </div>
   </div>
 </div>
 
+<!-- Düzenleme Modal -->
 <div class="modal" *ngIf="selectedPerson && isModalOpen">
   <div class="modal-content">
+    <span class="close-btn" (click)="closeEditModal()">&times;</span>
     <app-leave-form
-      *ngIf="selectedPerson"
       [personId]="selectedPerson.id!"
-      (leaveCreated)="onLeaveCreated()"
+      (leaveCreated)="handleLeaveCreated()"
     ></app-leave-form>
-
-    <app-leave-list
-      *ngIf="selectedPerson"
-      [personId]="selectedPerson.id!"
-      #leaveList
-    ></app-leave-list>
-
   </div>
 </div>

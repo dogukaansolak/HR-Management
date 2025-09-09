@@ -5,7 +5,7 @@ import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
-import { Department, DepartmentService } from '../../services/department.service';
+import { Department } from '../../services/department.service';
 
 @Component({
   selector: 'app-permission',
@@ -53,12 +53,12 @@ export class PermissionComponent implements OnInit {
   openEditModal(person: Person) {
     this.selectedPerson = person;
     this.isModalOpen = true;
-    this.oldLeavePerson = null; // popup varsa kapat
+    this.oldLeavePerson = null;
   }
 
   openOldLeavePopup(person: Person) {
     this.oldLeavePerson = person;
-    this.isModalOpen = false; // modal varsa kapat
+    this.isModalOpen = false;
   }
 
   closeEditModal() {
@@ -66,20 +66,16 @@ export class PermissionComponent implements OnInit {
     this.isModalOpen = false;
   }
 
-  onLeaveCreated() {
-    this.leaveList?.load();
+  handleLeaveCreated() {
+    // Modal kapansın
+    this.isModalOpen = false;
+    this.selectedPerson = null;
+
+    // Tablodaki veriyi yenile
+    this.personService.getPersons().subscribe((data: Person[]) => {
+      this.personnels = data;
+      this.filteredPersonnels = [...data];
+    });
   }
   
-  handleLeaveCreated() {
-  // Leave eklenince modalı kapat
-  this.isModalOpen = false;
-  this.selectedPerson = null;
-
-  // Tablodaki veriyi yenile
-  this.personService.getPersons().subscribe((data: Person[]) => {
-    this.personnels = data;
-    this.filteredPersonnels = [...data];
-  });
-}
-
 }
