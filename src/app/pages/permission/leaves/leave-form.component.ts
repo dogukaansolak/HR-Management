@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LeaveService } from '../../../services/leave.service';
-
+import { CreateLeaveDto, LeaveDto } from '../../../models/leave.model';
 
 @Component({
   selector: 'app-leave-form',
@@ -12,8 +12,8 @@ import { LeaveService } from '../../../services/leave.service';
   styleUrls: ['./leave-form.component.css']
 })
 export class LeaveFormComponent implements OnInit {
-  @Input() personId!: number; // Personel ID parent'tan geliyor
-  @Output() leaveCreated = new EventEmitter<void>(); // Yeni izin eklenince parent bilgilendirilecek
+  @Input() personId!: number;               // dışarıdan gelecek
+  @Output() saved = new EventEmitter<void>(); // başarıdan sonra parent’a haber ver
 
   leaveForm!: FormGroup;
 
@@ -21,28 +21,32 @@ export class LeaveFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.leaveForm = this.fb.group({
-      employeeId: [this.personId, Validators.required],
-      leaveType: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      reason: ['']
+      LeaveType: ['', Validators.required],
+      StartDate: ['', Validators.required],
+      EndDate:   ['', Validators.required],
+      Reason:    ['', Validators.required],
+      Status:    ['Pending', Validators.required]
     });
   }
 
   saveLeave(): void {
-    if (this.leaveForm.invalid) return;
+    if (this.leaveForm.invalid || !this.personId) return;
 
-    const leaveData = this.leaveForm.value;
+    const dto: CreateLeaveDto = {
+      EmployeeId: this.personId,
+      LeaveType:  this.leaveForm.value.LeaveType,
+      StartDate:  this.leaveForm.value.StartDate,
+      EndDate:    this.leaveForm.value.EndDate,
+      Reason:     this.leaveForm.value.Reason,
+      Status:     this.leaveForm.value.Status
+    };
 
-    this.leaveService.create(leaveData).subscribe({
-      next: res => {
-        console.log('İzin başarıyla kaydedildi:', res);
-        this.leaveForm.reset();
-        this.leaveCreated.emit(); // Parent component'i bilgilendir
+    this.leaveService.createLeave(dto).subscribe({
+      next: () => {
+        this.leaveForm.reset({ Status: 'Pending' });
+        this.saved.emit(); // listeyi yeniletmek için
       },
-      error: err => {
-        console.error('İzin kaydedilemedi:', err);
-      }
+      error: (err) => console.error('İzin kaydı hatası:', err)
     });
   }
 }
