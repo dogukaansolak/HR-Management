@@ -5,7 +5,7 @@ import { Person } from '../../models/personnel.model';
 import { PersonService } from '../../services/personnel.service';
 import { LeaveListComponent } from './leaves/leave-list.component';
 import { LeaveFormComponent } from './leaves/leave-form.component';
-import { Department } from '../../services/department.service';
+import { Department, DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-permission',
@@ -27,26 +27,44 @@ export class PermissionComponent implements OnInit {
 
   @ViewChild('leaveList') leaveList?: LeaveListComponent;
 
-  constructor(private personService: PersonService) { }
+  constructor
+    (private personService: PersonService,
+      private departmentService: DepartmentService
+    ) { }
 
   ngOnInit(): void {
     this.personService.getPersons().subscribe((data: Person[]) => {
       this.personnels = data;
       this.filteredPersonnels = [...data];
     });
+    this.loadDepartments();
   }
+  selectedWorkingStatus: string = '';
 
-  filterPersonnels() {
-    const searchTextLower = this.searchText.trim().toLowerCase();
-    this.filteredPersonnels = this.personnels.filter(person => {
-      const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
-      const matchesName = fullName.includes(searchTextLower);
+filterPersonnels() {
+  const searchTextLower = this.searchText.trim().toLowerCase();
 
-      const matchesDept = this.selectedDepartment === '' || this.selectedDepartment == null
+  this.filteredPersonnels = this.personnels.filter(person => {
+    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+    const matchesName = fullName.includes(searchTextLower);
+
+    const matchesDept =
+      this.selectedDepartment === '' || this.selectedDepartment == null
         ? true
         : person.departmentId === this.selectedDepartment;
 
-      return matchesName && matchesDept;
+    const matchesWorkingStatus =
+      this.selectedWorkingStatus === ''
+        ? true
+        : person.workingStatus === this.selectedWorkingStatus;
+
+    return matchesName && matchesDept && matchesWorkingStatus;
+  });
+}
+
+  loadDepartments() {
+    this.departmentService.getDepartments().subscribe((depts: Department[]) => {
+      this.departments = depts;
     });
   }
 
@@ -77,5 +95,4 @@ export class PermissionComponent implements OnInit {
       this.filteredPersonnels = [...data];
     });
   }
-  
 }

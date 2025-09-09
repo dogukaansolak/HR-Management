@@ -10,6 +10,12 @@
     <option value="">Tüm Departmanlar</option>
     <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
   </select>
+
+  <select [(ngModel)]="selectedWorkingStatus" (change)="filterPersonnels()">
+    <option value="">Tüm Durumlar</option>
+    <option value="Çalışıyor">Çalışıyor</option>
+    <option value="İzinli">İzinli</option>
+  </select>
 </div>
 
 <!-- Personel Tablosu -->
@@ -45,11 +51,7 @@
     <span class="close-popup" (click)="oldLeavePerson = null">&times;</span>
     <h3>{{ oldLeavePerson.firstName }} {{ oldLeavePerson.lastName }} - Eski İzinler</h3>
     <div class="popup-scroll">
-      <app-leave-list 
-  *ngIf="oldLeavePerson"
-  [personId]="oldLeavePerson.id!"
-  (close)="oldLeavePerson = null">
-</app-leave-list>
+      <app-leave-list [personId]="oldLeavePerson.id!"></app-leave-list>
     </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SafePipe } from '../../pipes/safe.pipe';
 
 
 interface Candidate {
@@ -16,10 +17,14 @@ interface Candidate {
 
 @Component({
   selector: 'app-candidate-management',
-  templateUrl: './candidate.html',
-  styleUrls: ['./candidate.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule,]
+  imports: [
+    CommonModule,   
+    FormsModule,
+    SafePipe     
+  ],
+  templateUrl: './candidate.html',
+  styleUrls: ['./candidate.css']
 })
 export class CandidateManagementComponent implements OnInit {
 
