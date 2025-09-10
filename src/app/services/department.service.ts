@@ -14,8 +14,9 @@ export class DepartmentService {
   constructor(private http: HttpClient) {}
 
   getDepartments(): Observable<Department[]> {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<Department[]>(this.apiUrl, { headers });
   }
 }
+
