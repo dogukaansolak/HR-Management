@@ -1,3 +1,4 @@
+<!-- Admin menüsü -->
 <nav *ngIf="isAdmin()">
   <a routerLink="/dashboard/personnel">Personel Yönetimi</a>
   <a routerLink="/dashboard/permission">İzinler</a>
@@ -9,16 +10,15 @@
   <a routerLink="/personnel-panel/leave-request">İzin Talebi Gönder</a>
   <a routerLink="/personnel-panel/expense-report">Gider Göstergesi Gönder</a>
 </nav>
-<div class="dashboard-layout">
 
+<div class="dashboard-layout">
   <input type="checkbox" id="menu-toggle" />
-  
-  <div class="overlay"  (click)="closeMenuOnOverlayClick()"></div>
+  <div class="overlay" (click)="closeMenuOnOverlayClick()"></div>
 
   <header class="top-nav">
     <div class="logo-container">
       <a [routerLink]="['/dashboard']">
-      <img src="https://barkod.narpos.com.tr/assets/images/yty-nar.svg" alt="Logo" class="logo" style="cursor:pointer">
+        <img src="https://barkod.narpos.com.tr/assets/images/yty-nar.svg" alt="Logo" class="logo" style="cursor:pointer">
       </a>
     </div>
 
@@ -29,11 +29,7 @@
         <span></span>
       </label>
     </div>
-
-    <div class="user-actions">
-      </div>
   </header>
-  
 
   <nav class="side-nav">
     <div class="nav-links">
@@ -49,15 +45,22 @@
     <div class="user-actions">
       <button (click)="logout()" class="logout-button">Çıkış Yap</button>
     </div>
-       <div class="nav-links">
-    </div>
-
-    <div class="user-actions">
-      <button (click)="logout()" class="logout-button">Çıkış Yap</button>
-    </div>
   </nav>
 
   <main class="main-content">
     <router-outlet></router-outlet>
-    </main>
+
+    <!-- Personel izin formu ve listesi -->
+    <app-leave-form
+      *ngIf="isPersonnel()"
+      [personId]="authService.currentUser?.id"
+      (leaveCreated)="onLeaveCreated()">
+    </app-leave-form>
+
+    <app-leave-list
+      *ngIf="isPersonnel()"
+      [personId]="authService.currentUser?.id">
+    </app-leave-list>
+
+  </main>
 </div>

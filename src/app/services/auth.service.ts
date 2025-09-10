@@ -16,7 +16,7 @@ interface LoginResponse {
 export class AuthService {
   private apiUrl = 'https://localhost:7168/api/Auth';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   public login(data: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data).pipe(
@@ -60,4 +60,9 @@ export class AuthService {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
+  get currentUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
 }

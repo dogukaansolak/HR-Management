@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LeaveService } from '../../../services/leave.service';
-import { Leave } from '../../../models/leave.model';
+import { CreateLeaveDto } from '../../../models/leave.model';
 
 @Component({
   selector: 'app-leave-form',
@@ -13,44 +13,25 @@ import { Leave } from '../../../models/leave.model';
 })
 export class LeaveFormComponent {
   @Input() personId!: number;
-  @Output() leaveCreated = new EventEmitter<void>(); // <- burada event
+  @Output() leaveCreated = new EventEmitter<void>();
 
-  newLeave: Partial<Leave> = {
-    leaveType: '',
-    startDate: '',
-    endDate: '',
-    reason: '',
-    status: 'Pending'
-  };
+  newLeave: CreateLeaveDto = { leaveType: '', startDate: '', endDate: '', reason: '' };
 
-  constructor(private leaveService: LeaveService) {}
-
-  private toIsoDate(dateStr?: string): string | undefined {
-    if (!dateStr) return undefined;
-    try {
-      const iso = new Date(dateStr).toISOString();
-      return iso;
-    } catch {
-      return undefined;
-    }
-  }
+  constructor(private leaveService: LeaveService) { }
 
   saveLeave() {
-    if (!this.personId) return;
-
-    const payload = {
-      EmployeeId: this.personId, // PascalCase
-      LeaveType: this.newLeave.leaveType || '',
-      StartDate: this.newLeave.startDate || '',
-      EndDate: this.newLeave.endDate || '',
-      Reason: this.newLeave.reason || '',
-      Status: this.newLeave.status || 'Pending'
+    const payload: CreateLeaveDto = {
+      leaveType: this.newLeave.leaveType,
+      startDate: new Date(this.newLeave.startDate).toISOString(),
+      endDate: new Date(this.newLeave.endDate).toISOString(),
+      reason: this.newLeave.reason
     };
 
-    this.leaveService.createLeave(payload as unknown as Leave).subscribe({
+
+    this.leaveService.createLeave(payload).subscribe({
       next: () => {
         alert('İzin başarıyla eklendi!');
-        this.leaveCreated.emit();  // <- parent component'e bildir
+        this.leaveCreated.emit();
         this.resetForm();
       },
       error: (err) => {
@@ -61,12 +42,6 @@ export class LeaveFormComponent {
   }
 
   private resetForm() {
-    this.newLeave = {
-      leaveType: '',
-      startDate: '',
-      endDate: '',
-      reason: '',
-      status: 'Pending'
-    };
+    this.newLeave = { leaveType: '', startDate: '', endDate: '', reason: '' };
   }
 }
