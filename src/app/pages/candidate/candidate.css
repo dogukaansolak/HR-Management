@@ -1,11 +1,22 @@
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 16px;
+  padding: 0 10px;
+}
+
+.filter-search-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* Ortada hizalama */
+}
+
 .filter-search {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 10px;
+  align-items: center;
 }
 
 .filter-search input,
@@ -22,10 +33,27 @@
 .filter-search input:focus,
 .filter-search select:focus {
   border-color: #ff7a00;
-  box-shadow: 0 0 0 4px rgba(255,122,0,0.18);
+  box-shadow: 0 0 0 4px rgba(255,122,0,0.12);
 }
 
-/* Kartlar */
+/* Add button sağda sabit kalır */
+.add-candidate-btn {
+  margin-left: 16px;
+}
+.add-candidate-btn .add-btn {
+  background: linear-gradient(90deg,#28a745 0%, #3ecf5e 100%);
+  color: white;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+}
+.add-candidate-btn .add-btn:hover { opacity: 0.95; }
+
+
+/* Cards */
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -34,92 +62,45 @@
   padding: 10px 0;
   max-width: 1200px;
   margin: 0 auto;
-  align-items: stretch;
 }
 .candidate-card {
   background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex: 1 1 280px;
-  max-width: 500px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative;
+  max-width: 420px;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 .candidate-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.10);
 }
-.candidate-card h3 {
-  margin: 0 0 8px 0;
-  font-size: 17px;
-  color: #111;
-}
-.candidate-card p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-}
-.approved-tag {
-  font-size: 12px;
-  color: #28a745;
-  font-weight: bold;
-  display: block;
-  margin: 6px 0;
-}
-.note-input {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
+.candidate-card h3 { margin: 0 0 6px 0; font-size: 17px; color: #111; }
+.candidate-card p { margin: 0; font-size: 14px; color: #555; }
 
-.note-input input {
-  flex: 1;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.note-input button {
-  background-color: #ff8800;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.note-input button:hover {
-  opacity: 0.9;
-}
+.accepted-tag { font-size: 12px; color: #28a745; font-weight: 700; display:block; margin-top:8px; }
+.declined-tag { font-size: 12px; color: #dc3545; font-weight: 700; display:block; margin-top:8px; }
 
 .card-buttons {
   display: flex;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: 14px;
 }
-
-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
 .card-buttons button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
   background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%);
   color: #fff;
 }
 
-/* Modal */
+/* Modals */
 .modal {
   position: fixed;
   inset: 0;
@@ -133,118 +114,104 @@ button:hover {
 .modal-content {
   background: #fff;
   margin: auto;
-  padding: 28px 36px;
-  border-radius: 18px;
-  width: 70%;
-  max-width: 500px;
+  padding: 24px;
+  border-radius: 14px;
+  width: 700px;
+  max-width: 95%;
   position: relative;
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  animation: modalFade 0.3s ease;
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
 }
 
 .modal-content .close {
   position: absolute;
-  top: 14px;
-  right: 18px;
-  font-size: 28px;
-  font-weight: bold;
+  top: 12px;
+  right: 14px;
+  font-size: 26px;
+  font-weight: 700;
   color: #333;
   cursor: pointer;
 }
 
-.modal-approved {
-  text-align: center;
-  font-weight: bold;
-  color: #28a745;
-  margin: 12px 0;
-  font-size: 16px;
+.modal-accepted { text-align:center; font-weight:700; color:#28a745; margin:10px 0; }
+.modal-declined { text-align:center; font-weight:700; color:#dc3545; margin:10px 0; }
+
+/* Note input inside modal */
+.note-input {
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+.note-input input {
+  flex:1;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+.note-input button {
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  background:#ff8800;
+  color:#fff;
+  cursor:pointer;
 }
 
+/* Modal buttons */
 .modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:18px;
 }
-
-.approve-btn {
-  background-color: #28a745;
-  color: #fff;
+.accept-btn {
+  background-color:#28a745;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
 }
-
+.decline-btn {
+  background-color:#dc3545;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+}
 .delete-btn {
-  background-color: #dc3545;
-  color: #fff;
+  background-color:#6b7280;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
 }
 
-@keyframes modalFade {
-  from { opacity: 0; transform: translateY(-20px);}
-  to   { opacity: 1; transform: translateY(0);}
+/* Add modal small extras */
+.form-group { margin-bottom:12px; display:flex; flex-direction:column; }
+.form-group input[type="file"] {
+  padding:8px;
+  border-radius:6px;
+  border:1px dashed #bdbdbd;
+  background:#fafafa;
 }
+.cv-name { margin-top:6px; font-size:13px; color:#333; }
 
-/* Sayfalama */
-.pagination {
-  margin-top: 28px;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.pagination button {
-  padding: 6px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f8f8f8;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.pagination button.active {
-  background-color: #FF6A00;
-  color: white;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Pagination */
+.pagination { margin-top:24px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.pagination button { padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#f7f7f7; cursor:pointer; }
+.pagination button.active { background:#FF6A00; color:#fff; }
 
 /* Responsive */
-@media (max-width: 600px) {
-  .filter-search {
-    flex-direction: column;
-    align-items: center;
-  }
-  .filter-search input,
-  .filter-search select {
-    width: 95%;
-  }
-  .card-container {
-    gap: 16px;
-  }
-  .candidate-card {
-    flex: 1 1 95%;
-  }
-  .modal-content {
-    width: 90%;
-    padding: 16px 20px;
-    margin-top: 30%;
-    max-height: 75vh;
-  }
-  .modal-buttons button {
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-  .modal-content .close {
-    top: 8px;
-    right: 12px;
-    font-size: 24px;
-  }
-  .modal-approved {
-    font-size: 16px;
-  }
+@media (max-width: 700px) {
+  .modal-content { width: 95%; padding:16px; }
+  .card-container { gap:14px; }
+  .candidate-card { max-width: 95%; }
+  .filter-search { flex-wrap: wrap; gap:8px; }
 }
