@@ -10,7 +10,6 @@
   <thead>
     <tr>
       <th>Ad Soyad</th>
-      <th>Departman</th>
       <th>Yemek</th>
       <th>Yol</th>
       <th>Diğer</th>
@@ -21,8 +20,6 @@
   <tbody>
     <tr *ngFor="let p of filteredPersonnel; trackBy: trackById">
       <td>{{ p.firstName + ' ' + p.lastName }}</td>
-      <td>{{ p.departmentName }}</td>
-      <td>{{ p.salary | currency:'TRY':'symbol':'1.0-0' }}</td>
       <td>{{ p.mealCost | currency:'TRY':'symbol':'1.0-0' }}</td>
       <td>{{ p.transportCost | currency:'TRY':'symbol':'1.0-0' }}</td>
       <td>{{ p.otherCost | currency:'TRY':'symbol':'1.0-0' }}</td>
@@ -32,7 +29,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="6" style="text-align:right;"><b>Toplam Şirket Maliyeti:</b></td>
+      <td colspan="4" style="text-align:right;"><b>Toplam Şirket Maliyeti:</b></td>
       <td colspan="2"><b>{{ getCompanyTotalCost() | currency:'TRY':'symbol':'1.0-0' }}</b></td>
     </tr>
   </tfoot>
@@ -41,7 +38,7 @@
 <div class="modal" *ngIf="selectedPersonnel">
   <div class="modal-content">
     <h3>{{ selectedPersonnel.firstName }} {{ selectedPersonnel.lastName }} - Yeni Gider Ekle</h3>
-    <p><b>Departman:</b> {{ selectedPersonnel.departmentName }}</p>
+    <!-- <p><b>Departman:</b> {{ selectedPersonnel.departmentName }}</p> -->
 
     <label>Gider Tarihi:</label>
     <input type="date" [(ngModel)]="selectedPersonnel.expenseDate" />
