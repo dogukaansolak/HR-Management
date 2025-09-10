@@ -1,34 +1,49 @@
-Filtreleme
-<div class="filter-search">
-  <input
-    type="text"
-    placeholder="Aday Ara..."
-    [(ngModel)]="searchText"
-    (input)="filterCandidates()"
-  />
+<div class="filter-bar">
+  <div class="filter-search-wrapper">
+    <div class="filter-search">
+      <input
+        type="text"
+        placeholder="Aday Ara..."
+        [(ngModel)]="searchText"
+        (input)="filterCandidates()"
+      />
 
-  <select [(ngModel)]="selectedPosition" (change)="filterCandidates()">
-    <option value="">Tüm Pozisyonlar</option>
-    <option value="approved">Onaylandı</option>
-    <option *ngFor="let pos of positions" [value]="pos">{{ pos }}</option>
-  </select>
+      <select [(ngModel)]="selectedPosition" (change)="filterCandidates()">
+        <option value="">Tüm Pozisyonlar</option>
+        <option *ngFor="let pos of positions" [value]="pos">{{ pos }}</option>
+      </select>
 
-  <select [(ngModel)]="selectedApproval" (change)="filterCandidates()">
-    <option value="">Tüm Durumlar</option>
-    <option value="approved">Onaylandı</option>
-    <option value="notApproved">Onaylanmadı</option>
-  </select>
+      <select [(ngModel)]="selectedApproval" (change)="filterCandidates()">
+        <option value="">Tüm Durumlar</option>
+        <option value="accepted">Kabul Edildi</option>
+        <option value="declined">Reddedildi</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="add-candidate-btn">
+    <button class="add-btn" (click)="openAddCandidateModal()">+ Yeni Aday Ekle</button>
+  </div>
 </div>
 
+
+<!-- Cards -->
 <div class="card-container">
   <div class="candidate-card" *ngFor="let candidate of pagedCandidates">
-    <h3>{{ candidate.name }}</h3>
-    <p>Pozisyon: {{ candidate.position }}</p>
+    <div>
+      <h3>{{ candidate.name }}</h3>
+      <p>Pozisyon: {{ candidate.position }}</p>
 
-    <span *ngIf="candidate.approved" class="approved-tag">
-      ✅ Onaylandı
-      <span *ngIf="candidate.note"> - {{ candidate.note }}</span>
-    </span>
+      <span *ngIf="candidate.status === 'accepted'" class="accepted-tag">
+        ✅ Kabul Edildi
+        <span *ngIf="candidate.note"> - {{ candidate.note }}</span>
+      </span>
+
+      <span *ngIf="candidate.status === 'declined'" class="declined-tag">
+        ❌ Reddedildi
+        <span *ngIf="candidate.note"> - {{ candidate.note }}</span>
+      </span>
+    </div>
 
     <div class="card-buttons">
       <button (click)="openModal(candidate)">Görüntüle</button>
@@ -36,21 +51,29 @@ Filtreleme
   </div>
 </div>
 
+<!-- View Modal (with Accept / Decline / Delete) -->
 <div class="modal" *ngIf="showModal && selectedCandidate">
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
+
     <h2>{{ selectedCandidate.name }}</h2>
     <p>Pozisyon: {{ selectedCandidate.position }}</p>
 
     <iframe
+      *ngIf="selectedCandidate.cvUrl"
       [src]="selectedCandidateUrl | safeUrl"
       width="80%"
       height="300"
-      style="border:0"
+      style="border:0; display:block; margin: 12px auto;"
     ></iframe>
 
-    <p *ngIf="selectedCandidate.approved" class="modal-approved">
-      ✅ Onaylandı
+    <p *ngIf="selectedCandidate.status === 'accepted'" class="modal-accepted">
+      ✅ Kabul Edildi
+      <span *ngIf="selectedCandidate.note"> - {{ selectedCandidate.note }}</span>
+    </p>
+
+    <p *ngIf="selectedCandidate.status === 'declined'" class="modal-declined">
+      ❌ Reddedildi
       <span *ngIf="selectedCandidate.note"> - {{ selectedCandidate.note }}</span>
     </p>
 
@@ -60,28 +83,49 @@ Filtreleme
         [(ngModel)]="selectedCandidate.noteText"
         placeholder="Notunuzu yazın..."
       />
-      <button
-        (click)="addNoteToCandidate(selectedCandidate, selectedCandidate.noteText)"
-      >
-        Kaydet
-      </button>
+      <button (click)="addNoteToCandidate(selectedCandidate, selectedCandidate.noteText)">Kaydet</button>
     </div>
 
     <div class="modal-buttons">
-      <button class="approve-btn" (click)="approveCandidate(selectedCandidate)">
-        Onayla
-      </button>
-      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">
-        Sil
-      </button>
+      <button class="accept-btn" (click)="acceptCandidate(selectedCandidate)">Kabul Et</button>
+      <button class="decline-btn" (click)="declineCandidate(selectedCandidate)">Reddet</button>
+      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
     </div>
   </div>
 </div>
 
+<!-- Add Candidate Modal (PDF-only file input) -->
+<div class="modal" *ngIf="showAddCandidateModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeAddCandidateModal()">&times;</span>
+    <h2>Yeni Aday Ekle</h2>
+
+    <div class="form-group">
+      <label>Ad Soyad</label>
+      <input type="text" [(ngModel)]="newCandidate.name" />
+    </div>
+
+    <div class="form-group">
+      <label>Pozisyon</label>
+      <input type="text" [(ngModel)]="newCandidate.position" />
+    </div>
+
+    <div class="form-group">
+      <label>CV (PDF)</label>
+      <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+      <div *ngIf="newCandidate.cvName" class="cv-name">Seçilen: {{ newCandidate.cvName }}</div>
+    </div>
+
+    <div class="modal-buttons">
+      <button class="accept-btn" (click)="addCandidate()">Kaydet</button>
+      <button class="delete-btn" (click)="closeAddCandidateModal()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination -->
 <div class="pagination" *ngIf="totalPages > 1">
-  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-    &laquo;
-  </button>
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
   <button
     *ngFor="let _ of [].constructor(totalPages); let i = index"
     (click)="goToPage(i + 1)"
@@ -89,11 +133,5 @@ Filtreleme
   >
     {{ i + 1 }}
   </button>
-  <button
-    (click)="goToPage(currentPage + 1)"
-    [disabled]="currentPage === totalPages"
-  >
-    &raquo;
-  </button>
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
 </div>
-
