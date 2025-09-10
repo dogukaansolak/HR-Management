@@ -6,6 +6,9 @@ export interface ExpenseHistory {
   date: Date;         // kaydedilen tarih
   fileUrl?: string;   // opsiyonel: fiş dosyası (resim/pdf)
   receiptUrls?: string[];  // Çoklu fiş URL'lerini tutmak için bu ideal.
+  mealCost?: number;
+  transportCost?: number;
+  otherCost?: number;
 }
 
 // Backend’den dönen id’yi garanti etmek için ayrı interface

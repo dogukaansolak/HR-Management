@@ -117,26 +117,28 @@ export class CostComponent implements OnInit {
 
         const person = this.personnelList.find(p => p.id === personId);
         if (person) {
-          person.salary = (person.salary || 0) + (this.selectedPersonnel!.salary || 0);
-          person.mealCost = (person.mealCost || 0) + (this.selectedPersonnel!.mealCost || 0);
-          person.transportCost = (person.transportCost || 0) + (this.selectedPersonnel!.transportCost || 0);
-          person.otherCost = (person.otherCost || 0) + (this.selectedPersonnel!.otherCost || 0);
-
-          const total = (this.selectedPersonnel!.salary || 0) +
-                        (this.selectedPersonnel!.mealCost || 0) +
-                        (this.selectedPersonnel!.transportCost || 0) +
-                        (this.selectedPersonnel!.otherCost || 0);
-
-          const receiptUrls: string[] = (this.selectedFiles || [])
-            .map(file => URL.createObjectURL(file))
-            .filter((url): url is string => !!url);
-
+          
+          const meal = this.selectedPersonnel!.mealCost || 0;
+          const transport = this.selectedPersonnel!.transportCost || 0;
+          const other = this.selectedPersonnel!.otherCost || 0;
+    
+          const total = meal + transport + other;
+          
           const newExpense: ExpenseHistoryWithId = {
             id: res.id!,
             amount: total,
             date: new Date(this.selectedPersonnel!.expenseDate!),
-            receiptUrls
+            receiptUrls: res.receiptUrls || [],
+            // Döküm bilgilerini fişe ekle
+            mealCost: meal,
+            transportCost: transport,
+            otherCost: other
           };
+
+          // Personelin toplam maliyetlerini güncelle
+          person.mealCost = (person.mealCost || 0) + meal;
+          person.transportCost = (person.transportCost || 0) + transport;
+          person.otherCost = (person.otherCost || 0) + other;
 
           person.expenseHistory = [...(person.expenseHistory ?? []), newExpense];
         }
@@ -156,14 +158,21 @@ export class CostComponent implements OnInit {
   this.personService.deleteExpense(historyItem.id).subscribe({
     next: () => {
       const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
-      if (!person || !person.expenseHistory) return;
+      if (!person) return;
 
-      // Kayıtları güncelle
-      person.expenseHistory = person.expenseHistory.filter(h => h.id !== historyItem.id);
-      person.otherCost = (person.otherCost || 0) - historyItem.amount;
-
-      this.selectedHistoryPerson!.expenseHistory =
-        this.selectedHistoryPerson!.expenseHistory.filter(h => h.id !== historyItem.id);
+      // Parayı fişteki döküme göre doğru gözlere geri koy
+      person.mealCost = (person.mealCost || 0) - (historyItem.mealCost || 0);
+      person.transportCost = (person.transportCost || 0) - (historyItem.transportCost || 0);
+      person.otherCost = (person.otherCost || 0) - (historyItem.otherCost || 0);
+      
+      // Kaydı fiş defterinden (expenseHistory) sil
+      if (person.expenseHistory) {
+        person.expenseHistory = person.expenseHistory.filter(h => h.id !== historyItem.id);
+      }
+      
+      if (this.selectedHistoryPerson?.expenseHistory) {
+        this.selectedHistoryPerson.expenseHistory = this.selectedHistoryPerson.expenseHistory.filter(h => h.id !== historyItem.id);
+      }
 
       this.filterPersonnels();
       this.filterHistory();
