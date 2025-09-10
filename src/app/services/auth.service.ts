@@ -1,4 +1,3 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -56,13 +55,14 @@ export class AuthService {
     }
   }
 
+
   public logout(): void {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
+
   get currentUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
-
 }

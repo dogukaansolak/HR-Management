@@ -1,4 +1,3 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { Register } from './auth/register/register.component';
@@ -22,7 +21,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AdminGuard], // sadece admin görebilir
+    canActivate: [AdminGuard],
     children: [
       { path: '', component: DashboardHome },
       { path: 'personnel', component: PersonnelComponent },
@@ -39,10 +38,9 @@ export const routes: Routes = [
     path: 'personnel-panel',
     loadChildren: () =>
       import('./personnel/user-personnel.module').then(m => m.PersonnelModule),
-    canActivate: [PersonnelGuard] // sadece personel görebilir
+    canActivate: [PersonnelGuard]
   },
 
-  // Default ve fallback
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];

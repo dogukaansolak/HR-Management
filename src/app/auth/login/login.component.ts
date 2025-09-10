@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginRequest } from '../../models/login-request.model';
-import { AuthService } from '../../services/auth.service';  // <-- AuthService'i import ettik
+import { AuthService } from '../../services/auth.service';
 
 export interface LoginResponse {
   token: string;
   fullName: string;
   email: string;
+  role: string;
 }
 
 @Component({
@@ -35,13 +36,12 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // 🔹 Backend'e istek atıyoruz
     this.authService.login(this.loginData).subscribe({
       next: (res: LoginResponse) => {
         console.log("Login başarılı:", res);
 
-        // 🔹 JWT token'ı localStorage'a kaydet
-        localStorage.setItem('token', res.token);
+        // ✅ Doğru key ile token kaydet
+        localStorage.setItem('accessToken', res.token);
 
         this.authService.redirectToDashboard();
         this.isLoading = false;
