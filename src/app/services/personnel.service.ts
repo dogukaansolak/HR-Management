@@ -50,7 +50,7 @@ export class PersonService {
 
   // ------------------- Expense Fonksiyonları -------------------
   addExpense(personId: number, formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/${personId}/expenses`, formData, { headers: this.getAuthHeaders() });
+    return this.http.put<any>(`${this.apiUrl}/${personId}/cost`, formData, { headers: this.getAuthHeaders() });
   }
 
   updateExpense(expenseId: number, dto: { Amount: number }): Observable<any> {
