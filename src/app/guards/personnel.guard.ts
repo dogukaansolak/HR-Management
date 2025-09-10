@@ -7,12 +7,16 @@ export class PersonnelGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
+
     const role = this.authService.getRole();
     const token = this.authService.isAuthenticated();
 
-    if (token && role === 'personnel') {
+    if (token && role === 'Personnel') {
       return true;
     }
+
+
+    if (this.authService.getRole() === 'Personnel') return true;
 
     this.router.navigate(['/login']);
     return false;

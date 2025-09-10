@@ -29,7 +29,7 @@ export class DashboardComponent {
   ngOnInit(): void {}
 
   isAdmin(): boolean {
-    return this.authService.currentUser?.role === 'Admin';
+    return this.authService.currentUser?.role === 'HRManager';
   }
 
   isPersonnel(): boolean {

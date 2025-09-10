@@ -48,7 +48,7 @@ export class AuthService {
 
   public redirectToDashboard(): void {
     const role = this.getRole();
-    if (role === 'personnel') {
+    if (role === 'Personnel') {
       this.router.navigate(['/personnel-panel']);
     } else {
       this.router.navigate(['/dashboard']);

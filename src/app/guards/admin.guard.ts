@@ -10,7 +10,7 @@ export class AdminGuard implements CanActivate {
     const role = this.authService.getRole();
     const token = this.authService.isAuthenticated();
 
-    if (token && role === 'admin') {
+    if (token && role === 'HRManager') {
       return true;
     }
 
