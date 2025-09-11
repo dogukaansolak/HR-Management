@@ -33,7 +33,7 @@ export class CandidateManagementComponent implements OnInit {
   filteredCandidates: Candidate[] = [];
   searchText: string = '';
   selectedPosition: string = '';
-  selectedApproval: string = ''; // '', 'accepted', 'declined'
+  selectedApproval: string = '';
   positions: string[] = [];
 
   // View modal
@@ -43,6 +43,10 @@ export class CandidateManagementComponent implements OnInit {
   // Add candidate modal
   showAddCandidateModal: boolean = false;
   newCandidate: Candidate = { id: 0, name: '', position: '', cvUrl: '', cvName: '', status: null, note: '' };
+
+  // Delete confirm modal
+  showDeleteConfirmModal: boolean = false;
+  candidateToDelete?: Candidate;
 
   // Pagination
   currentPage: number = 1;
@@ -60,12 +64,10 @@ export class CandidateManagementComponent implements OnInit {
     this.filteredCandidates = this.candidates.filter(c => {
       const matchesName = c.name.toLowerCase().includes(q);
       const matchesPos = this.selectedPosition ? c.position === this.selectedPosition : true;
-
       const matchesApproval =
         this.selectedApproval === 'accepted' ? c.status === 'accepted' :
         this.selectedApproval === 'declined' ? c.status === 'declined' :
         true;
-
       return matchesName && matchesPos && matchesApproval;
     });
 
@@ -88,7 +90,7 @@ export class CandidateManagementComponent implements OnInit {
     return this.selectedCandidate?.cvUrl ?? '';
   }
 
-  // Pagination helpers
+  // Pagination
   updatePagination(): void {
     this.totalPages = Math.max(1, Math.ceil(this.filteredCandidates.length / this.pageSize));
   }
@@ -114,13 +116,6 @@ export class CandidateManagementComponent implements OnInit {
     if (!candidate) return;
     candidate.status = 'declined';
     this.filterCandidates(false);
-  }
-
-  deleteCandidate(candidate?: Candidate): void {
-    if (!candidate) return;
-    this.candidates = this.candidates.filter(c => c.id !== candidate.id);
-    this.filterCandidates(false);
-    this.closeModal();
   }
 
   addNoteToCandidate(candidate?: Candidate, noteText?: string) {
@@ -151,7 +146,6 @@ export class CandidateManagementComponent implements OnInit {
       return;
     }
 
-    // geçici gösterim URL'si ve dosya adı
     this.newCandidate.cvUrl = URL.createObjectURL(file);
     this.newCandidate.cvName = file.name;
   }
@@ -174,9 +168,27 @@ export class CandidateManagementComponent implements OnInit {
     };
 
     this.candidates.push(candidate);
-    // güncel pozisyonları yenile
     this.positions = Array.from(new Set(this.candidates.map(c => c.position)));
     this.filterCandidates(false);
     this.closeAddCandidateModal();
+  }
+
+  // --- Delete confirm modal ---
+  openDeleteConfirmModal(candidate: Candidate): void {
+    this.candidateToDelete = candidate;
+    this.showDeleteConfirmModal = true;
+  }
+
+  closeDeleteConfirmModal(): void {
+    this.showDeleteConfirmModal = false;
+    this.candidateToDelete = undefined;
+  }
+
+  confirmDeleteCandidate(): void {
+    if (!this.candidateToDelete) return;
+    this.candidates = this.candidates.filter(c => c.id !== this.candidateToDelete!.id);
+    this.filterCandidates(false);
+    this.closeDeleteConfirmModal();
+    this.closeModal();
   }
 }

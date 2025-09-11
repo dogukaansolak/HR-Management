@@ -1,12 +1,7 @@
 <div class="filter-bar">
   <div class="filter-search-wrapper">
     <div class="filter-search">
-      <input
-        type="text"
-        placeholder="Aday Ara..."
-        [(ngModel)]="searchText"
-        (input)="filterCandidates()"
-      />
+      <input type="text" placeholder="Aday Ara..." [(ngModel)]="searchText" (input)="filterCandidates()" />
 
       <select [(ngModel)]="selectedPosition" (change)="filterCandidates()">
         <option value="">Tüm Pozisyonlar</option>
@@ -22,10 +17,9 @@
   </div>
 
   <div class="add-candidate-btn">
-    <button class="add-btn" (click)="openAddCandidateModal()">+ Yeni Aday Ekle</button>
+    <button class="add-btn" aria-label="Yeni aday ekle" (click)="openAddCandidateModal()">+ Yeni Aday Ekle</button>
   </div>
 </div>
-
 
 <!-- Cards -->
 <div class="card-container">
@@ -46,26 +40,21 @@
     </div>
 
     <div class="card-buttons">
-      <button (click)="openModal(candidate)">Görüntüle</button>
+      <button aria-label="Adayı görüntüle" (click)="openModal(candidate)">Görüntüle</button>
     </div>
   </div>
 </div>
 
-<!-- View Modal (with Accept / Decline / Delete) -->
+<!-- View Modal -->
 <div class="modal" *ngIf="showModal && selectedCandidate">
   <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
+    <span class="close" aria-label="Kapat" (click)="closeModal()">&times;</span>
 
     <h2>{{ selectedCandidate.name }}</h2>
     <p>Pozisyon: {{ selectedCandidate.position }}</p>
 
-    <iframe
-      *ngIf="selectedCandidate.cvUrl"
-      [src]="selectedCandidateUrl | safeUrl"
-      width="80%"
-      height="300"
-      style="border:0; display:block; margin: 12px auto;"
-    ></iframe>
+    <iframe *ngIf="selectedCandidate.cvUrl" [src]="selectedCandidateUrl | safeUrl" width="80%" height="300"
+      style="border:0; display:block; margin: 12px auto;"></iframe>
 
     <p *ngIf="selectedCandidate.status === 'accepted'" class="modal-accepted">
       ✅ Kabul Edildi
@@ -78,60 +67,70 @@
     </p>
 
     <div class="note-input">
-      <input
-        type="text"
-        [(ngModel)]="selectedCandidate.noteText"
-        placeholder="Notunuzu yazın..."
-      />
-      <button (click)="addNoteToCandidate(selectedCandidate, selectedCandidate.noteText)">Kaydet</button>
+      <input type="text" [(ngModel)]="selectedCandidate.noteText" placeholder="Notunuzu yazın..."
+        [attr.aria-label]="'Not alanı'" />
+      <button aria-label="Notu kaydet"
+        (click)="addNoteToCandidate(selectedCandidate, selectedCandidate.noteText)">Kaydet</button>
     </div>
 
     <div class="modal-buttons">
-      <button class="accept-btn" (click)="acceptCandidate(selectedCandidate)">Kabul Et</button>
-      <button class="decline-btn" (click)="declineCandidate(selectedCandidate)">Reddet</button>
-      <button class="delete-btn" (click)="deleteCandidate(selectedCandidate)">Sil</button>
+      <button class="accept-btn" aria-label="Kabul et" (click)="acceptCandidate(selectedCandidate)">Kabul Et</button>
+      <button class="decline-btn" aria-label="Reddet" (click)="declineCandidate(selectedCandidate)">Reddet</button>
+      <button class="delete-btn" (click)="openDeleteConfirmModal(selectedCandidate)">Sil</button>
     </div>
   </div>
 </div>
 
-<!-- Add Candidate Modal (PDF-only file input) -->
+<!-- Add Candidate Modal -->
 <div class="modal" *ngIf="showAddCandidateModal">
   <div class="modal-content">
-    <span class="close" (click)="closeAddCandidateModal()">&times;</span>
+    <span class="close" aria-label="Kapat" (click)="closeAddCandidateModal()">&times;</span>
     <h2>Yeni Aday Ekle</h2>
 
     <div class="form-group">
       <label>Ad Soyad</label>
-      <input type="text" [(ngModel)]="newCandidate.name" />
+      <input type="text" [(ngModel)]="newCandidate.name" [attr.aria-label]="'Ad soyad alanı'" />
     </div>
 
     <div class="form-group">
       <label>Pozisyon</label>
-      <input type="text" [(ngModel)]="newCandidate.position" />
+      <input type="text" [(ngModel)]="newCandidate.position" [attr.aria-label]="'Pozisyon alanı'" />
     </div>
 
     <div class="form-group">
       <label>CV (PDF)</label>
-      <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+      <input type="file" accept="application/pdf" (change)="onFileSelected($event)"
+        aria-label="CV yükle (sadece PDF)" />
       <div *ngIf="newCandidate.cvName" class="cv-name">Seçilen: {{ newCandidate.cvName }}</div>
     </div>
 
     <div class="modal-buttons">
-      <button class="accept-btn" (click)="addCandidate()">Kaydet</button>
-      <button class="delete-btn" (click)="closeAddCandidateModal()">İptal</button>
+      <button class="accept-btn" aria-label="Kaydet" (click)="addCandidate()">Kaydet</button>
+      <button class="delete-btn" aria-label="İptal" (click)="closeAddCandidateModal()">İptal</button>
     </div>
   </div>
 </div>
 
 <!-- Pagination -->
 <div class="pagination" *ngIf="totalPages > 1">
-  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
-  <button
-    *ngFor="let _ of [].constructor(totalPages); let i = index"
-    (click)="goToPage(i + 1)"
-    [class.active]="currentPage === i + 1"
-  >
+  <button aria-label="Önceki sayfa" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&laquo;</button>
+  <button *ngFor="let _ of [].constructor(totalPages); let i = index" (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1" [attr.aria-label]="'Sayfa ' + (i + 1)">
     {{ i + 1 }}
   </button>
-  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&raquo;</button>
+  <button aria-label="Sonraki sayfa" (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages">&raquo;</button>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal" *ngIf="showDeleteConfirmModal">
+  <div class="modal-content">
+    <h3 style="text-align:center; margin-bottom:16px;">⚠️ Adayı sileceksiniz</h3>
+    <p style="text-align:center; margin-bottom:20px;">Emin misiniz?</p>
+
+    <div class="modal-buttons" style="justify-content:center;">
+      <button class="delete-btn" aria-label="Evet sil" (click)="confirmDeleteCandidate()">Evet, Sil</button>
+      <button class="accept-btn" aria-label="Vazgeç" (click)="closeDeleteConfirmModal()">Vazgeç</button>
+    </div>
+  </div>
 </div>

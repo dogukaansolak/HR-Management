@@ -182,3 +182,14 @@
     </div>
   </div>
 </div>
+<!-- Silme Onay Modalı -->
+<div *ngIf="showDeleteConfirm">
+  <div class="modal-backdrop" (click)="cancelDelete()"></div>
+  <div class="confirm-modal">
+    <h3>Bu personeli silmek istediğinize emin misiniz?</h3>
+    <div class="modal-buttons">
+      <button class="confirm-btn" (click)="confirmDelete()">Evet, Sil</button>
+      <button class="cancel-btn" (click)="cancelDelete()">Vazgeç</button>
+    </div>
+  </div>
+</div>
