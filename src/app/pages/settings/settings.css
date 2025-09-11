@@ -1,0 +1,238 @@
+/* ================= AYARLAR SAYFASI GENEL ================= */
+.settings-container {
+  /* Sayfanın çok genişlemesini önleyip ortalamak için */
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 32px;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Sayfa ana başlığı (Ayarlar) */
+.settings-container h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ================= AYAR KARTI ================= */
+.setting-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(24, 39, 75, 0.12);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.setting-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(24, 39, 75, 0.16);
+}
+
+.setting-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.setting-card p {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+/* ================= FORM ELEMENTLERİ ================= */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Küçük ekranlar için hazırlık */
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 15px;
+}
+
+.form-group input[type="text"] {
+  flex-grow: 1; /* Esneyerek boşluğu doldurur */
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  font-size: 15px;
+  background: #f9fafb;
+  color: #111827;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.2);
+  background: #fff;
+}
+
+/* ================= FORM AKSİYONLARI (BUTON HİZALAMA) ================= */
+.form-actions {
+  display: flex; /* Butonları yan yana getirir */
+  justify-content: space-between; /* Aralarına boşluk koyarak iki uca yaslar */
+  align-items: center; /* Dikey olarak ortalar */
+  margin-top: 10px; /* Üstteki alanla arasına boşluk koyar */
+}
+
+/* ================= BUTON ================= */
+.submit-button {
+  display: inline-block;
+  background: linear-gradient(90deg, #FF6A00 0%, #FF9900 100%);
+  box-shadow: 0 6px 18px rgba(255, 106, 0, 0.22);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(255, 106, 0, 0.3);
+  filter: brightness(1.05);
+}
+
+/* ================= BİLDİRİM MESAJLARI ================= */
+.message {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 15px;
+  border: 1px solid transparent;
+  animation: fadeIn 0.4s ease;
+}
+
+.message.success {
+  background-color: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+
+.message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+/* ================= ANİMASYON ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= DEPARTMAN LİSTESİ ================= */
+
+/* Göster/Gizle Butonu */
+.toggle-departments-btn {
+  background: #fff;
+  color: #ff7a00;
+  border: 1.5px solid #ff7a00;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.toggle-departments-btn:hover {
+  background: #fff8f2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.1);
+}
+
+/* Liste Alanı */
+.departments-list-container {
+  margin-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 20px;
+}
+
+.departments-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.department-item {
+  padding: 14px 8px;
+  font-size: 16px;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.department-item:last-child {
+  border-bottom: none;
+}
+
+/* Yükleme animasyonu (Spinner) */
+.loading-spinner {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #ff7a00; /* Orange */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Bilgi Mesajı (örn: Departman bulunamadı) */
+.message.info {
+  background-color: #f0f5ff;
+  color: #1d39c4;
+  border-color: #adc6ff;
+}
+
+/* ================= RESPONSIVE TASARIM ================= */
+@media (max-width: 600px) {
+  .settings-container {
+    padding: 20px 16px;
+    margin: 20px auto;
+  }
+  
+  .setting-card {
+    padding: 20px;
+  }
+  
+  .form-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .submit-button {
+    width: 100%; /* Buton tam genişlik kaplar */
+  }
+}
