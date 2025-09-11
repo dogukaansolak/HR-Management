@@ -1,0 +1,65 @@
+.leave-form-container { 
+    max-width: 450px;
+    margin: 40px auto;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    padding: 32px 24px 24px 24px;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.leave-form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ff4d00;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.leave-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.leave-form label {
+    font-weight: 600;
+}
+
+.leave-form input,
+.leave-form select,
+.leave-form textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.leave-form textarea {
+    resize: vertical;
+}
+
+.leave-form button { 
+    width: 100%;
+    background: linear-gradient(90deg, #ff4d00 60%, #ff4d00 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(255,77,0,0.3);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.leave-form button:hover { 
+    box-shadow: 0 6px 16px rgba(255,77,0,0.5);
+    transform: translateY(-2px);
+}
