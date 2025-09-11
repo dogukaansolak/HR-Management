@@ -18,11 +18,16 @@ export class HrLeaveService {
     }
     return headers;
   }
-
+getLeavesByPersonId(employeeId: number): Observable<LeaveDto[]> {
+  const headers = this.getAuthHeaders();
+  return this.http.get<LeaveDto[]>(`${this.apiUrl}/person/${employeeId}`, { headers });
+}
   getPendingLeaves(): Observable<LeaveDto[]> {
     return this.http.get<LeaveDto[]>(`${this.apiUrl}/all`, { headers: this.getAuthHeaders() });
   }
-
+deleteLeave(id: number) {
+  return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+}
   approveLeave(id: number) {
     return this.http.post(`${this.apiUrl}/${id}/approve`, {}, { headers: this.getAuthHeaders() });
   }

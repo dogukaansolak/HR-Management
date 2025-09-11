@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LeaveService } from '../../../services/leave.service';
+import { HrLeaveService } from '../hr-leave.service'; // Doğru servisi import et!
 import { LeaveDto } from '../../../models/leave.model';
 
 @Component({
@@ -16,25 +16,25 @@ export class LeaveListComponent implements OnInit {
 
   leaves: LeaveDto[] = [];
 
-  constructor(private leaveService: LeaveService) {}
+  constructor(private hrLeaveService: HrLeaveService) {} // Doğru servisi inject et
 
-ngOnInit(): void {
-  this.loadLeaves();
-}
-
-loadLeaves() {
-  this.leaveService.getMyLeaves().subscribe({
-    next: (data: any) => this.leaves = data,
-    error: (err: any) => console.error('İzinler yüklenemedi:', err)
-  });
-}
-
-
-  deleteLeave(id: number) {
-    if (confirm('Bu izni silmek istediğinize emin misiniz?')) {
-      this.leaveService.deleteLeave(id).subscribe({ next: () => this.loadLeaves() });
+  ngOnInit(): void {
+    if (this.personId) {
+      this.hrLeaveService.getLeavesByPersonId(this.personId).subscribe({
+        next: (data: LeaveDto[]) => this.leaves = data,
+        error: (err: any) => console.error('İzinler yüklenemedi:', err)
+      });
     }
   }
+
+deleteLeave(id: number) {
+  if (confirm('Bu izni silmek istediğinize emin misiniz?')) {
+    this.hrLeaveService.deleteLeave(id).subscribe({
+      next: () => this.ngOnInit(),
+      error: (err) => alert('Silme işlemi başarısız: ' + err.message)
+    });
+  }
+}
 
   onClose() {
     this.close.emit();
