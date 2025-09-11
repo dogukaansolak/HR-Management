@@ -13,4 +13,8 @@ export interface CreateEmployeeDto {
   usedLeave: number;
   departmentId: number;
   adres: string;
+  salary: number;
+  mealCost: number;
+  transportCost: number;
+  otherCost: number;
 }

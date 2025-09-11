@@ -32,18 +32,34 @@ export class CostComponent implements OnInit {
     this.loadPersonnel();
   }
 
+  fixNumber(val: string | number) {
+    if (typeof val === 'string') {
+      return parseFloat(val.replace(',', '.'));
+    }
+    return Number(val);
+  }
+
   loadPersonnel() {
     this.personService.getPersons().subscribe(data => {
+      console.log("API response:", data);
       this.personnelList = data.map(p => ({
         ...p,
-        salary: p.salary || 0,
-        mealCost: p.mealCost || 0,
-        transportCost: p.transportCost || 0,
-        otherCost: p.otherCost || 0,
-        expenseHistory: (p.expenseHistory ?? []).map(h => ({ ...h, id: h.id! })) as ExpenseHistoryWithId[]
+        salary: p.salary != null ? Number(String(p.salary).replace(',', '.')) : 0,
+        mealCost: p.mealCost != null ? Number(String(p.mealCost).replace(',', '.')) : 0,
+        transportCost: p.transportCost != null ? Number(String(p.transportCost).replace(',', '.')) : 0,
+        otherCost: p.otherCost != null ? Number(String(p.otherCost).replace(',', '.')) : 0,
+        expenseHistory: Array.isArray(p.expenseHistory)
+          ? p.expenseHistory.map(h => ({ ...h, id: h.id ?? '' }))
+          : []
       }));
       this.filteredPersonnel = [...this.personnelList];
-      this.departments = Array.from(new Set(this.personnelList.map(p => p.departmentName).filter((d): d is string => !!d)));
+      this.departments = Array.from(
+        new Set(
+          this.personnelList
+            .map(p => p.departmentName)
+            .filter((d): d is string => !!d)
+        )
+      );
     });
   }
 
@@ -81,12 +97,12 @@ export class CostComponent implements OnInit {
       firstName: person.firstName,
       lastName: person.lastName,
       departmentName: person.departmentName,
-      salary: person.salary || 0,
-      mealCost: person.mealCost || 0,
-      transportCost: person.transportCost || 0,
-      otherCost: person.otherCost || 0,
+      salary: 0,
+      mealCost: 0,
+      transportCost: 0,
+      otherCost: 0,
       expenseDate: today,
-      expenseHistory: person.expenseHistory ? [...person.expenseHistory] : []
+      expenseHistory: []
     };
   }
 
@@ -100,46 +116,45 @@ export class CostComponent implements OnInit {
   saveEdit() {
     if (!this.selectedPersonnel || !this.selectedPersonnel.id) return;
 
-    console.log('Kaydet tıklandı:', this.selectedPersonnel);
-
     const personId = this.selectedPersonnel.id;
     const dto = new FormData();
-    dto.append('Salary', (this.selectedPersonnel.salary || 0).toString());
-    dto.append('MealCost', (this.selectedPersonnel.mealCost || 0).toString());
-    dto.append('TransportCost', (this.selectedPersonnel.transportCost || 0).toString());
-    dto.append('OtherCost', (this.selectedPersonnel.otherCost || 0).toString());
+    dto.append('Salary', this.fixNumber(this.selectedPersonnel.salary || 0).toString());
+    dto.append('MealCost', this.fixNumber(this.selectedPersonnel.mealCost || 0).toString());
+    dto.append('TransportCost', this.fixNumber(this.selectedPersonnel.transportCost || 0).toString());
+    dto.append('OtherCost', this.fixNumber(this.selectedPersonnel.otherCost || 0).toString());
     dto.append('ExpenseDate', this.selectedPersonnel.expenseDate!);
-    this.selectedFiles.forEach(file => dto.append('Receipts', file));
+
+    if (this.selectedFiles && this.selectedFiles.length > 0) {
+      this.selectedFiles.forEach(file => dto.append('Receipts', file));
+    }
 
     this.personService.addExpense(personId, dto).subscribe({
       next: res => {
-        console.log('Backend response:', res);
+        if (!res) {
+          console.error('Backend null döndü, gider kaydedilemedi!');
+          return;
+        }
 
         const person = this.personnelList.find(p => p.id === personId);
         if (person) {
-          
-          const meal = this.selectedPersonnel!.mealCost || 0;
-          const transport = this.selectedPersonnel!.transportCost || 0;
-          const other = this.selectedPersonnel!.otherCost || 0;
-    
+          const meal = this.fixNumber(this.selectedPersonnel!.mealCost || 0);
+          const transport = this.fixNumber(this.selectedPersonnel!.transportCost || 0);
+          const other = this.fixNumber(this.selectedPersonnel!.otherCost || 0);
           const total = meal + transport + other;
-          
+
           const newExpense: ExpenseHistoryWithId = {
             id: res.id!,
             amount: total,
             date: new Date(this.selectedPersonnel!.expenseDate!),
             receiptUrls: res.receiptUrls || [],
-            // Döküm bilgilerini fişe ekle
             mealCost: meal,
             transportCost: transport,
             otherCost: other
           };
 
-          // Personelin toplam maliyetlerini güncelle
           person.mealCost = (person.mealCost || 0) + meal;
           person.transportCost = (person.transportCost || 0) + transport;
           person.otherCost = (person.otherCost || 0) + other;
-
           person.expenseHistory = [...(person.expenseHistory ?? []), newExpense];
         }
 
@@ -151,35 +166,33 @@ export class CostComponent implements OnInit {
   }
 
   deleteHistory(index: number) {
-  if (!this.selectedHistoryPerson) return;
-  const historyItem = this.filteredExpenseHistory[index];
-  if (!historyItem || historyItem.id === undefined) return;
+    if (!this.selectedHistoryPerson) return;
+    const historyItem = this.filteredExpenseHistory[index];
+    if (!historyItem || historyItem.id === undefined) return;
 
-  this.personService.deleteExpense(historyItem.id).subscribe({
-    next: () => {
-      const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
-      if (!person) return;
+    this.personService.deleteExpense(historyItem.id).subscribe({
+      next: () => {
+        const person = this.personnelList.find(p => p.id === this.selectedHistoryPerson!.id);
+        if (!person) return;
 
-      // Parayı fişteki döküme göre doğru gözlere geri koy
-      person.mealCost = (person.mealCost || 0) - (historyItem.mealCost || 0);
-      person.transportCost = (person.transportCost || 0) - (historyItem.transportCost || 0);
-      person.otherCost = (person.otherCost || 0) - (historyItem.otherCost || 0);
-      
-      // Kaydı fiş defterinden (expenseHistory) sil
-      if (person.expenseHistory) {
-        person.expenseHistory = person.expenseHistory.filter(h => h.id !== historyItem.id);
-      }
-      
-      if (this.selectedHistoryPerson?.expenseHistory) {
-        this.selectedHistoryPerson.expenseHistory = this.selectedHistoryPerson.expenseHistory.filter(h => h.id !== historyItem.id);
-      }
+        person.mealCost = (person.mealCost || 0) - (historyItem.mealCost || 0);
+        person.transportCost = (person.transportCost || 0) - (historyItem.transportCost || 0);
+        person.otherCost = (person.otherCost || 0) - (historyItem.otherCost || 0);
 
-      this.filterPersonnels();
-      this.filterHistory();
-    },
-    error: err => console.error('Gider silme hatası:', err)
-  });
-}
+        if (person.expenseHistory) {
+          person.expenseHistory = person.expenseHistory.filter(h => h.id !== historyItem.id);
+        }
+
+        if (this.selectedHistoryPerson?.expenseHistory) {
+          this.selectedHistoryPerson.expenseHistory = this.selectedHistoryPerson.expenseHistory.filter(h => h.id !== historyItem.id);
+        }
+
+        this.filterPersonnels();
+        this.filterHistory();
+      },
+      error: err => console.error('Gider silme hatası:', err)
+    });
+  }
 
   openHistoryModal(person: Person) {
     this.selectedHistoryPerson = { ...person, expenseHistory: [...(person.expenseHistory ?? [])] };
@@ -206,4 +219,5 @@ export class CostComponent implements OnInit {
     const person = this.personnelList.find(p => p.id === this.selectedPersonnel!.id);
     if (person) this.openHistoryModal(person);
   }
+  
 }

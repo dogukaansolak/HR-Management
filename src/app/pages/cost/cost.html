@@ -20,10 +20,10 @@
   <tbody>
     <tr *ngFor="let p of filteredPersonnel; trackBy: trackById">
       <td>{{ p.firstName + ' ' + p.lastName }}</td>
-      <td>{{ p.mealCost | currency:'TRY':'symbol':'1.0-0' }}</td>
-      <td>{{ p.transportCost | currency:'TRY':'symbol':'1.0-0' }}</td>
-      <td>{{ p.otherCost | currency:'TRY':'symbol':'1.0-0' }}</td>
-      <td><b>{{ getTotalCost(p) | currency:'TRY':'symbol':'1.0-0' }}</b></td>
+      <td>{{ p.mealCost | currency:'₺':'symbol':'1.0-0' }}</td>
+      <td>{{ p.transportCost | currency:'₺':'symbol':'1.0-0' }}</td>
+      <td>{{ p.otherCost | currency:'₺':'symbol':'1.0-0' }}</td>
+      <td><b>{{ getTotalCost(p) | currency:'₺':'symbol':'1.0-0' }}</b></td>
       <td><button (click)="openEditModal(p)">Düzenle</button></td>
     </tr>
   </tbody>
