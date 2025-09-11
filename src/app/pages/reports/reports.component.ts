@@ -5,10 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -19,7 +16,6 @@ import { debounceTime } from 'rxjs/operators';
     HttpClientModule,
     ReactiveFormsModule,
     BaseChartDirective
-    // BrowserAnimationsModule **KALDIRILDI**, root module’de olacak
   ],
   templateUrl: './reports.html',
   styleUrls: ['./reports.css'],
@@ -37,46 +33,45 @@ export class ReportsComponent implements OnInit {
   filterForm!: FormGroup;
   filterVisible: boolean = true;
 
-  performanceData!: ChartConfiguration<'bar'>['data'];
-  leaveData!: ChartConfiguration<'pie'>['data'];
+  performanceData!: ChartConfiguration<'pie'>['data'];
+  leaveData!: ChartConfiguration<'bar'>['data'];
   costData!: ChartConfiguration<'line'>['data'];
 
-  performanceOptions: ChartOptions<'bar'> = { responsive: true, animation: { duration: 800 } };
-  leaveOptions: ChartOptions<'pie'> = { responsive: true, animation: { duration: 800 } };
+  performanceOptions: ChartOptions<'pie'> = { responsive: true, animation: { duration: 800 } };
+  leaveOptions: ChartOptions<'bar'> = { responsive: true, animation: { duration: 800 } };
   costOptions: ChartOptions<'line'> = { responsive: true, animation: { duration: 800 } };
+
+  departments: string[] = [];
 
   constructor(private http: HttpClient, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-  this.filterForm = this.fb.group({
-    startDate: [''],
-    endDate: [''],
-    department: [''],
-    personId: ['']
-  });
+    this.filterForm = this.fb.group({
+      startDate: [''],
+      endDate: [''],
+      department: [''],
+      personId: ['']
+    });
 
-  // Filtre değişikliklerini dinle
-  this.filterForm.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadReports());
+    // filtre değişikliklerini dinle
+    this.filterForm.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadReports());
 
-  // Departmanları al
-  this.loadDepartments();
+    // departmanları al
+    this.loadDepartments();
 
-  // İlk raporları yükle
-  this.loadReports();
-}
-
-loadDepartments() {
-  this.http.get<any>('http://localhost:8000/api/departments').subscribe(res => {
-    // Backend’den dönen departman listesini ata
-    this.departments = res.departments; 
-  });
-}
-toggleFilter() {
-    this.filterVisible = !this.filterVisible;
-
-  
+    // ilk raporları yükle
+    this.loadReports();
   }
-  departments: string[] = [];
+
+  loadDepartments() {
+    this.http.get<any>('http://localhost:8000/api/departments').subscribe(res => {
+      this.departments = res.departments;
+    });
+  }
+
+  toggleFilter() {
+    this.filterVisible = !this.filterVisible;
+  }
 
   loadReports() {
     const filters = this.filterForm.value;
@@ -87,18 +82,49 @@ toggleFilter() {
     if (filters.personId) params = params.set('personId', filters.personId);
 
     this.http.get<any>('http://localhost:8000/api/reports', { params }).subscribe(res => {
+      // Performans grafiği (pie)
       this.performanceData = {
         labels: res.performance.labels,
-        datasets: [{ label: 'Performans', data: res.performance.data, backgroundColor: '#42A5F5' }]
+        datasets: [{
+          label: 'Performans',
+          data: res.performance.data,
+          backgroundColor: ['#42A5F5','#66BB6A','#FFA726','#AB47BC','#EF5350']
+        }]
       };
+
+      // İzin dağılımı (departman seçimine göre)
       this.leaveData = {
         labels: res.leave.labels,
-        datasets: [{ data: res.leave.data, backgroundColor: ['#66BB6A', '#FFA726', '#EF5350'] }]
+        datasets: [{
+          data: res.leave.data,
+          backgroundColor: ['#66BB6A', '#FFA726', '#EF5350', '#42A5F5', '#AB47BC']
+        }]
       };
+
+      // Masraf grafiği (masraflar vs bütçe)
       this.costData = {
         labels: res.cost.labels,
-        datasets: [{ label: 'Masraflar', data: res.cost.data, borderColor: '#AB47BC', fill: false }]
+        datasets: [
+          {
+            label: 'Masraflar',
+            data: res.cost.data,
+            borderColor: '#AB47BC',
+            backgroundColor: 'rgba(171,71,188,0.3)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Bütçe',
+            data: res.cost.budget,
+            borderColor: '#42A5F5',
+            backgroundColor: 'rgba(66,165,245,0.3)',
+            fill: false,
+            borderDash: [5,5],
+            tension: 0.4
+          }
+        ]
       };
+
       setTimeout(() => this.chart?.update(), 0);
     });
   }
