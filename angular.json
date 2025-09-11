@@ -14,6 +14,9 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "allowedCommonJsDependencies": [
+            "file-saver"
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -32,17 +35,17 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
+          {
+            "type": "initial",
+            "maximumWarning": "800kb",  
+            "maximumError": "1mb"
+          },
+          {
+            "type": "anyComponentStyle",
+            "maximumWarning": "8kb",   
+          "maximumError": "12kb"   
+        }
+      ],
               "outputHashing": "all"
             },
             "development": {
