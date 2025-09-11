@@ -12,8 +12,14 @@ export interface ExpenseHistory {
 }
 
 // Backend’den dönen id’yi garanti etmek için ayrı interface
-export interface ExpenseHistoryWithId extends ExpenseHistory {
+export interface ExpenseHistoryWithId {
   id: number;
+  amount: number;
+  date: Date | string;
+  receiptUrls: string[];
+  mealCost?: number;
+  transportCost?: number;
+  otherCost?: number;
 }
 
 // Person modeli
@@ -35,6 +41,7 @@ export interface Person {
   departmentName?: string;
   hireDate?: string;   
   leaves?: { startDate: string, endDate: string }[];
+  
 
   // Bu alanlar veritabanına eklenecek!
   adres?: string;
