@@ -45,36 +45,30 @@ export class ReportsComponent implements OnInit {
   leaveOptions: ChartOptions<'pie'> = { responsive: true, animation: { duration: 800 } };
   costOptions: ChartOptions<'line'> = { responsive: true, animation: { duration: 800 } };
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(private http: HttpClient, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-  this.filterForm = this.fb.group({
-    startDate: [''],
-    endDate: [''],
-    department: [''],
-    personId: ['']
-  });
+    this.filterForm = this.fb.group({
+      startDate: [''],
+      endDate: [''],
+      department: [''],
+      personId: ['']
+    });
 
-  // Filtre değişikliklerini dinle
-  this.filterForm.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadReports());
+    this.filterForm.valueChanges.pipe(debounceTime(300)).subscribe(() => this.loadReports());
+    this.loadDepartments();
+    this.loadReports();
+  }
 
-  // Departmanları al
-  this.loadDepartments();
-
-  // İlk raporları yükle
-  this.loadReports();
-}
-
-loadDepartments() {
-  this.http.get<any>('http://localhost:8000/api/departments').subscribe(res => {
-    // Backend’den dönen departman listesini ata
-    this.departments = res.departments; 
-  });
-}
-toggleFilter() {
+  loadDepartments() {
+    this.http.get<any>('http://localhost:8000/api/departments').subscribe(res => {
+      // Backend’den dönen departman listesini ata
+      this.departments = res.departments;
+    });
+  }
+  toggleFilter() {
     this.filterVisible = !this.filterVisible;
 
-  
   }
   departments: string[] = [];
 
@@ -99,10 +93,31 @@ toggleFilter() {
         labels: res.cost.labels,
         datasets: [{ label: 'Masraflar', data: res.cost.data, borderColor: '#AB47BC', fill: false }]
       };
+
+      const totalLeaves = res.leave.data.reduce((a: number, b: number) => a + b, 0);
+      const totalCost = res.cost.data.reduce((a: number, b: number) => a + b, 0);
+      const avgPerformance = res.performance.data.length > 0
+        ? Math.round(res.performance.data.reduce((a: number, b: number) => a + b, 0) / res.performance.data.length)
+        : 0;
+
+      this.summary = {
+        totalEmployees: res.performance.data.length,
+        totalLeaves,
+        totalCost,
+        avgPerformance
+      };
+
       setTimeout(() => this.chart?.update(), 0);
     });
   }
 
+  summary = {
+    totalEmployees: 0,
+    totalLeaves: 0,
+    totalCost: 0,
+    avgPerformance: 0
+  };
+  
   exportExcel() {
     const filters = this.filterForm.value;
     let params = new HttpParams();

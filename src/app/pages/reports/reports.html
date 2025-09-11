@@ -34,6 +34,25 @@
     </div>
   </div>
 
+<div class="kpi-cards">
+  <div class="kpi-card">
+    <h4>Toplam Personel</h4>
+    <p>{{ summary.totalEmployees }}</p>
+  </div>
+  <div class="kpi-card">
+    <h4>Toplam İzin</h4>
+    <p>{{ summary.totalLeaves }}</p>
+  </div>
+  <div class="kpi-card">
+    <h4>Toplam Masraf</h4>
+    <p>{{ summary.totalCost | currency:'TRY' }}</p>
+  </div>
+  <div class="kpi-card">
+    <h4>Ortalama Performans</h4>
+    <p>{{ summary.avgPerformance }}%</p>
+  </div>
+</div>
+
   <!-- Export Butonları -->
   <div class="export-buttons">
     <button (click)="exportExcel()" class="btn btn-success">

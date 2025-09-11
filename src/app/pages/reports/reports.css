@@ -11,19 +11,6 @@
   flex-direction: column;
 }
 
-/* Filtreleme Alanı */
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 24px;
-  align-items: center;
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
 .form-control {
   padding: 10px 14px;
   border-radius: 8px;
@@ -61,7 +48,13 @@
 .btn-danger { background-color: #dc3545; color: white; }
 .btn-danger:hover { background-color: #a71d2a; }
 
-/* Grafikler */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+.btn-secondary:hover {
+  background-color: #565e64;
+}
 .charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -99,8 +92,13 @@
 }
 
 .filter-bar {
+  display: flex;
+  flex-wrap: wrap;
   overflow: hidden;
+  gap: 12px;
+  margin-bottom: 24px;
   border-radius: 12px;
+  align-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   background: white;
   padding: 16px;
@@ -108,6 +106,30 @@
   flex-wrap: wrap;
   gap: 12px;
   transition: all 0.3s ease-in-out;
+}
+
+.kpi-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.kpi-card h4 {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 8px;
+}
+.kpi-card p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
 }
 
 
