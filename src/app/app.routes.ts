@@ -7,7 +7,7 @@ import { PersonnelComponent } from './pages/personnel/personnel.component';
 import { PermissionComponent } from './pages/permission/permission.component';
 import { CostComponent } from './pages/cost/cost.component';
 import { CandidateManagementComponent } from './pages/candidate/candidate.component';
-import { Reports } from './pages/reports/reports.component';
+import { ReportsComponent } from './pages/reports/reports.component';
 import { Settings } from './pages/settings/settings.component';
 import { SupportComponent } from './support/support.component';
 
@@ -28,7 +28,7 @@ export const routes: Routes = [
       { path: 'permission', component: PermissionComponent },
       { path: 'cost', component: CostComponent },
       { path: 'candidate', component: CandidateManagementComponent },
-      { path: 'reports', component: Reports },
+      { path: 'reports', component: ReportsComponent },
       { path: 'settings', component: Settings },
       { path: 'support', component: SupportComponent },
     ]

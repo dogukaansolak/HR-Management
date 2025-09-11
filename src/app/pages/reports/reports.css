@@ -1,0 +1,119 @@
+/* Container */
+.report-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background: #f8f9fa;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Filtreleme Alanı */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  align-items: center;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.form-control {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1 1 150px;
+  border: 1px solid #ced4da;
+  transition: border 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74,144,226,0.2);
+}
+
+/* Butonlar */
+.btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary { background-color: #4a90e2; color: white; }
+.btn-primary:hover { background-color: #357ab8; }
+
+.btn-success { background-color: #28a745; color: white; }
+.btn-success:hover { background-color: #1e7e34; }
+
+.btn-danger { background-color: #dc3545; color: white; }
+.btn-danger:hover { background-color: #a71d2a; }
+
+/* Grafikler */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.chart-card h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #555;
+}
+
+/* Export Butonları alt sağa hizalandı */
+.export-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end; /* sağa hizalama */
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.toggle-filter {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.filter-bar {
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: white;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .charts { grid-template-columns: 1fr; }
+  .export-buttons { justify-content: flex-start; }
+}

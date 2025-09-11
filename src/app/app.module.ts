@@ -1,7 +1,8 @@
-// import { NgModule } from '@angular/core';
 // import { BrowserModule } from '@angular/platform-browser';
 // import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { HttpClientModule } from '@angular/common/http';
+// import { NgModule } from '@angular/core';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // import { AppComponent } from './app';
 // import { LeaveListComponent } from './pages/permission/leaves/leave-list.component';
@@ -10,14 +11,15 @@
 // @NgModule({
 //   imports: [
 //     BrowserModule,
+//     BrowserAnimationsModule, 
 //     FormsModule,
 //     ReactiveFormsModule,
 //     HttpClientModule,
-//     AppComponent,       // Standalone olduğu için imports’a ekliyoruz
-//     LeaveListComponent, // imports’a ekle
-//     DateDiffPipe        // imports’a ekle
+//     AppComponent,
+//     LeaveListComponent,
+//     DateDiffPipe
 //   ],
 //   providers: [],
-//   bootstrap: [AppComponent,]
+//   bootstrap: [AppComponent]
 // })
 // export class AppModule { }
