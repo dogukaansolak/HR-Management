@@ -29,6 +29,10 @@ export class PersonnelComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
+  // ✅ Yeni alanlar
+  showDeleteConfirm = false;
+  deleteId: number | null = null;
+
   constructor(private readonly personService: PersonService, private readonly departmentService: DepartmentService) {}
 
   ngOnInit() {
@@ -40,8 +44,6 @@ export class PersonnelComponent implements OnInit {
     this.personService.getPersons().subscribe(data => {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
-
-
     });
   }
   loadDepartments() {
@@ -51,103 +53,113 @@ export class PersonnelComponent implements OnInit {
   }
 
   addPersonnel() {
-  this.errorMessage = null;
-  this.successMessage = null;
+    this.errorMessage = null;
+    this.successMessage = null;
 
-  if (!this.newPersonnel.firstName || !this.newPersonnel.lastName || !this.newPersonnel.departmentId) {
-    this.errorMessage = "Ad, Soyad ve Departman ID zorunlu!";
-    return;
+    if (!this.newPersonnel.firstName || !this.newPersonnel.lastName || !this.newPersonnel.departmentId) {
+      this.errorMessage = "Ad, Soyad ve Departman ID zorunlu!";
+      return;
+    }
+
+    const body = {
+      firstName: this.newPersonnel.firstName,
+      lastName: this.newPersonnel.lastName,
+      tcKimlik: this.newPersonnel.tckimlik,
+      dogumTarihi: this.newPersonnel.dogumTarihi ? new Date(this.newPersonnel.dogumTarihi).toISOString() : null,
+      telNo: this.newPersonnel.telNo,
+      email: this.newPersonnel.email,
+      position: this.newPersonnel.position,
+      workingStatus: this.newPersonnel.workingStatus,
+      personnelPhoto: this.newPersonnel.personnelPhoto,
+      startDate: this.newPersonnel.startDate ? new Date(this.newPersonnel.startDate).toISOString() : null,
+      totalLeave: this.newPersonnel.totalLeave,
+      usedLeave: this.newPersonnel.usedLeave,
+      departmentId: this.newPersonnel.departmentId,
+      adres: this.newPersonnel.adres
+    };
+
+    this.personService.addPerson(body).subscribe({
+      next: () => {
+        this.successMessage = "Personel başarıyla eklendi.";
+        this.loadPersonnel();
+        this.showAddForm = false;
+        this.resetForm();
+      },
+      error: (err) => {
+        this.errorMessage = "Ekleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+        console.log('Giden body:', body);
+        console.log('Backend hata:', err);
+      }
+    });
   }
 
-  const body = {
-    firstName: this.newPersonnel.firstName,
-    lastName: this.newPersonnel.lastName,
-    tcKimlik: this.newPersonnel.tckimlik,
-    dogumTarihi: this.newPersonnel.dogumTarihi ? new Date(this.newPersonnel.dogumTarihi).toISOString() : null,
-    telNo: this.newPersonnel.telNo,
-    email: this.newPersonnel.email,
-    position: this.newPersonnel.position,
-    workingStatus: this.newPersonnel.workingStatus,
-    personnelPhoto: this.newPersonnel.personnelPhoto,
-    startDate: this.newPersonnel.startDate ? new Date(this.newPersonnel.startDate).toISOString() : null,
-    totalLeave: this.newPersonnel.totalLeave,
-    usedLeave: this.newPersonnel.usedLeave,
-    departmentId: this.newPersonnel.departmentId,
-    adres: this.newPersonnel.adres
-  };
+  saveDetails() {
+    if (!this.selectedPersonnel) return;
 
-  this.personService.addPerson(body).subscribe({
-    next: () => {
-      this.successMessage = "Personel başarıyla eklendi.";
-      this.loadPersonnel();
-      this.showAddForm = false;
-      this.resetForm();
-    },
-    error: (err) => {
-      this.errorMessage = "Ekleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-      console.log('Giden body:', body); // Debug için!
-      console.log('Backend hata:', err);
+    if (!this.selectedPersonnel.firstName || !this.selectedPersonnel.lastName) {
+      this.errorMessage = "Ad ve Soyad boş olamaz!";
+      return;
     }
-  });
-}
 
-saveDetails() {
-  if (!this.selectedPersonnel) return;
-
-  if (!this.selectedPersonnel.firstName || !this.selectedPersonnel.lastName) {
-    this.errorMessage = "Ad ve Soyad boş olamaz!";
-    return;
+    this.personService.updatePerson(this.selectedPersonnel).subscribe({
+      next: () => {
+        this.successMessage = "Personel güncellendi.";
+        this.loadPersonnel();         
+        this.isEditMode = false;      
+        this.isCardVisible = false;   
+      },
+      error: (err) => {
+        this.errorMessage = "Güncelleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+        console.error(err);
+      }
+    });
   }
 
-  this.personService.updatePerson(this.selectedPersonnel).subscribe({
-    next: () => {
-      this.successMessage = "Personel güncellendi.";
-      this.loadPersonnel();         
-      this.isEditMode = false;      
-      this.isCardVisible = false;   
-    },
-    error: (err) => {
-      this.errorMessage = "Güncelleme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-      console.error(err);
-    }
-  });
-}
-
-
-deletePersonnel(id: number) {
-  if (!confirm("Bu personeli silmek istediğinize emin misiniz?")) {
-    return;
+  // ✅ Değiştirildi
+  deletePersonnel(id: number) {
+    this.deleteId = id;
+    this.showDeleteConfirm = true;
   }
-  this.personService.deletePerson(id).subscribe({
-    next: () => {
-      this.successMessage = "Personel silindi.";
-      this.loadPersonnel();
-      this.closeDetails();
-    },
-    error: (err) => {
-      this.errorMessage = "Silme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
-    }
-  });
-}
 
-filterPersonnel() {
-  const searchTextLower = this.searchText.trim().toLowerCase();
-  this.filteredPersonnel = this.personnelList.filter(person => {
-    const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
-    const matchesName = fullName.includes(searchTextLower);
+  confirmDelete() {
+    if (!this.deleteId) return;
 
-    // Departman Id ile filtrele
-    const matchesDept =
-      this.selectedDepartment === '' || this.selectedDepartment == null
-        ? true
-        : person.departmentId === this.selectedDepartment;
+    this.personService.deletePerson(this.deleteId).subscribe({
+      next: () => {
+        this.successMessage = "Personel silindi.";
+        this.loadPersonnel();
+        this.closeDetails();
+      },
+      error: (err) => {
+        this.errorMessage = "Silme hatası: " + (err.error?.message || err.message || "Bilinmeyen hata");
+      }
+    });
 
-    return matchesName && matchesDept;
-  });
+    this.showDeleteConfirm = false;
+    this.deleteId = null;
+  }
 
-  this.currentPage = 1;
-}
+  cancelDelete() {
+    this.showDeleteConfirm = false;
+    this.deleteId = null;
+  }
 
+  filterPersonnel() {
+    const searchTextLower = this.searchText.trim().toLowerCase();
+    this.filteredPersonnel = this.personnelList.filter(person => {
+      const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+      const matchesName = fullName.includes(searchTextLower);
+
+      const matchesDept =
+        this.selectedDepartment === '' || this.selectedDepartment == null
+          ? true
+          : person.departmentId === this.selectedDepartment;
+
+      return matchesName && matchesDept;
+    });
+
+    this.currentPage = 1;
+  }
 
   openDetails(person: Person) {
     this.selectedPersonnel = { ...person };
@@ -156,9 +168,9 @@ filterPersonnel() {
   }
 
   editDetails(person: Person | null) {
-  if (!person) return;
-  this.isEditMode = true;
-}
+    if (!person) return;
+    this.isEditMode = true;
+  }
 
   closeDetails() {
     this.isCardVisible = false;
@@ -212,7 +224,7 @@ filterPersonnel() {
       usedLeave: 0,
       workingStatus: 'Çalışıyor',
       personnelPhoto: 'assets/images/1f93e380-509a-477b-a3d1-f36894aa28a5.jpg',
-      departmentId: 0 // <-- EKLENDİ!
+      departmentId: 0
     };
   }
 
