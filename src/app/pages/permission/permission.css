@@ -256,17 +256,21 @@ button:active {
 
 /* Butonlar */
 button {
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+  background: #fff;
+  color: #ff7a00;
+  border: 1.5px solid #ff7a00;
+  padding: 10px 20px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s ease;
 }
 
 button:hover {
-  background: #2980b9;
+  background: #fff8f2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.1);
 }
 
 /* Form */
@@ -383,12 +387,4 @@ button:hover {
 }
 .close-btn:hover {
   color: red;
-}
-
-
-
-/* Animasyon */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
 }

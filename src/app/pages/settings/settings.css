@@ -83,7 +83,7 @@
 .form-actions {
   display: flex; /* Butonları yan yana getirir */
   justify-content: space-between; /* Aralarına boşluk koyarak iki uca yaslar */
-  align-items: center; /* Dikey olarak ortalar */
+   /* Dikey olarak ortalar */
   margin-top: 10px; /* Üstteki alanla arasına boşluk koyar */
 }
 
