@@ -97,74 +97,83 @@
   <div class="card-person-detail" [ngClass]="{ 'editing': isEditMode }">
     <h2>👤 Personel Bilgileri</h2>
 
-    <!-- Fotoğraf ve yükleme -->
     <div class="person-photo-wrapper">
-      <img
-        [src]="selectedPersonnel?.personnelPhoto"
-        alt="Personnel"
-      />
-
-      <!-- Düzenleme modunda görünsün -->
-      <label *ngIf="isEditMode" class="photo-upload-btn">
+      <img [src]="selectedPersonnel?.personnelPhoto" alt="Personnel" />
+      <label *ngIf="isEditMode" class="photo-upload-btn" title="Fotoğrafı Değiştir">
         <input type="file" accept="image/*" (change)="handleFileInput($event)" hidden />
       </label>
     </div>
 
-    <!-- Alanlar -->
-    <label>Ad:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.firstName }}</span>
-      <input [(ngModel)]="selectedPersonnel!.firstName" *ngIf="isEditMode" name="firstName"/>
-    </label>
+    <div class="details-grid">
+      <div class="detail-row">
+        <span class="label">Ad:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.firstName }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.firstName" name="firstName" />
+      </div>
 
-    <label>Soyad:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.lastName }}</span>
-      <input [(ngModel)]="selectedPersonnel!.lastName" *ngIf="isEditMode" name="lastName"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Soyad:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.lastName }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.lastName" name="lastName" />
+      </div>
 
-    <label>TC Kimlik:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.tckimlik }}</span>
-      <input [(ngModel)]="selectedPersonnel!.tckimlik" *ngIf="isEditMode" name="tckimlik"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">TC Kimlik:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.tckimlik }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.tckimlik" name="tckimlik" />
+      </div>
 
-    <label>Doğum Tarihi:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.dogumTarihi }}</span>
-      <input [(ngModel)]="selectedPersonnel!.dogumTarihi" type="date" *ngIf="isEditMode" name="dogumTarihi"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Doğum Tarihi:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.dogumTarihi | date:'dd.MM.yyyy' }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.dogumTarihi" type="date" name="dogumTarihi" />
+      </div>
 
-    <label>Telefon:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.telNo }}</span>
-      <input [(ngModel)]="selectedPersonnel!.telNo" *ngIf="isEditMode" name="telNo"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Telefon:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.telNo }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.telNo" name="telNo" />
+      </div>
 
-    <label>Adres:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.adres }}</span>
-      <input [(ngModel)]="selectedPersonnel!.adres" *ngIf="isEditMode" name="adres"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Adres:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.adres }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.adres" name="adres" />
+      </div>
 
-    <label>Email:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.email }}</span>
-      <input [(ngModel)]="selectedPersonnel!.email" *ngIf="isEditMode" type="email" name="email"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Email:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.email }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.email" type="email" name="email" />
+      </div>
 
-    <label>Departman:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.departmentName }}</span>
-      <select *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.departmentId" name="departmentId">
-        <option value="">Seçiniz</option>
-        <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
-      </select>
-    </label>
+      <div class="detail-row">
+        <span class="label">Departman:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.departmentName }}</span>
+        <select *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.departmentId" name="departmentId">
+          <option value="">Seçiniz</option>
+          <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
+        </select>
+      </div>
 
-    <label>Pozisyon:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.position }}</span>
-      <input [(ngModel)]="selectedPersonnel!.position" *ngIf="isEditMode" name="position"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Pozisyon:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.position }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.position" name="position" />
+      </div>
 
-    <label>Başlangıç Tarihi:
-      <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.startDate }}</span>
-      <input [(ngModel)]="selectedPersonnel!.startDate" type="date" *ngIf="isEditMode" name="startDate"/>
-    </label>
+      <div class="detail-row">
+        <span class="label">Başlangıç Tarihi:</span>
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.startDate | date:'dd.MM.yyyy' }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.startDate" type="date" name="startDate" />
+      </div>
+    </div>
 
-    <!-- Form Butonları -->
+    <div class="message-container">
+      <div *ngIf="successMessage" class="message success-message">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="message error-message">{{ errorMessage }}</div>
+    </div>
+
     <div class="form-buttons">
       <button *ngIf="!isEditMode" type="button" class="edit-btn" (click)="editDetails(selectedPersonnel)">Düzenle</button>
       <button *ngIf="isEditMode" type="button" class="save-btn" (click)="saveDetails()">Kaydet</button>

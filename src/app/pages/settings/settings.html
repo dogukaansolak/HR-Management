@@ -11,7 +11,7 @@
           type="text" 
           id="departmentName"
           name="departmentName"
-          placeholder="Örn: Muhasebe"
+          placeholder=""
           required
           [(ngModel)]="newDepartmentName"
         >
@@ -23,7 +23,7 @@
 
     <div class="form-actions">
     <button (click)="toggleDepartmentsList()" class="toggle-departments-btn">
-      {{ showDepartmentsList ? 'Listeyi Gizle' : 'Departmanları Göster' }}
+      {{ showDepartmentsList ? 'Departmanları Gizle' : 'Departmanları Göster' }}
     </button>
     
     <div *ngIf="showDepartmentsList" class="departments-list-container">

@@ -496,3 +496,61 @@
   font-weight: 500;
   letter-spacing: 0.5px;
 }
+
+/* Detay kartındaki alanların düzeni için */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobil için tek sütun */
+  gap: 12px; /* Satırlar arası boşluk */
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Geniş ekranlar için iki sütunlu yapı */
+@media (min-width: 768px) {
+  .details-grid {
+    grid-template-columns: 1fr 1fr; /* İki eşit sütun */
+    gap: 15px 25px; /* Dikey ve yatay boşluk */
+  }
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column; /* Etiket ve değeri alt alta dizer */
+  text-align: left;
+}
+
+.detail-row .label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+/* Görüntüleme modundaki değer stili */
+.detail-row .value {
+  background-color: #f4f7f9;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 15px;
+  min-height: 40px; /* Input ile aynı yükseklikte olması için */
+  display: flex;
+  align-items: center;
+}
+
+/* Düzenleme modundaki input/select stili */
+.detail-row input,
+.detail-row select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box; /* Padding ve border'ı genişliğe dahil eder */
+}
+
+.message-container {
+  width: 100%;
+  grid-column: 1 / -1; /* İki sütunlu düzende tüm genişliği kaplar */
+  margin-top: 15px;
+}
