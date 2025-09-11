@@ -1,6 +1,5 @@
 <!-- Bildirim Çanı ve Paneli için container -->
 <div style="position: relative; min-height: 50px; display: flex; justify-content: flex-end;">
-  <!-- Notification Bell: Sağ üst köşede -->
   <div style="position: relative;">
     <app-notification-bell
       [count]="pendingLeaves.length"
@@ -28,7 +27,9 @@
   />
   <select [(ngModel)]="selectedDepartment" (change)="filterPersonnels()">
     <option value="">Tüm Departmanlar</option>
-    <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.name }}</option>
+    <option *ngFor="let dept of departments" [ngValue]="dept.id">
+      {{ dept.name }}
+    </option>
   </select>
 
   <select [(ngModel)]="selectedWorkingStatus" (change)="filterPersonnels()">
@@ -65,16 +66,12 @@
   </tbody>
 </table>
 
-<!-- Eski İzinler Popup -->
-<div class="overlay" *ngIf="oldLeavePerson">
-  <div class="popup">
-    <span class="close-popup" (click)="oldLeavePerson = null">&times;</span>
-    <h3>{{ oldLeavePerson.firstName }} {{ oldLeavePerson.lastName }} - Eski İzinler</h3>
-    <div class="popup-scroll">
-      <app-leave-list [personId]="oldLeavePerson.id!"></app-leave-list>
-    </div>
-  </div>
-</div>
+<!-- ✅ Eski İzinler Popup (LeaveListComponent kendi popup'ıyla açılır) -->
+<app-leave-list
+  *ngIf="oldLeavePerson"
+  [personId]="oldLeavePerson.id!"
+  (close)="oldLeavePerson = null">
+</app-leave-list>
 
 <!-- Düzenleme Modal -->
 <div class="modal" *ngIf="selectedPerson && isModalOpen">
