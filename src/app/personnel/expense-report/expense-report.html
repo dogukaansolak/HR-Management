@@ -1,1 +1,11 @@
-<p>expense-report works!</p>
+<h2>Gider Göstergesi Gönder</h2>
+    <form (ngSubmit)="submitExpense()">
+      <label>Tarih:</label>
+      <input type="date" [(ngModel)]="expense.date" name="date" required />
+      <label>Tutar:</label>
+      <input type="number" [(ngModel)]="expense.amount" name="amount" required />
+      <label>Açıklama:</label>
+      <textarea [(ngModel)]="expense.note" name="note" rows="3"></textarea>
+      <button type="submit">Gönder</button>
+    </form>
+  
