@@ -1,37 +1,36 @@
 <div class="report-container">
 
-  <button class="btn btn-secondary toggle-filter" (click)="toggleFilter()">
-    <i class="fa" [ngClass]="{'fa-chevron-down': !filterVisible, 'fa-chevron-up': filterVisible}"></i>
-    Filtreler
+<button class="btn btn-secondary toggle-filter" (click)="toggleFilter()">
+  <i class="fa" [ngClass]="{'fa-chevron-down': !filterVisible, 'fa-chevron-up': filterVisible}"></i>
+  Filtreler
+</button>
+
+<form [@slideToggle]="filterVisible ? 'open' : 'closed'" [formGroup]="filterForm" class="filter-bar" (ngSubmit)="loadReports()">
+  <input type="date" formControlName="startDate" class="form-control" />
+  <input type="date" formControlName="endDate" class="form-control" />
+  <select formControlName="department" class="form-control">
+  <option value="">Tüm Departmanlar</option>
+  <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+</select>
+
+  <button type="submit" class="btn btn-primary">
+    <i class="fa fa-filter"></i> Filtrele
   </button>
-
-  <form [@slideToggle]="filterVisible ? 'open' : 'closed'" [formGroup]="filterForm" class="filter-bar" (ngSubmit)="loadReports()">
-    <input type="date" formControlName="startDate" class="form-control" />
-    <input type="date" formControlName="endDate" class="form-control" />
-
-    <select formControlName="department" class="form-control">
-      <option value="">Tüm Departmanlar</option>
-      <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-    </select>
-
-    <button type="submit" class="btn btn-primary">
-      <i class="fa fa-filter"></i> Filtrele
-    </button>
-  </form>
+</form>
 
   <!-- Grafikler -->
   <div class="charts">
     <div class="chart-card">
       <h3>Performans Grafiği</h3>
-      <canvas baseChart [data]="performanceData" [options]="performanceOptions" type="pie"></canvas>
+      <canvas baseChart [data]="performanceData" type="bar"></canvas>
     </div>
     <div class="chart-card">
       <h3>İzin Dağılımı</h3>
-      <canvas baseChart [data]="leaveData" [options]="leaveOptions" type="bar"></canvas>
+      <canvas baseChart [data]="leaveData" type="pie"></canvas>
     </div>
     <div class="chart-card">
       <h3>Masraf Grafiği</h3>
-      <canvas baseChart [data]="costData" [options]="costOptions" type="line"></canvas>
+      <canvas baseChart [data]="costData" type="line"></canvas>
     </div>
   </div>
 
