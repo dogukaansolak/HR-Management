@@ -1,16 +1,3 @@
-<!-- Admin menüsü -->
-<nav *ngIf="isAdmin()">
-  <a routerLink="/dashboard/personnel">Personel Yönetimi</a>
-  <a routerLink="/dashboard/permission">İzinler</a>
-  <a routerLink="/dashboard/cost">Giderler</a>
-</nav>
-
-<!-- Personel menüsü -->
-<nav *ngIf="isPersonnel()">
-  <a routerLink="/personnel-panel/leave-request">İzin Talebi Gönder</a>
-  <a routerLink="/personnel-panel/expense-report">Gider Göstergesi Gönder</a>
-</nav>
-
 <div class="dashboard-layout">
   <input type="checkbox" id="menu-toggle" />
   <div class="overlay" (click)="closeMenuOnOverlayClick()"></div>

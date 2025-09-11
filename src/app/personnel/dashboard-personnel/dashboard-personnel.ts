@@ -1,23 +1,48 @@
-// src/app/personnel/dashboard-personnel/dashboard-personnel.ts
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common'; // NgClass, NgIf gibi direktifler için gereklidir
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-dashboard-personnel',
+  selector: 'app-dashboard-personnel', // Selector'ın bu olduğunu varsayıyorum
   standalone: true,
-  imports: [RouterLink],
-  template: `
-    <h1>Personel Paneli</h1>
-    <div class="menu-buttons">
-      <button routerLink="/personnel-panel/leave-request">İzin Talebi Gönder</button>
-      <button routerLink="/personnel-panel/expense-report">Gider Göstergesi Gönder</button>
-      <button routerLink="/personnel-panel/settings">Ayarlar</button>
-    </div>
-  `,
-  styles: [`
-    .menu-buttons { display: flex; gap: 16px; margin-top: 20px; }
-    button { padding: 12px 20px; border-radius: 10px; border: none; background: linear-gradient(90deg,#FF6A00 0%, #FF9900 100%); color: white; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    button:hover { opacity: 0.9; }
-  `]
+  templateUrl: './dashboard-personnel.html',
+  styleUrls: ['./dashboard-personnel.css'],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet
+  ]
 })
-export class DashboardPersonnelComponent {}
+export class DashboardPersonnelComponent {
+  // Menünün açık/kapalı durumunu takip eden değişken
+  isMenuOpen = false;
+
+  constructor(public authService: AuthService) {}
+
+  // Rol kontrol metodları template'te kullanılabilir
+  isAdmin(): boolean {
+    return this.authService.currentUser?.role === 'HRManager';
+  }
+
+  isPersonnel(): boolean {
+    return this.authService.currentUser?.role === 'Personnel';
+  }
+
+  // Menüyü açıp kapatan fonksiyon
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  // Navigasyon linkine tıklandığında menüyü kapatır (mobil kullanım için ideal)
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+  // Çıkış yapma fonksiyonu
+  logout(): void {
+    this.authService.logout();
+    console.log("Çıkış yapıldı!");
+  }
+}

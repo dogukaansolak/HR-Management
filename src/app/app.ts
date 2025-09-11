@@ -6,7 +6,7 @@ import { LeaveListComponent } from './pages/permission/leaves/leave-list.compone
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, LeaveListComponent],
+  imports: [CommonModule, RouterModule,],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardPersonnelComponent } from './dashboard-personnel/dashboard-personnel';
+import { DashboardPersonnelComponent } from '../personnel/dashboard-personnel/dashboard-personnel';
 import { LeaveRequestComponent } from './leave-request/leave-request';
 import { ExpenseReportComponent } from './expense-report/expense-report';
 import { PersonnelSettingsComponent } from './personnel-settings/personnel-settings';

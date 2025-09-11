@@ -1,1 +1,39 @@
-<p>dashboard works!</p>
+<div class="dashboard-layout">
+  <input type="checkbox" id="menu-toggle" />
+  <div class="overlay" (click)="toggleMenu()"></div>
+
+  <header class="top-nav">
+    <div class="logo-container">
+      <a [routerLink]="['/dashboard']">
+        <img src="https://barkod.narpos.com.tr/assets/images/yty-nar.svg" alt="Logo" class="logo" style="cursor:pointer">
+      </a>
+    </div>
+
+    <div class="hamburger-menu">
+      <label for="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+    </div>
+  </header>
+
+  <nav class="side-nav">
+    <div class="nav-links">
+      <a routerLink="/personnel-panel/leave-request" routerLinkActive="active" class="nav-link">İzin Talebi Gönder</a>
+      <a routerLink="/personnel-panel/expense-report" routerLinkActive="active" class="nav-link">Masraf Formu</a>
+      <a routerLink="/personnel-panel/settings" routerLinkActive="active" class="nav-link">Ayarlar</a>
+    </div>
+
+    <div class="user-actions">
+      <button (click)="logout()" class="logout-button">Çıkış Yap</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+
+
+    
+  </main>
+</div>
