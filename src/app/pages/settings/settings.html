@@ -1,1 +1,48 @@
-<p>settings works!</p>
+<div class="settings-container">
+  <h2>Ayarlar</h2>
+  
+  <div class="setting-card">
+    <h3>Yeni Departman Ekle</h3>
+    <p>Sisteme yeni bir departman ekleyin.</p>
+    <form (ngSubmit)="addDepartment()">
+      <div class="form-group">
+        <label for="departmentName">Departman Adı:</label>
+        <input 
+          type="text" 
+          id="departmentName"
+          name="departmentName"
+          placeholder="Örn: Muhasebe"
+          required
+          [(ngModel)]="newDepartmentName"
+        >
+      </div>
+      <button type="submit" class="submit-button">Ekle</button>
+
+      
+    </form>
+
+    <div class="form-actions">
+    <button (click)="toggleDepartmentsList()" class="toggle-departments-btn">
+      {{ showDepartmentsList ? 'Listeyi Gizle' : 'Departmanları Göster' }}
+    </button>
+    
+    <div *ngIf="showDepartmentsList" class="departments-list-container">
+      
+      <div *ngIf="isLoading" class="loading-spinner"></div>
+      
+      <div *ngIf="!isLoading && departments.length === 0" class="message info">
+        Gösterilecek departman bulunamadı.
+      </div>
+
+      <ul *ngIf="!isLoading && departments.length > 0" class="departments-list">
+        <li *ngFor="let dept of departments" class="department-item">
+          {{ dept.name }}
+        </li>
+      </ul>
+    </div>
+    </div>
+
+    <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+  </div>
+</div>
