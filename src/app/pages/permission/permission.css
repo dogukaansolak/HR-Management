@@ -8,7 +8,34 @@ html, body {
 .main-container, .container, .content {
   margin-top: 0 !important;
   padding-top: 0 !important;
-}/* Filtre Çubuğu */
+}
+
+.notification-panel {
+  position: fixed;
+  top: 0; /* 40px yerine 0 yaptık */
+  right: -360px;
+  width: 340px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -3px 0 12px rgba(0,0,0,0.13);
+  z-index: 3000;
+  transition: right 0.3s;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #eee;
+}
+.notification-panel.open {
+  right: 0;
+}
+
+
+
+
+
+
+
+
+/* Filtre Çubuğu */
 .filter-bar {
   display: flex;
   gap: 12px;
