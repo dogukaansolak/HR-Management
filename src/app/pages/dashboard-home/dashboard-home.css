@@ -24,7 +24,7 @@
 .logo-container {
   display: flex;
   align-items: center;
-  transition: padding-left 0.3s ease-in-out; /* Mobil için yumuşak geçiş */
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .logo {
@@ -48,7 +48,7 @@
   left: 0;
   z-index: 1000;
   transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Navigasyon Linkleri (Tekrarlar Temizlendi) */
@@ -65,7 +65,7 @@
   color: #555;
   font-weight: 500;
   border-radius: 6px;
-  transition: background-color 0.2s, color 0.2s;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
   cursor: pointer;
 }
 
@@ -108,7 +108,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 1001;
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .logout-button:hover {
@@ -122,7 +122,7 @@
   padding: 32px;
   flex-grow: 1;
   margin-left: 240px;
-  transition: margin-left 0.3s ease-in-out;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Kart Kapsayıcısı */
@@ -139,7 +139,7 @@
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box; 
+  box-sizing: border-box;
   width: 540px;
   max-width: 100%;
   min-height: 300px;
@@ -174,7 +174,7 @@
   height: 3px;
   background-color: #333;
   border-radius: 3px;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Menü açıldığında hamburger ikonunu "X" işaretine dönüştürme */
@@ -199,7 +199,7 @@
   z-index: 999;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Checkbox seçildiğinde overlay'i görünür yap */
@@ -215,9 +215,9 @@
   .side-nav {
     transform: translateX(-100%);
   }
-  
+
   #menu-toggle:checked ~ .side-nav {
-      transform: translateX(0);
+    transform: translateX(0);
   }
 
   .main-content {
@@ -228,7 +228,7 @@
     display: flex;
     align-items: center;
   }
-  
+
   .content-card {
     width: 100%;
   }
@@ -263,15 +263,11 @@
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box; 
+  box-sizing: border-box;
   width: 540px;
   max-width: 100%;
   min-height: 300px;
-  transition: 
-    box-shadow 0.25s,
-    transform 0.25s,
-    background 0.25s,
-    border 0.25s;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
   border: 1.5px solid #f1f1f1;
   cursor: pointer;
 }
@@ -291,12 +287,12 @@
 .content-card:hover h2,
 .content-card:hover p {
   color: #ff4b00;
-  transition: color 0.2s;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Eğer kartların linkle sarılıysa (örn: <a><div class="content-card"></div></a>) ekstra vurgu için: */
 a .content-card {
-  transition: box-shadow 0.25s, transform 0.25s, background 0.25s, border 0.25s;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 a:focus .content-card, a:hover .content-card {
   outline: none;

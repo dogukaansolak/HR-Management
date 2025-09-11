@@ -23,7 +23,7 @@ body {
   border: 1px solid #e5e7eb;
   font-size: 14px;
   outline: none;
-  transition: border-color .15s ease, box-shadow .2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
   background: #ffffff;
 }
 
@@ -74,7 +74,7 @@ button {
   color: white;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 button:hover {
@@ -102,7 +102,7 @@ button:hover {
   width: 400px;
   max-width: 90%;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease;
+  animation: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .modal-content h3 {
@@ -126,7 +126,7 @@ button:hover {
   border-radius: 8px;
   margin-bottom: 10px;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .modal-content input:focus,
@@ -173,7 +173,7 @@ button:hover {
 /* Satır hover efekti */
 tbody tr:hover {
   background-color: #f9fafb;
-  transition: background 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 /* Responsive tablo sarmalayıcı */

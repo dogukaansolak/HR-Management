@@ -35,7 +35,7 @@ body {
   border: 1px solid #e5e7eb;
   font-size: 14px;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .filter-search input:focus,
@@ -57,7 +57,7 @@ body {
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .add-candidate-btn .add-btn:hover {
   transform: translateY(-2px);
@@ -81,7 +81,7 @@ body {
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
   flex: 1 1 280px;
   max-width: 380px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .candidate-card:hover {
   transform: translateY(-6px);
@@ -122,7 +122,7 @@ body {
   font-weight: 600;
   background: linear-gradient(90deg,#ff6a00 0%, #ff9900 100%);
   color: #fff;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .card-buttons button:hover {
   transform: translateY(-2px);
@@ -150,7 +150,7 @@ body {
   max-height: 85vh;
   overflow-y: auto;
   position: relative;
-  animation: fadeIn 0.2s ease-in-out;
+  animation: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 
 .modal-content .close {
@@ -201,7 +201,7 @@ body {
   color:#fff;
   font-weight:600;
   cursor:pointer;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .note-input button:hover {
   background:#e67600;
@@ -236,7 +236,7 @@ body {
   border-radius:8px;
   cursor:pointer;
   font-weight:600;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .modal-buttons button:hover {
   opacity:0.9;
@@ -275,7 +275,7 @@ body {
   border:1px solid #ddd;
   background:#fff;
   cursor:pointer;
-  transition: all 0.2s ease;
+  transition: none; /* SÜRE EFEKTİ KALDIRILDI */
 }
 .pagination button.active {
   background:#ff6a00;
