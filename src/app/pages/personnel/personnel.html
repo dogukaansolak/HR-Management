@@ -62,7 +62,7 @@
       <input [(ngModel)]="newPersonnel.lastName" name="lastName" required />
     </label>
     <label>Tc Kimlik Numarası:
-      <input [(ngModel)]="newPersonnel.tckimlik" name="tckimlik" required />
+      <input [(ngModel)]="newPersonnel.tcKimlik" name="tckimlik" required />
     </label>
     <label>Doğum Tarihi:
       <input [(ngModel)]="newPersonnel.dogumTarihi" name="dogumTarihi" type="date" required />
@@ -127,8 +127,8 @@
 
       <div class="detail-row">
         <span class="label">TC Kimlik:</span>
-        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.tckimlik }}</span>
-        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.tckimlik" name="tckimlik" />
+        <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.tcKimlik }}</span>
+        <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.tcKimlik" name="tcKimlik" />
       </div>
 
       <div class="detail-row">
