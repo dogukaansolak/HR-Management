@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LeaveDto } from '../../models/leave.model';
+import { CreateLeaveDto, HRCreateLeaveDto, LeaveDto } from '../../models/leave.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -18,10 +18,16 @@ export class HrLeaveService {
     }
     return headers;
   }
+
+   hrcreateLeave(leavePayload: HRCreateLeaveDto): Observable<LeaveDto> {
+    return this.http.post<LeaveDto>(this.apiUrl, leavePayload, { headers: this.getAuthHeaders() });
+  } 
+
 getLeavesByPersonId(employeeId: number): Observable<LeaveDto[]> {
   const headers = this.getAuthHeaders();
   return this.http.get<LeaveDto[]>(`${this.apiUrl}/person/${employeeId}`, { headers });
 }
+
   getPendingLeaves(): Observable<LeaveDto[]> {
     return this.http.get<LeaveDto[]>(`${this.apiUrl}/all`, { headers: this.getAuthHeaders() });
   }

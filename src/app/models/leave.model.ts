@@ -11,6 +11,14 @@ export interface LeaveDto {
   updatedAt: string;
 }
 
+export interface HRCreateLeaveDto {
+   employeeId: number; 
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+}
+
 export interface CreateLeaveDto {
   leaveType: string;
   startDate: string;

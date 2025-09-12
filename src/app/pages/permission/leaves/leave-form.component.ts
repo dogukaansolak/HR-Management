@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LeaveService } from '../../../services/leave.service';
-import { CreateLeaveDto } from '../../../models/leave.model';
+import { HRCreateLeaveDto } from '../../../models/leave.model';
+import { HrLeaveService } from '../hr-leave.service';
 
 @Component({
   selector: 'app-leave-form',
@@ -15,20 +15,29 @@ export class LeaveFormComponent {
   @Input() personId!: number;
   @Output() leaveCreated = new EventEmitter<void>();
 
-  newLeave: CreateLeaveDto = { leaveType: '', startDate: '', endDate: '', reason: '' };
+newLeave = { leaveType: '', startDate: '', endDate: '', reason: '' };
 
-  constructor(private leaveService: LeaveService) { }
+  constructor(private leaveService: HrLeaveService) { }
 
-  saveLeave() {
-    const payload: CreateLeaveDto = {
-      leaveType: this.newLeave.leaveType,
-      startDate: new Date(this.newLeave.startDate).toISOString(),
-      endDate: new Date(this.newLeave.endDate).toISOString(),
-      reason: this.newLeave.reason
-    };
+saveLeave() {
+  if (!this.personId) {
+    alert('Personel seçilmedi!');
+    return;
+  }
+  const payload: HRCreateLeaveDto = {
+    employeeId: this.personId, // <-- Eksik olan buydu!
+    leaveType: this.newLeave.leaveType,
+    startDate: new Date(this.newLeave.startDate).toISOString(),
+    endDate: new Date(this.newLeave.endDate).toISOString(),
+    reason: this.newLeave.reason
+  };
 
 
-    this.leaveService.createLeave(payload).subscribe({
+
+
+
+
+    this.leaveService.hrcreateLeave(payload).subscribe({
       next: () => {
         alert('İzin başarıyla eklendi!');
         this.leaveCreated.emit();

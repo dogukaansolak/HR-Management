@@ -2,11 +2,12 @@
   <h3>Yeni İzin Ekle</h3>
 
   <label>İzin Tipi</label>
-  <select [(ngModel)]="newLeave.leaveType">
-    <option value="Yıllık">Yıllık</option>
-    <option value="Hastalık">Hastalık</option>
-    <option value="Mazeret">Mazeret</option>
-  </select>
+<select [(ngModel)]="newLeave.leaveType" required>
+  <option value="" disabled selected>İzin Tipi Seçiniz</option>
+  <option value="Yıllık">Yıllık</option>
+  <option value="Hastalık">Hastalık</option>
+  <option value="Mazeret">Mazeret</option>
+</select>
 
   <label>Başlangıç Tarihi</label>
   <input type="date" [(ngModel)]="newLeave.startDate" />
