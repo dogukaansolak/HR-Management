@@ -1,30 +1,8 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-
-// export interface Department {
-//   id: number;
-//   name: string;
-// }
-
-// @Injectable({ providedIn: 'root' })
-// export class DepartmentService {
-//   private apiUrl = 'https://localhost:7168/api/Department';
-
-//   constructor(private http: HttpClient) {}
-
-//   getDepartments(): Observable<Department[]> {
-//     const token = localStorage.getItem('accessToken');
-//     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-//     return this.http.get<Department[]>(this.apiUrl, { headers });
-//   }
-// }
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Bu interface tanımı harika, olduğu gibi kalabilir.
+// Interface tanımı
 export interface Department {
   id: number;
   name: string;
@@ -40,39 +18,39 @@ export class DepartmentService {
 
   /**
    * Yetkilendirme (Authorization) başlığını oluşturan özel bir metot.
-   * Bu sayede kodu tekrar yazmaktan kaçınırız.
-   * @returns HttpHeaders objesi
    */
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken'); // Token'ı al
-    // Eğer token yoksa boş bir header dönebilir veya hata yönetimi yapabiliriz.
-    // Şimdilik token'ın var olduğunu varsayıyoruz.
+    const token = localStorage.getItem('accessToken');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
   /**
-   * API'den tüm departmanların listesini getirir. (Senin yazdığın kod)
-   * @returns Departman dizisi içeren bir Observable
+   * API'den tüm departmanların listesini getirir.
    */
   getDepartments(): Observable<Department[]> {
-    const headers = this.getAuthHeaders(); // Başlıkları oluştur
+    const headers = this.getAuthHeaders();
     return this.http.get<Department[]>(this.apiUrl, { headers });
   }
 
   /**
-   * YENİ METOT: API'ye yeni bir departman eklemek için POST isteği gönderir.
-   * @param departmentName Eklenmek istenen departmanın adı
-   * @returns Sunucudan dönen yeni departman objesini içeren bir Observable
+   * API'ye yeni bir departman eklemek için POST isteği gönderir.
    */
-  addDepartment(departmentName: string): Observable<number> { // <--- DEĞİŞİKLİK 1
-  const headers = this.getAuthHeaders();
-  
-  // DEĞİŞİKLİK 2: .NET API'leri genellikle PascalCase (büyük harfle başlayan)
-  // özellikler beklediği için 'name' yerine 'Name' kullanıyoruz.
-  // Bu, backend'de modelin doğru şekilde bağlanmasını garantiler.
-  const newDepartment = { Name: departmentName };
-  
-  // API'den dönecek cevabın 'number' tipinde olacağını belirtiyoruz.
-  return this.http.post<number>(this.apiUrl, newDepartment, { headers }); // <--- DEĞİŞİKLİK 1
-}
+  addDepartment(departmentName: string): Observable<number> {
+    const headers = this.getAuthHeaders();
+    const newDepartment = { Name: departmentName };
+    return this.http.post<number>(this.apiUrl, newDepartment, { headers });
+  }
+
+  /**
+   * YENİ EKLENEN METOT: Belirtilen ID'ye sahip departmanı siler.
+   * @param id Silinmek istenen departmanın kimlik (ID) numarası
+   * @returns Genellikle boş bir cevap döner, bu yüzden 'any' tipi kullanmak güvenlidir.
+   */
+  deleteDepartment(id: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    
+    // API'ye hangi departmanın silineceğini belirtmek için URL'ye ID'yi ekliyoruz.
+    // Örn: https://localhost:7168/api/Department/15
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
 }

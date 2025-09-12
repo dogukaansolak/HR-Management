@@ -1,13 +1,11 @@
 /* ================= AYARLAR SAYFASI GENEL ================= */
 .settings-container {
-  /* Sayfanın çok genişlemesini önleyip ortalamak için */
   max-width: 900px;
   margin: 40px auto;
   padding: 32px;
   font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* Sayfa ana başlığı (Ayarlar) */
 .settings-container h2 {
   font-size: 28px;
   font-weight: 800;
@@ -52,7 +50,7 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* Küçük ekranlar için hazırlık */
+  flex-wrap: wrap;
 }
 
 .form-group label {
@@ -62,7 +60,7 @@
 }
 
 .form-group input[type="text"] {
-  flex-grow: 1; /* Esneyerek boşluğu doldurur */
+  flex-grow: 1;
   padding: 12px 18px;
   border-radius: 12px;
   border: 1.5px solid #e5e7eb;
@@ -79,15 +77,7 @@
   background: #fff;
 }
 
-/* ================= FORM AKSİYONLARI (BUTON HİZALAMA) ================= */
-.form-actions {
-  display: flex; /* Butonları yan yana getirir */
-  justify-content: space-between; /* Aralarına boşluk koyarak iki uca yaslar */
-   /* Dikey olarak ortalar */
-  margin-top: 10px; /* Üstteki alanla arasına boşluk koyar */
-}
-
-/* ================= BUTON ================= */
+/* ================= BUTON (Orijinal Stiliniz) ================= */
 .submit-button {
   display: inline-block;
   background: linear-gradient(90deg, #FF6A00 0%, #FF9900 100%);
@@ -132,70 +122,72 @@
   border-color: #fca5a5;
 }
 
-/* ================= ANİMASYON ================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ================= YENİ EKLENEN/GÜNCELLENEN STİLLER ================= */
+
+/* YENİ: Üç ana butonu yan yana getiren ve hizalayan konteyner */
+.action-buttons {
+  display: flex;
+  gap: 12px; /* Butonlar arası boşluk */
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 24px;
 }
 
-/* ================= DEPARTMAN LİSTESİ ================= */
-
-/* Göster/Gizle Butonu */
-.toggle-departments-btn {
-  background: #fff;
-  color: #ff7a00;
-  border: 1.5px solid #ff7a00;
-  padding: 10px 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.25s ease;
+/* YENİ: Ana butonların esneyerek alanı doldurmasını sağlar */
+.action-buttons .submit-button {
+  flex: 1; /* Butonların eşit genişlikte olmasını sağlar */
 }
 
-.toggle-departments-btn:hover {
-  background: #fff8f2;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.1);
-}
-
-/* Liste Alanı */
-.departments-list-container {
+/* YENİ: Form ve Liste gibi içerik bölümleri için animasyonlu geçiş */
+.content-section {
+  animation: fadeIn 0.5s ease;
   margin-top: 24px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 20px;
 }
 
+/* Departman Listesi Alanı */
 .departments-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  border-top: 1px solid #f0f0f0;
 }
 
+/* GÜNCELLENDİ: Liste elemanını flexbox ile hizalayalım */
 .department-item {
+  display: flex;
+  justify-content: space-between; /* İçerikleri iki uca yaslar */
+  align-items: center; /* Dikey olarak ortalar */
   padding: 14px 8px;
   font-size: 16px;
   color: #374151;
   border-bottom: 1px solid #f3f4f6;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .department-item:last-child {
   border-bottom: none;
 }
 
-/* Yükleme animasyonu (Spinner) */
+/* YENİ: Liste içindeki "Sil" butonu için sade bir stil */
+.list-delete-btn {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.list-delete-btn:hover {
+  background-color: #fecaca;
+}
+
+/* ================= YÜKLEME ANİMASYONU VE DİĞERLERİ ================= */
 .loading-spinner {
-  border: 4px solid #f3f3f3; /* Light grey */
-  border-top: 4px solid #ff7a00; /* Orange */
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff7a00;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -208,7 +200,11 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Bilgi Mesajı (örn: Departman bulunamadı) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .message.info {
   background-color: #f0f5ff;
   color: #1d39c4;
@@ -221,18 +217,19 @@
     padding: 20px 16px;
     margin: 20px auto;
   }
-  
   .setting-card {
     padding: 20px;
   }
-  
   .form-group {
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
   }
-
   .submit-button {
-    width: 100%; /* Buton tam genişlik kaplar */
+    width: 100%;
+  }
+  /* YENİ: Küçük ekranlarda ana butonlar alt alta gelsin */
+  .action-buttons {
+    flex-direction: column;
   }
 }

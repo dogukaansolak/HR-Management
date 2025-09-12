@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-// Department interface'ini de import edelim ki kullanabilelim
 import { Department, DepartmentService } from '../../services/department.service'; 
 
 @Component({
@@ -12,19 +11,45 @@ import { Department, DepartmentService } from '../../services/department.service
   styleUrl: './settings.css'
 })
 export class Settings {
-  // Departman Ekleme Formu için değişkenler (Bunlar zaten vardı)
+  // --- Değişkenler ---
   newDepartmentName: string = '';
   successMessage: string = '';
   errorMessage: string = '';
-
-  // YENİ DEĞİŞKENLER: Departman listesi için
-  departments: Department[] = []; // API'den gelen departmanları tutacak dizi
-  isLoading: boolean = false;      // Veri yüklenirken spinner göstermek için
-  showDepartmentsList: boolean = false; // Listenin görünürlüğünü kontrol etmek için
+  
+  departments: Department[] = [];
+  isLoading: boolean = false;
+  
+  // Hangi bölümün gösterileceğini belirleyen durum değişkeni
+  // 'none': Hiçbiri, 'add': Ekleme Formu, 'show': Listeleme, 'delete': Silme Listesi
+  currentView: 'none' | 'add' | 'show' | 'delete' = 'none';
 
   constructor(private departmentService: DepartmentService) { }
 
-  // Bu metot zaten vardı ve doğru çalışıyordu
+  /**
+   * Görünümü değiştiren ana metot.
+   * @param view Gösterilecek olan bölümün adı ('add', 'show', 'delete')
+   */
+  setView(view: 'none' | 'add' | 'show' | 'delete'): void {
+    // Eğer zaten o görünümdeysek veya tekrar aynı butona basıldıysa, görünümü kapat.
+    if (this.currentView === view) {
+      this.currentView = 'none';
+      return;
+    }
+
+    this.currentView = view;
+    this.successMessage = ''; // Görünüm değiştiğinde mesajları temizle
+    this.errorMessage = '';
+
+    // Eğer 'göster' veya 'sil' görünümü açılıyorsa ve departmanlar daha önce çekilmediyse,
+    // API'den departmanları çek.
+    if ((view === 'show' || view === 'delete') && this.departments.length === 0) {
+      this.fetchDepartments();
+    }
+  }
+
+  /**
+   * Yeni bir departman ekler.
+   */
   addDepartment(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -34,14 +59,11 @@ export class Settings {
     }
     const departmentToCreate = this.newDepartmentName.trim();
     this.departmentService.addDepartment(departmentToCreate).subscribe({
-      next: (responseId) => {
-        console.log('Departman başarıyla eklendi, yeni ID:', responseId);
+      next: () => {
         this.successMessage = `"${departmentToCreate}" departmanı başarıyla eklendi.`;
         this.newDepartmentName = '';
-        // Başarıyla ekleme yapıldıysa ve liste açıksa, listeyi yenileyelim
-        if (this.showDepartmentsList) {
-          this.fetchDepartments();
-        }
+        // Ekleme sonrası listeyi yenilemek için departmanları tekrar çek
+        this.fetchDepartments(); 
       },
       error: (err) => {
         console.error('Departman eklenirken hata oluştu:', err);
@@ -50,32 +72,39 @@ export class Settings {
     });
   }
 
-  // YENİ METOT: Departman listesini gösterme/gizleme
-  toggleDepartmentsList(): void {
-    this.showDepartmentsList = !this.showDepartmentsList;
-
-    // Eğer liste gösterilecekse ve daha önce hiç veri çekilmediyse, API'den veriyi çek
-    if (this.showDepartmentsList && this.departments.length === 0) {
-      this.fetchDepartments();
-    }
-  }
-
-  // YENİ METOT: API'den departmanları çeken asıl metot
-  fetchDepartments(): void {
-    this.isLoading = true; // Yükleme animasyonunu başlat
-    this.departmentService.getDepartments().subscribe({
-      next: (data) => {
-        this.departments = data; // Gelen veriyi departments dizisine ata
-        console.log('Departmanlar başarıyla çekildi:', data);
-        this.isLoading = false; // Yüklemeyi bitir
+  /**
+   * Belirtilen ID'ye sahip departmanı siler.
+   * @param deptId Silinecek departmanın ID'si
+   */
+  deleteDepartment(deptId: number): void {
+    this.departmentService.deleteDepartment(deptId).subscribe({
+      next: () => {
+        // Silme işlemi başarılı olursa, listeden bu departmanı anında kaldır.
+        this.departments = this.departments.filter(d => d.id !== deptId);
+        this.successMessage = 'Departman başarıyla silindi.';
       },
       error: (err) => {
-        console.error('Departmanlar çekilirken hata oluştu:', err);
-        this.errorMessage = 'Departmanlar yüklenirken bir hata oluştu.'; // Hata mesajını güncelleyebiliriz
-        this.isLoading = false; // Yüklemeyi bitir
+        console.error('Departman silinirken hata oluştu:', err);
+        this.errorMessage = 'Departman silinirken bir hata oluştu.';
       }
     });
   }
 
-  
+  /**
+   * API'den tüm departmanları çeker.
+   */
+  fetchDepartments(): void {
+    this.isLoading = true;
+    this.departmentService.getDepartments().subscribe({
+      next: (data) => {
+        this.departments = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Departmanlar çekilirken hata oluştu:', err);
+        this.errorMessage = 'Departmanlar yüklenirken bir hata oluştu.';
+        this.isLoading = false;
+      }
+    });
+  }
 }

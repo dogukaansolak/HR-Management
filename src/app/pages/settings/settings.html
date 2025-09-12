@@ -2,44 +2,54 @@
   <h2>Ayarlar</h2>
   
   <div class="setting-card">
-    <h3>Yeni Departman Ekle</h3>
-    <p>Sisteme yeni bir departman ekleyin.</p>
-    <form (ngSubmit)="addDepartment()">
-      <div class="form-group">
-        <label for="departmentName">Departman Adı:</label>
-        <input 
-          type="text" 
-          id="departmentName"
-          name="departmentName"
-          placeholder=""
-          required
-          [(ngModel)]="newDepartmentName"
-        >
-      </div>
-      <button type="submit" class="submit-button">Ekle</button>
+    <h3>Departman Ayarları</h3>
+    <p>Sisteme yeni bir departman ekleyin, silin veya mevcut departmanları görüntüleyin.</p>
 
-      
-    </form>
+    <div class="action-buttons">
+      <button (click)="setView('add')" class="submit-button">
+        Yeni Departman Ekle
+      </button>
+      <button (click)="setView('delete')" class="submit-button">
+        Departman Sil
+      </button>
+      <button (click)="setView('show')" class="submit-button">
+        Departmanları Göster
+      </button>
+    </div>
 
-    <div class="form-actions">
-    <button (click)="toggleDepartmentsList()" class="toggle-departments-btn">
-      {{ showDepartmentsList ? 'Departmanları Gizle' : 'Departmanları Göster' }}
-    </button>
-    
-    <div *ngIf="showDepartmentsList" class="departments-list-container">
-      
+    <div *ngIf="currentView === 'add'" class="content-section">
+      <form (ngSubmit)="addDepartment()">
+        <div class="form-group">
+          <label for="departmentName">Departman Adı:</label>
+          <input 
+            type="text" 
+            id="departmentName"
+            name="departmentName"
+            required
+            [(ngModel)]="newDepartmentName"
+          >
+        </div>
+        <button type="submit" class="submit-button">Ekle</button>
+      </form>
+    </div>
+
+    <div *ngIf="currentView === 'show' || currentView === 'delete'" class="content-section">
       <div *ngIf="isLoading" class="loading-spinner"></div>
-      
       <div *ngIf="!isLoading && departments.length === 0" class="message info">
         Gösterilecek departman bulunamadı.
       </div>
-
       <ul *ngIf="!isLoading && departments.length > 0" class="departments-list">
         <li *ngFor="let dept of departments" class="department-item">
-          {{ dept.name }}
+          <span>{{ dept.name }}</span>
+          <button 
+            *ngIf="currentView === 'delete'" 
+            (click)="deleteDepartment(dept.id)" 
+            class="list-delete-btn"
+          >
+            Sil
+          </button>
         </li>
       </ul>
-    </div>
     </div>
 
     <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
