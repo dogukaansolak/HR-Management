@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/personnel.service';
 import { Person } from '../../models/personnel.model';
 import { HttpClientModule } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Department, DepartmentService } from '../../services/department.service';
 
 @Component({
@@ -13,7 +15,7 @@ import { Department, DepartmentService } from '../../services/department.service
   templateUrl: './personnel.html',
   styleUrls: ['./personnel.css']
 })
-export class PersonnelComponent implements OnInit {
+export class PersonnelComponent implements OnInit , OnDestroy {
   personnelList: Person[] = [];
   filteredPersonnel: Person[] = [];
   searchText = '';
@@ -33,6 +35,8 @@ export class PersonnelComponent implements OnInit {
   showDeleteConfirm = false;
   deleteId: number | null = null;
 
+   private destroy$ = new Subject<void>();
+
   constructor(private readonly personService: PersonService, private readonly departmentService: DepartmentService) {}
 
   ngOnInit() {
@@ -40,14 +44,19 @@ export class PersonnelComponent implements OnInit {
     this.loadDepartments();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadPersonnel() {
-    this.personService.getPersons().subscribe(data => {
+    this.personService.getPersons().pipe(takeUntil(this.destroy$)).subscribe(data => {
       this.personnelList = data;
       this.filteredPersonnel = [...this.personnelList];
     });
   }
   loadDepartments() {
-    this.departmentService.getDepartments().subscribe(depts => {
+    this.departmentService.getDepartments().pipe(takeUntil(this.destroy$)).subscribe(depts => {
       this.departments = depts;
     });
   }
@@ -78,7 +87,7 @@ export class PersonnelComponent implements OnInit {
       adres: this.newPersonnel.adres
     };
 
-    this.personService.addPerson(body).subscribe({
+    this.personService.addPerson(body).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.successMessage = "Personel başarıyla eklendi.";
         this.loadPersonnel();
@@ -101,7 +110,7 @@ export class PersonnelComponent implements OnInit {
       return;
     }
 
-    this.personService.updatePerson(this.selectedPersonnel).subscribe({
+    this.personService.updatePerson(this.selectedPersonnel).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.successMessage = "Personel güncellendi.";
         this.loadPersonnel();         
@@ -124,7 +133,7 @@ export class PersonnelComponent implements OnInit {
   confirmDelete() {
     if (!this.deleteId) return;
 
-    this.personService.deletePerson(this.deleteId).subscribe({
+    this.personService.deletePerson(this.deleteId).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.successMessage = "Personel silindi.";
         this.loadPersonnel();
@@ -137,7 +146,67 @@ export class PersonnelComponent implements OnInit {
 
     this.showDeleteConfirm = false;
     this.deleteId = null;
+
+    //this.cancelDelete();
   }
+  private handleSuccess(message: string) {
+    this.showMessage(message, 'success');
+    this.loadPersonnel(); // Veriyi yenile
+  }
+
+  // YENİ: Hata durumlarını yöneten yardımcı fonksiyon
+  private handleError(err: any, context: string) {
+    const errorMessage = err.error?.message || err.message || "Bilinmeyen bir hata oluştu";
+    this.showMessage(`${context} hatası: ${errorMessage}`, 'error');
+    console.error(`${context} Hatası:`, err);
+  }
+
+  // YENİ: Mesajları gösterip bir süre sonra temizleyen fonksiyon
+  private showMessage(message: string, type: 'success' | 'error', duration: number = 4000) {
+    if (type === 'success') {
+      this.successMessage = message;
+      this.errorMessage = null;
+    } else {
+      this.errorMessage = message;
+      this.successMessage = null;
+    }
+
+    setTimeout(() => {
+      this.successMessage = null;
+      this.errorMessage = null;
+    }, duration);
+  }
+
+  // YENİ: Bir önceki adımdan eklediğimiz fonksiyon
+  calculateWorkDuration(startDateString: string | Date | undefined): string {
+    if (!startDateString) return 'Başlangıç tarihi belirtilmemiş';
+    const startDate = new Date(startDateString);
+    const today = new Date();
+    if (isNaN(startDate.getTime())) return 'Geçersiz tarih formatı';
+    if (startDate > today) return 'Henüz başlamadı';
+
+    let years = today.getFullYear() - startDate.getFullYear();
+    let months = today.getMonth() - startDate.getMonth();
+    let days = today.getDate() - startDate.getDate();
+
+    if (days < 0) {
+      months--;
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += lastMonth.getDate();
+    }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    const parts: string[] = [];
+    if (years > 0) parts.push(`${years} yıl`);
+    if (months > 0) parts.push(`${months} ay`);
+    if (days > 0) parts.push(`${days} gün`);
+    if (parts.length === 0) return "Bugün başladı";
+    return parts.join(', ') + ' çalışıyor';
+  }
+
 
   cancelDelete() {
     this.showDeleteConfirm = false;

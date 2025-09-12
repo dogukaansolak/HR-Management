@@ -175,6 +175,11 @@
         <span class="value" *ngIf="!isEditMode">{{ selectedPersonnel?.startDate | date:'dd.MM.yyyy' }}</span>
         <input *ngIf="isEditMode" [(ngModel)]="selectedPersonnel!.startDate" type="date" name="startDate" />
       </div>
+
+      <div class="detail-row" *ngIf="!isEditMode">
+        <span class="label">Çalışma Süresi:</span>
+        <span class="value">{{ calculateWorkDuration(selectedPersonnel!.startDate!) }}</span>
+    </div>
     </div>
 
     <div class="message-container">
