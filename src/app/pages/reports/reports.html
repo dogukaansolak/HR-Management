@@ -10,7 +10,7 @@
   <input type="date" formControlName="endDate" class="form-control" />
   <select formControlName="department" class="form-control">
   <option value="">Tüm Departmanlar</option>
-  <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+<option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
 </select>
 
   <button type="submit" class="btn btn-primary">
