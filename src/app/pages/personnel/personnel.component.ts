@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../../services/personnel.service';
 import { Person } from '../../models/personnel.model';
@@ -9,7 +9,7 @@ import { Department, DepartmentService } from '../../services/department.service
 @Component({
   selector: 'app-personnel',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, NgIf, NgFor],
   templateUrl: './personnel.html',
   styleUrls: ['./personnel.css']
 })
@@ -237,10 +237,11 @@ export class PersonnelComponent implements OnInit {
     return Math.ceil(this.filteredPersonnel.length / this.itemsPerPage);
   }
 
-  goToPreviousPage() {
-    if (this.currentPage > 1) this.currentPage--;
+  
+  goToPage(page: number) {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
   }
-  goToNextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
+}
+
 }

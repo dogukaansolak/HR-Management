@@ -27,7 +27,18 @@ export class CandidateManagementComponent implements OnInit {
     { id: 1, name: 'Ahmet Yılmaz', position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf', cvName: 'ahmet.pdf' },
     { id: 2, name: 'Ayşe Demir', position: 'İK Uzmanı', cvUrl: '/assets/cvs/ayse.pdf', cvName: 'ayse.pdf' },
     { id: 3, name: 'Mehmet Kaya', position: 'Satış Temsilcisi', cvUrl: '/assets/cvs/mehmet.pdf', cvName: 'mehmet.pdf' },
-    { id: 4, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' }
+    { id: 4, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 5, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 6, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 7, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 8, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 9, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 10, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 11, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 12, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 13, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+    { id: 14, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
+
   ];
 
   filteredCandidates: Candidate[] = [];
@@ -66,8 +77,8 @@ export class CandidateManagementComponent implements OnInit {
       const matchesPos = this.selectedPosition ? c.position === this.selectedPosition : true;
       const matchesApproval =
         this.selectedApproval === 'accepted' ? c.status === 'accepted' :
-        this.selectedApproval === 'declined' ? c.status === 'declined' :
-        true;
+          this.selectedApproval === 'declined' ? c.status === 'declined' :
+            true;
       return matchesName && matchesPos && matchesApproval;
     });
 
