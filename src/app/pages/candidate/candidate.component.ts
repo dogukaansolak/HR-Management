@@ -28,17 +28,16 @@ export class CandidateManagementComponent implements OnInit {
     { id: 2, name: 'Ayşe Demir', position: 'İK Uzmanı', cvUrl: '/assets/cvs/ayse.pdf', cvName: 'ayse.pdf' },
     { id: 3, name: 'Mehmet Kaya', position: 'Satış Temsilcisi', cvUrl: '/assets/cvs/mehmet.pdf', cvName: 'mehmet.pdf' },
     { id: 4, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 5, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 6, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 7, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 8, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 9, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 10, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 11, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 12, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 13, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-    { id: 14, name: 'Elif Çelik', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/elif.pdf', cvName: 'elif.pdf' },
-
+    { id: 5, name: 'Ayşe Yıldız', position: 'İK Uzmanı', cvUrl: '/assets/cvs/ayse.pdf', cvName: 'ayse.pdf' },
+    { id: 6, name: 'Mehmet Demir', position: 'Satış Uzmanı', cvUrl: '/assets/cvs/mehmet.pdf', cvName: 'mehmet.pdf' },
+    { id: 7, name: 'Fatma Kaya', position: 'Finans Uzmanı', cvUrl: '/assets/cvs/fatma.pdf', cvName: 'fatma.pdf' },
+    { id: 8, name: 'Ahmet Çetin', position: 'Yazılım Geliştirici', cvUrl: '/assets/cvs/ahmet.pdf', cvName: 'ahmet.pdf' },
+    { id: 9, name: 'Zeynep Aksoy', position: 'Proje Yöneticisi', cvUrl: '/assets/cvs/zeynep.pdf', cvName: 'zeynep.pdf' },
+    { id: 10, name: 'Ali Yılmaz', position: 'Pazarlama Uzmanı', cvUrl: '/assets/cvs/ali.pdf', cvName: 'ali.pdf' },
+    { id: 11, name: 'Emine Şahin', position: 'Analist', cvUrl: '/assets/cvs/emine.pdf', cvName: 'emine.pdf' },
+    { id: 12, name: 'Murat Kılıç', position: 'Tasarımcı', cvUrl: '/assets/cvs/murat.pdf', cvName: 'murat.pdf' },
+    { id: 13, name: 'Hatice Öztürk', position: 'Müşteri İlişkileri Uzmanı', cvUrl: '/assets/cvs/hatice.pdf', cvName: 'hatice.pdf' },
+    { id: 14, name: 'Caner Arslan', position: 'Veri Analisti', cvUrl: '/assets/cvs/caner.pdf', cvName: 'caner.pdf' },
   ];
 
   filteredCandidates: Candidate[] = [];
