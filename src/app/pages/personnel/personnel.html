@@ -29,18 +29,26 @@
   </div>
 </div>
 
-<!-- PAGINATION ŞIK TASARIM -->
-<div class="pagination-bar" *ngIf="totalPages > 1">
-  <button class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
-    &#8592; Önceki
+<div class="pagination" *ngIf="totalPages > 1">
+  <button aria-label="Önceki sayfa"
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 1">
+    &laquo;
   </button>
-  <span class="pagination-info">
-    Sayfa <b>{{ currentPage }}</b> / {{ totalPages }}
-  </span>
-  <button class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
-    Sonraki &#8594;
+  <button *ngFor="let _ of [].constructor(totalPages); let i = index"
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage === i + 1"
+          [attr.aria-label]="'Sayfa ' + (i + 1)">
+    {{ i + 1 }}
+  </button>
+  <button aria-label="Sonraki sayfa"
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage === totalPages">
+    &raquo;
   </button>
 </div>
+
+
 
 <!-- Ekleme Formu -->
 <button class="bton" (click)="toggleAddForm()">Yeni Personel Ekle</button>
