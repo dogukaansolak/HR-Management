@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { debounceTime } from 'rxjs/operators';
+import { Department, DepartmentService } from '../../services/department.service'; // ✅ eklendi
 
 @Component({
   selector: 'app-reports',
@@ -19,7 +20,6 @@ import { debounceTime } from 'rxjs/operators';
     HttpClientModule,
     ReactiveFormsModule,
     BaseChartDirective
-    // BrowserAnimationsModule **KALDIRILDI**, root module’de olacak
   ],
   templateUrl: './reports.html',
   styleUrls: ['./reports.css'],
@@ -45,7 +45,21 @@ export class ReportsComponent implements OnInit {
   leaveOptions: ChartOptions<'pie'> = { responsive: true, animation: { duration: 800 } };
   costOptions: ChartOptions<'line'> = { responsive: true, animation: { duration: 800 } };
 
-  constructor(private http: HttpClient, private fb: FormBuilder) { }
+  // ✅ Departman listesi artık Department[]
+  departments: Department[] = [];
+
+  summary = {
+    totalEmployees: 0,
+    totalLeaves: 0,
+    totalCost: 0,
+    avgPerformance: 0
+  };
+
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private departmentService: DepartmentService // ✅ eklendi
+  ) { }
 
   ngOnInit(): void {
     this.filterForm = this.fb.group({
@@ -60,17 +74,17 @@ export class ReportsComponent implements OnInit {
     this.loadReports();
   }
 
+  // ✅ DepartmentService üzerinden departmanları çekiyoruz
   loadDepartments() {
-    this.http.get<any>('http://localhost:8000/api/departments').subscribe(res => {
-      // Backend’den dönen departman listesini ata
-      this.departments = res.departments;
+    this.departmentService.getDepartments().subscribe({
+      next: (res) => this.departments = res,
+      error: (err) => console.error('Departmanlar yüklenirken hata:', err)
     });
   }
+
   toggleFilter() {
     this.filterVisible = !this.filterVisible;
-
   }
-  departments: string[] = [];
 
   loadReports() {
     const filters = this.filterForm.value;
@@ -111,13 +125,6 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  summary = {
-    totalEmployees: 0,
-    totalLeaves: 0,
-    totalCost: 0,
-    avgPerformance: 0
-  };
-  
   exportExcel() {
     const filters = this.filterForm.value;
     let params = new HttpParams();
