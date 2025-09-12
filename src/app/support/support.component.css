@@ -21,15 +21,21 @@
   border-radius: 4px;
 }
 .support-container button {
-  width: 120px;
-  padding: 10px;
-  background: #1976d2;
+  display: inline-block;
+  background: linear-gradient(90deg, #FF6A00 0%, #FF9900 100%);
+  box-shadow: 0 6px 18px rgba(255, 106, 0, 0.22);
   color: #fff;
   border: none;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 .support-container button:hover {
-  background: #125ea7;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(255, 106, 0, 0.3);
+  filter: brightness(1.05);
 }
