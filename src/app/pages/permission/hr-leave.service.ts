@@ -6,7 +6,7 @@ import { CreateLeaveDto, HRCreateLeaveDto, LeaveDto } from '../../models/leave.m
 
 @Injectable({ providedIn: 'root' })
 export class HrLeaveService {
-  private apiUrl = 'https://localhost:7168/api/hr/leave';
+  private apiUrl = 'http://localhost:5179/api/hr/leave';
 
   constructor(private http: HttpClient) {}
 

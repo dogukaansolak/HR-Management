@@ -94,7 +94,7 @@ export class ReportsComponent implements OnInit {
     if (filters.department) params = params.set('department', filters.department);
     if (filters.personId) params = params.set('personId', filters.personId);
 
-    this.http.get<any>('http://localhost:8000/api/reports', { params }).subscribe(res => {
+    this.http.get<any>('http://localhost:5179/api/reports', { params }).subscribe(res => {
       this.performanceData = {
         labels: res.performance.labels,
         datasets: [{ label: 'Performans', data: res.performance.data, backgroundColor: '#42A5F5' }]
@@ -133,7 +133,7 @@ export class ReportsComponent implements OnInit {
     if (filters.department) params = params.set('department', filters.department);
     if (filters.personId) params = params.set('personId', filters.personId);
 
-    this.http.get('http://localhost:8000/api/reports/excel', { params, responseType: 'blob' })
+    this.http.get('http://localhost:5179/api/reports/excel', { params, responseType: 'blob' })
       .subscribe(blob => saveAs(blob, `Rapor_${new Date().toISOString().slice(0, 10)}.xlsx`));
   }
 
@@ -145,7 +145,7 @@ export class ReportsComponent implements OnInit {
     if (filters.department) params = params.set('department', filters.department);
     if (filters.personId) params = params.set('personId', filters.personId);
 
-    this.http.get('http://localhost:8000/api/reports/pdf', { params, responseType: 'blob' })
+    this.http.get('http://localhost:5179/api/reports/pdf', { params, responseType: 'blob' })
       .subscribe(blob => saveAs(blob, `Rapor_${new Date().toISOString().slice(0, 10)}.pdf`));
   }
 }
