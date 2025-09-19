@@ -6,7 +6,7 @@ import { CreateEmployeeDto } from '../pages/personnel/createPersonnelDto';
 
 @Injectable({ providedIn: 'root' })
 export class PersonService {
-  private apiUrl = 'https://localhost:7168/api/Employee';
+  private apiUrl = 'http://localhost:5179/api/Employee';
 
   constructor(private http: HttpClient) {}
 

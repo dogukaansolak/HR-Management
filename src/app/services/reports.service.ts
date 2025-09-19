@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReportsService {
-  private apiUrl = 'http://localhost:8000/api/reports'; // Laravel API endpoint
+  private apiUrl = 'http://localhost:5179/api/reports'; // Laravel API endpoint
 
   constructor(private http: HttpClient) {}
 

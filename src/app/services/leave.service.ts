@@ -7,7 +7,7 @@ import { LeaveDto, CreateLeaveDto, UpdateLeaveDto } from '../models/leave.model'
   providedIn: 'root'
 })
 export class LeaveService {
-  private apiUrl = 'https://localhost:7168/api/personnel/leave';
+  private apiUrl = 'http://localhost:5179/api/personnel/leave';
 
   constructor(private http: HttpClient) {}
 

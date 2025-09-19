@@ -12,7 +12,7 @@ export interface Department {
   providedIn: 'root'
 })
 export class DepartmentService {
-  private apiUrl = 'https://localhost:7168/api/Department';
+  private apiUrl = 'http://localhost:5179/api/Department';
 
   constructor(private http: HttpClient) {}
 
